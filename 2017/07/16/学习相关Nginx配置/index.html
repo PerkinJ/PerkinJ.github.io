@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
+<meta name="keywords" content="nginx,proxy,Node.js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="学习Nginx相关配置">
+<meta property="og:url" content="http://perkinj.github.io/2017/07/16/学习相关Nginx配置/index.html">
+<meta property="og:site_name" content="Perkin">
+<meta property="og:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
+<meta property="og:updated_time" content="2017-07-16T06:22:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="学习Nginx相关配置">
+<meta name="twitter:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon2.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon2.ico" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon2.ico">
+          
+        
+    
+    <!-- title -->
+    <title>学习Nginx相关配置</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- rss -->
+    
+    
+</head>
+
+<body>
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">主页</a></li>
+         
+          <li><a href="/archives/">杂谈</a></li>
+         
+          <li><a href="http://github.com/perkinj">项目</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2017/06/16/基于react的视频类APP分享页填坑总结/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
+        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&text=学习Nginx相关配置"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&is_video=false&description=学习Nginx相关配置"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=学习Nginx相关配置&body=Check out this article: http://perkinj.github.io/2017/07/16/学习相关Nginx配置/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&name=学习Nginx相关配置&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx的作用"><span class="toc-number">1.</span> <span class="toc-text">Nginx的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx和单进程NodeJS比较"><span class="toc-number">2.</span> <span class="toc-text">Nginx和单进程NodeJS比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx在服务器上的配置"><span class="toc-number">3.</span> <span class="toc-text">Nginx在服务器上的配置</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index width mx-auto px2 my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        学习Nginx相关配置
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Perkin</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-07-16T06:10:21.000Z" itemprop="datePublished">2017-07-16</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Node-js/">Node.js</a>, <a class="tag-link" href="/tags/nginx/">nginx</a>, <a class="tag-link" href="/tags/proxy/">proxy</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="Nginx的作用"><a href="#Nginx的作用" class="headerlink" title="Nginx的作用"></a>Nginx的作用</h3><ul>
+<li>反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。</li>
+<li>静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。</li>
+</ul>
+<blockquote>
+<p>Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面。</p>
+</blockquote>
+<h3 id="Nginx和单进程NodeJS比较"><a href="#Nginx和单进程NodeJS比较" class="headerlink" title="Nginx和单进程NodeJS比较"></a>Nginx和单进程NodeJS比较</h3><ol>
+<li>静态文件性能<br>NodeJS处理静态文件，受限于单线程异步IO模型。在多核处理器上，应该尽量使用Nginx来处理静态文件。</li>
+<li>反向代理规则<br>反向代理服务多样，让配置好的机器分担更多的压力。</li>
+<li>稳定性和转发性能<br>Nginx在同样的负载，相比NodeJS占用更好的CPU和内存资源</li>
+<li>安全性<br>减少DOS攻击<br>5 .运维管理<br>监听不同的端口，通过反向代理配置，将多个站点域名指向一个机器。</li>
+</ol>
+<h3 id="Nginx在服务器上的配置"><a href="#Nginx在服务器上的配置" class="headerlink" title="Nginx在服务器上的配置"></a>Nginx在服务器上的配置</h3><ol>
+<li><p>删除appache,首先检测是否有apache</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo service apache2 stop</div><div class="line">sudo service apache stop</div></pre></td></tr></table></figure>
+</li>
+<li><p>删除apache</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update-rc.d -f apache2 remove</div></pre></td></tr></table></figure>
+</li>
+<li><p>移除apache</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo agt-get remove apache2</div></pre></td></tr></table></figure>
+</li>
+<li><p>更新列表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入nginx目录</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /etc/nginx</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd conf.d</div></pre></td></tr></table></figure>
+<ol>
+<li><p>命名</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi perkinzone-com-8081.conf</div></pre></td></tr></table></figure>
+</li>
+<li><p>配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">upstream perkinzone &#123;</div><div class="line">        server 127.0.0.1:8081</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen:80;</div><div class="line">        server_name:localhost;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP $remote_addr;</div><div class="line">                proxy_set_header X-Forward-For $proxy_add_xforwarded_for;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_set_header X-Nginx-Proxy true;</div><div class="line"></div><div class="line">                proxy_pass http://perkinzone;  //配置指令来实现代理，把域名配置到代理的名字上面，或者是应用的名字上面</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果配有域名之后，重新配置一下nginx<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">upstream website &#123;</div><div class="line">        server 127.0.0.1:8000;</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name www.perkinzone.cn;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP $remote_addr;</div><div class="line">                proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_set_header X-Nginx-Proxy true;</div><div class="line"></div><div class="line">                proxy_pass http://website;</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>然后再配置nginx.conf</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
+</li>
+<li><p>查看</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">include /etc/nginx/conf.d/*.conf;</div><div class="line">include /etc/nginx/sites-enabled/*;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>是否被注释，注释则打开</p>
+<ol>
+<li><p>检测配置文件是否有错误</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -t</div></pre></td></tr></table></figure>
+</li>
+<li><p>重启nginx</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -s reload</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>或<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure></p>
+<ol>
+<li>让nginx对外透明，编辑nginx.conf<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>打开<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server_tokens off;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>再设置防火墙</li>
+</ol>
+
+  </div>
+</article>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">主页</a></li>
+         
+          <li><a href="/archives/">杂谈</a></li>
+         
+          <li><a href="http://github.com/perkinj">项目</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx的作用"><span class="toc-number">1.</span> <span class="toc-text">Nginx的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx和单进程NodeJS比较"><span class="toc-number">2.</span> <span class="toc-text">Nginx和单进程NodeJS比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx在服务器上的配置"><span class="toc-number">3.</span> <span class="toc-text">Nginx在服务器上的配置</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&text=学习Nginx相关配置"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&is_video=false&description=学习Nginx相关配置"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=学习Nginx相关配置&body=Check out this article: http://perkinj.github.io/2017/07/16/学习相关Nginx配置/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&title=学习Nginx相关配置"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/16/学习相关Nginx配置/&name=学习Nginx相关配置&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+      <ul>
+        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
+        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
+        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
+        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2017 Perkin
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">主页</a></li>
+         
+          <li><a href="/archives/">杂谈</a></li>
+         
+          <li><a href="http://github.com/perkinj">项目</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
+<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-100907186-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Disqus Comments -->
+
+
