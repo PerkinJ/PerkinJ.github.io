@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://perkinj.github.io/2017/07/16/学习相关Nginx配置/index.html">
 <meta property="og:site_name" content="Perkin">
 <meta property="og:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
-<meta property="og:updated_time" content="2017-07-16T06:29:58.000Z">
+<meta property="og:updated_time" content="2017-07-16T06:34:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习Nginx相关配置">
 <meta name="twitter:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
@@ -69,7 +69,7 @@
       <ul>
         
         
-        <li><a class="icon" href="/2017/06/16/first-article/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
+        <li><a class="icon" href="/2017/06/16/webSecurity/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
         <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
@@ -150,57 +150,54 @@
 </ol>
 <h3 id="Nginx在服务器上的配置"><a href="#Nginx在服务器上的配置" class="headerlink" title="Nginx在服务器上的配置"></a>Nginx在服务器上的配置</h3><ol>
 <li><p>删除appache,首先检测是否有apache</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo service apache2 stop</div><div class="line">sudo service apache stop</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">sudo service apache2 stop</div><div class="line">sudo service apache stop</div></pre></td></tr></table></figure>
 </li>
 <li><p>删除apache</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update-rc.d -f apache2 remove</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">update-rc.d -f apache2 remove</div></pre></td></tr></table></figure>
 </li>
 <li><p>移除apache</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo agt-get remove apache2</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo agt-get remove apache2</div></pre></td></tr></table></figure>
 </li>
 <li><p>更新列表</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
 </li>
 <li><p>安装nginx</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
 </li>
 <li><p>进入nginx目录</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd /etc/nginx</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/nginx</div><div class="line"></div><div class="line"><span class="built_in">cd</span> conf.d</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cd conf.d</div></pre></td></tr></table></figure>
-<ol>
 <li><p>命名</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi perkinzone-com-8081.conf</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi perkinzone-com-8081.conf</div></pre></td></tr></table></figure>
 </li>
 <li><p>配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">upstream perkinzone &#123;</div><div class="line">        server 127.0.0.1:8081</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen:80;</div><div class="line">        server_name:localhost;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP $remote_addr;</div><div class="line">                proxy_set_header X-Forward-For $proxy_add_xforwarded_for;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_set_header X-Nginx-Proxy true;</div><div class="line"></div><div class="line">                proxy_pass http://perkinzone;  //配置指令来实现代理，把域名配置到代理的名字上面，或者是应用的名字上面</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">upstream perkinzone &#123;</div><div class="line">        server 127.0.0.1:8081</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen:80;</div><div class="line">        server_name:localhost;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_xforwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://perkinzone;  //配置指令来实现代理，把域名配置到代理的名字上面，或者是应用的名字上面</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>如果配有域名之后，重新配置一下nginx<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">upstream website &#123;</div><div class="line">        server 127.0.0.1:8000;</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name www.perkinzone.cn;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP $remote_addr;</div><div class="line">                proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;</div><div class="line">                proxy_set_header Host $http_host;</div><div class="line">                proxy_set_header X-Nginx-Proxy true;</div><div class="line"></div><div class="line">                proxy_pass http://website;</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果配有域名之后，重新配置一下nginx<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">upstream website &#123;</div><div class="line">        server 127.0.0.1:8000;</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name www.perkinzone.cn;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://website;</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ol>
 <li><p>然后再配置nginx.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
 </li>
 <li><p>查看</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">include /etc/nginx/conf.d/*.conf;</div><div class="line">include /etc/nginx/sites-enabled/*;</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">include /etc/nginx/conf.d/*.conf;</div><div class="line">include /etc/nginx/sites-enabled/*;</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>是否被注释，注释则打开</p>
 <ol>
 <li><p>检测配置文件是否有错误</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -t</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -t</div></pre></td></tr></table></figure>
 </li>
 <li><p>重启nginx</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -s reload</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -s reload</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>或<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure></p>
+<p>或<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure></p>
 <ol>
-<li>让nginx对外透明，编辑nginx.conf<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
+<li>让nginx对外透明，编辑nginx.conf<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>打开<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server_tokens off;</div></pre></td></tr></table></figure></p>
+<p>打开<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server_tokens off;</div></pre></td></tr></table></figure></p>
 <ol>
 <li>再设置防火墙</li>
 </ol>
