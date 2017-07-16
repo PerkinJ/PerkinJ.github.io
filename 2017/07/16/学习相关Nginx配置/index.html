@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://perkinj.github.io/2017/07/16/学习相关Nginx配置/index.html">
 <meta property="og:site_name" content="Perkin">
 <meta property="og:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
-<meta property="og:updated_time" content="2017-07-16T06:37:12.000Z">
+<meta property="og:updated_time" content="2017-07-16T06:40:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="学习Nginx相关配置">
 <meta name="twitter:description" content="Nginx的作用 反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。 静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。   Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面">
@@ -146,7 +146,8 @@
 <li>静态文件性能<br>NodeJS处理静态文件，受限于单线程异步IO模型。在多核处理器上，应该尽量使用Nginx来处理静态文件。</li>
 <li>反向代理规则<br>反向代理服务多样，让配置好的机器分担更多的压力。</li>
 <li>稳定性和转发性能<br>Nginx在同样的负载，相比NodeJS占用更好的CPU和内存资源</li>
-<li>安全性<br>减少DOS攻击<br>5 .运维管理<br>监听不同的端口，通过反向代理配置，将多个站点域名指向一个机器。</li>
+<li>安全性<br>减少DOS攻击</li>
+<li>运维管理<br>监听不同的端口，通过反向代理配置，将多个站点域名指向一个机器。</li>
 </ol>
 <h3 id="Nginx在服务器上的配置"><a href="#Nginx在服务器上的配置" class="headerlink" title="Nginx在服务器上的配置"></a>Nginx在服务器上的配置</h3><ol>
 <li><p>删除appache,首先检测是否有apache</p>
@@ -174,7 +175,7 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">upstream perkinzone &#123;</div><div class="line">        server 127.0.0.1:8081</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen:80;</div><div class="line">        server_name:localhost;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_xforwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://perkinzone;  //配置指令来实现代理，把域名配置到代理的名字上面，或者是应用的名字上面</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>如果配有域名之后，重新配置一下nginx<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">upstream website &#123;</div><div class="line">        server 127.0.0.1:8000;</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name www.perkinzone.cn;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://website;</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">upstream website &#123;</div><div class="line">        server 127.0.0.1:8000; //如果配有域名之后，重新配置一下nginx</div><div class="line">&#125;</div><div class="line">server &#123;</div><div class="line">        listen 80;</div><div class="line">        server_name www.perkinzone.cn;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_x_forwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://website;</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <ol>
 <li><p>然后再配置nginx.conf</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
@@ -189,16 +190,10 @@
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -t</div></pre></td></tr></table></figure>
 </li>
 <li><p>重启nginx</p>
-<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nginx -s reload</div></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo nginx -s reload</div><div class="line"></div><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<p>或<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure></p>
-<ol>
-<li>让nginx对外透明，编辑nginx.conf<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
+<li><p>让nginx对外透明，编辑nginx.conf<br>```sh<br>sudo vi nginx.conf   //打开 server_tokens off;</p>
 </li>
-</ol>
-<p>打开<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">server_tokens off;</div></pre></td></tr></table></figure></p>
-<ol>
 <li>再设置防火墙</li>
 </ol>
 
