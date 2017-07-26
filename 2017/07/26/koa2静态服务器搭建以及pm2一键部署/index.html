@@ -7,14 +7,15 @@
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="使用某一技术栈多了，自然而然就要考虑属于自己常用的脚手架了，毕竟搬砖也要自己总结一套最有效率的搬砖方法。  本人目前使用较多的是react方面的技术栈，react官方推荐使用的是create-react-app,本文不做过多讲解。该脚手架将webpack隐藏了起来，使用者不必去关注具体的webpack实现细节，而是操作相关的脚本即可。(当然，作为一名优秀的程序员，就算没有直接接触webpack，">
+<meta name="keywords" content="koa2,pm2">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Perkin">
+<meta property="og:title" content="koa2静态服务器的搭建以及pm2一键部署入门">
 <meta property="og:url" content="http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/index.html">
 <meta property="og:site_name" content="Perkin">
 <meta property="og:description" content="使用某一技术栈多了，自然而然就要考虑属于自己常用的脚手架了，毕竟搬砖也要自己总结一套最有效率的搬砖方法。  本人目前使用较多的是react方面的技术栈，react官方推荐使用的是create-react-app,本文不做过多讲解。该脚手架将webpack隐藏了起来，使用者不必去关注具体的webpack实现细节，而是操作相关的脚本即可。(当然，作为一名优秀的程序员，就算没有直接接触webpack，">
-<meta property="og:updated_time" content="2017-07-26T12:58:40.000Z">
+<meta property="og:updated_time" content="2017-07-26T13:01:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Perkin">
+<meta name="twitter:title" content="koa2静态服务器的搭建以及pm2一键部署入门">
 <meta name="twitter:description" content="使用某一技术栈多了，自然而然就要考虑属于自己常用的脚手架了，毕竟搬砖也要自己总结一套最有效率的搬砖方法。  本人目前使用较多的是react方面的技术栈，react官方推荐使用的是create-react-app,本文不做过多讲解。该脚手架将webpack隐藏了起来，使用者不必去关注具体的webpack实现细节，而是操作相关的脚本即可。(当然，作为一名优秀的程序员，就算没有直接接触webpack，">
     
     
@@ -35,7 +36,7 @@
         
     
     <!-- title -->
-    <title>Perkin</title>
+    <title>koa2静态服务器的搭建以及pm2一键部署入门</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- rss -->
@@ -82,15 +83,15 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&text="><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&is_video=false&description="><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&name=&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&text=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&is_video=false&description=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=koa2静态服务器的搭建以及pm2一键部署入门&body=Check out this article: http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&name=koa2静态服务器的搭建以及pm2一键部署入门&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -107,7 +108,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        
+        koa2静态服务器的搭建以及pm2一键部署入门
     </h1>
 
 
@@ -123,6 +124,11 @@
 
 
       
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/koa2/">koa2</a>, <a class="tag-link" href="/tags/pm2/">pm2</a>
+    </div>
+
 
     </div>
   </header>
@@ -226,15 +232,15 @@
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&text="><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&is_video=false&description="><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=&body=Check out this article: http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title="><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&name=&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&text=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&is_video=false&description=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=koa2静态服务器的搭建以及pm2一键部署入门&body=Check out this article: http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&title=koa2静态服务器的搭建以及pm2一键部署入门"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/07/26/koa2静态服务器搭建以及pm2一键部署/&name=koa2静态服务器的搭建以及pm2一键部署入门&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
