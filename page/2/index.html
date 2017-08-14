@@ -22,7 +22,7 @@
         
     </title>
 
-    <link rel="canonical" href="http://perkinj.github.io/tags/svg/">
+    <link rel="canonical" href="http://perkinj.github.io/page/2/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="true
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "false" data-istags="false
+" data-ishome = "true" >
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -145,217 +145,335 @@
 </script>
 
 <!-- Main Content -->
+
+
 <style>
-    .intro-header .site-heading {
-        margin: 50px;
+
+    .custom-haojen-container .post-preview:nth-of-type(1),
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        text-align: center;
+        background-repeat: no-repeat;
+        border-radius: 3px;
+        background-size: cover;
+        padding: 0;
+        height: 300px;
+        display: table;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.16);
     }
-    
-    header.intro-header {
-        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/default.jpg')
+
+    /*去掉诗歌的背景图片*/
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) {
+        background-image: none !important;
+        background-color: rgba(255, 248, 220, 0.5);
     }
-    
+
+    .custom-haojen-container .post-preview:nth-child(1) h2,
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta,
+    .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+        text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        letter-spacing: 1px;
+        color: #fff;
+        margin-top: 0;
+        padding-left: 60px;
+        padding-right: 60px;
+    }
+
+    .custom-haojen-container .post-preview:nth-child(1) .post-meta {
+        font-size: .9em;
+        font-weight: 300;
+        margin-top: 0;
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-child(1) .post-subtitle {
+        letter-spacing: 6px;
+        font-size: 18px;
+        font-family: unset;
+        font-weight: 400;
+        color: rgba(0, 0, 0, .75)
+    }
+
+    /*不显示摘要*/
+    .custom-haojen-container .post-preview:nth-child(1) .post-content-preview {
+        display: none
+    }
+
+    /*只第一个显示背景图片*/
+    .custom-haojen-container .post-preview:not(:nth-child(1)) {
+        background-image: none !important;
+    }
+
+    /*第一个分界线去掉*/
+    .custom-haojen-container hr:nth-of-type(1) {
+        display: none;
+    }
+
+    /*主题*/
+    .custom-haojen-container .post-preview:nth-of-type(1) > a {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    /*诗词标题*/
+    .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+        font-size: 35px;
+        font-family: STKaiti;
+        color: rgba(0, 0, 0, .8);
+    }
+
+    .custom-haojen-container .post-preview-poetry:nth-of-type(1) .post-meta {
+        color: #0e2231;
+    }
+
+    @media (max-width: 768px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 240px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 28px !important;
+            margin-top: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .custom-haojen-container .post-preview:nth-of-type(1) > a {
+            padding: 20px
+        }
+    }
+
+    /*手机屏幕*/
+    @media (max-width: 400px) {
+        .custom-haojen-container .post-preview:nth-child(1) {
+            height: 195px;
+        }
+
+        .custom-haojen-container .post-preview-poetry:nth-child(1) h2 {
+            font-size: 20px !important;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) .post-subtitle {
+            font-size: 16px;
+        }
+
+        .custom-haojen-container .post-preview:nth-child(1) a {
+            padding: 30px 20px;
+        }
+    }
 </style>
 
 <!-- Page Header -->
-<header class="intro-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 ">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 visible-xs-block visible-sm-block">
+    <div class="row">
+        <header class="intro-header">
+            <div class="container">
                 <div class="site-heading text-center">
-                    <h1>PerkinZone</h1>
-                    <span class="subheading">可以根据归档日期检索所有文件</span>
+                    <div class="about-me">
+                        <!--移动端头部显示-->
+                        <img src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg"/>
+                        <h5><a href="/about/">Perkin</a></h5>
+                        <p>致，孤勇如你</p>
+                    </div>
                 </div>
             </div>
-        </div>
+        </header>
     </div>
-</header>
-
+</div>
 <!-- Main Content -->
-<div class="container">
+<div class="container custom-haojen-container">
+    <!-- Post Container -->
     <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <!-- archive list -->
-            
-				
-				
-				
-					
-					
-					<div class="archive archive-year" data-date="2017">
-						<h2 class="archive-title">
-						<span class="fa fa-archive">
-							<a href="/archives/2017">2017</a>
-						</span>
-						</h2>
-				
-				
-					
-					
-					<div class="archive archive-month" data-date="201708">
-						<h3 class="archive-title">
-							<a href="/archives/2017/08">08</a>
-						</h3>
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/08/15/Redux,Koa,Express之middleware机制对比/">
-                        <h4 class="post-title">
-                            Redux,Koa,Express之middleware机制对比
-                        </h4>
+        <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
+            <!-- Main Content -->
+
+
+
+<div class="post-preview "
+     style="background-image: url('http://oum6ifofe.bkt.clouddn.com/image/react.jpg')">
+    <a href="/2017/06/16/基于react的视频类APP分享页填坑总结/">
+        <h2 class="post-title">
+            基于react的视频类APP分享页填坑总结
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2017-06-16
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                
+随着内容型产品的逐渐增多，视频类的产品井喷式增长。腾讯系，阿里系，今日头条等视频产品越来越壮大，不少创业团队也纷纷加入，希望能在市场分一份羮。本人目前所在的创业团队也在负责视频类的app,作为前端新人的我，有幸搭建了分享页项目，现把所遇到的坑总结一下，欢迎共同讨论学习。
+
+本项目是基于reac..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+
+<!-- 翻页 pager -->
+
+<ul class="pager">
+    
+    <li class="previous">
+        <a href="/">&larr; Newer Posts</a>
+    </li>
+    
+    
+</ul>
+
+
+        </div>
+        <!-- Sidebar Container -->
+        <div class="
+                col-lg-3 col-lg-offset-0
+                col-md-3 col-md-offset-0
+                col-sm-12
+                col-xs-12
+                sidebar-container
+            ">
+
+            <!-- About Me -->
+            <section class="visible-md visible-lg" style="padding: 0 18px">
+                <div class="short-about">
+                    <!--侧边栏头像-->
+                    
+                    <img src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg"/>
+                    
+                    <h5><a href="/about/">Perkin</a></h5>
+                    
+                    <p>致，孤勇如你</p>
+                    
+                    <hr>
+                    <!-- SNS Link 社交 -->
+                    <ul class="list-inline">
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/08/09/Facebook面试题之凸边形判断而衍生的实际场景应用/">
-                        <h4 class="post-title">
-                            Facebook面试题之凸边形判断而衍生的实际场景应用
-                        </h4>
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/08/05/由requestAnimationFrame谈浏览器渲染优化/">
-                        <h4 class="post-title">
-                            由requestAnimationFrame谈浏览器渲染优化
-                        </h4>
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-					
-					</div><!--month-->
-					
-					
-					<div class="archive archive-month" data-date="201707">
-						<h3 class="archive-title">
-							<a href="/archives/2017/07">07</a>
-						</h3>
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/07/26/koa2静态服务器的搭建以及pm2一键部署入门/">
-                        <h4 class="post-title">
-                            koa2静态服务器的搭建以及pm2一键部署入门
-                        </h4>
+                        <li>
+                            <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa  fa-stack-1x fa-inverse">知</i>
+                                        </span>
+                            </a>
+                        </li>
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/07/23/学习react&redux之自定义Provider/">
-                        <h4 class="post-title">
-                            学习react&redux之自定义Provider
-                        </h4>
+
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/07/23/学习react&redux之自定义createStore/">
-                        <h4 class="post-title">
-                            学习react&redux之自定义createStore
-                        </h4>
+                        <li>
+                            <a target="_blank" href="http://weibo.com/2432428362">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/07/16/学习相关Nginx配置/">
-                        <h4 class="post-title">
-                            学习Nginx相关配置
-                        </h4>
+
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-					
-					</div><!--month-->
-					
-					
-					<div class="archive archive-month" data-date="201706">
-						<h3 class="archive-title">
-							<a href="/archives/2017/06">06</a>
-						</h3>
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/06/16/webSecurity/">
-                        <h4 class="post-title">
-                            Web前端安全
-                        </h4>
+
                         
-                    </a>
-                </div>
-				<hr>
-				</div>
-            
-				
-				
-				
-				
-				<div class="one-tag-list">
-                <div class="post-preview">
-                    <a href="/2017/06/16/基于react的视频类APP分享页填坑总结/">
-                        <h4 class="post-title">
-                            基于react的视频类APP分享页填坑总结
-                        </h4>
+                        <li>
+                            <a target="_blank" href="https://github.com/perkinJ">
+                                        <span class="fa-stack fa-lg">
+                                            <i class="fa fa-circle fa-stack-2x"></i>
+                                            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                        </span>
+                            </a>
+                        </li>
                         
-                    </a>
+
+                        
+                    </ul>
                 </div>
-				<hr>
-				</div>
+            </section>
+
+            <!-- Featured Tags  标签 -->
             
+            <section>
+                <div class="tags">
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    <a href="/tags/#react" title="react"
+                       rel="3">react</a>
+                    
+                    
+                    
+                    
+                    
+                    <a href="/tags/#redux" title="redux"
+                       rel="2">redux</a>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                </div>
+            </section>
+            
+
+            
+
         </div>
     </div>
+</div>
 
 <!-- Footer -->
 <!-- Footer -->

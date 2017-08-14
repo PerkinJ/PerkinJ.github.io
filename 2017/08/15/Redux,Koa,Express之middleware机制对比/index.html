@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Redux,Koa,Express之middleware机制对比｜Perkin
+        
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/2017/08/15/Redux,Koa,Express之middleware机制对比/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                的博客
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://oum6ifofe.bkt.clouddn.com/image/Middleware-web.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/Middleware-web.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Redux,Koa,Express之middleware机制对比</h1>
+                    
+                    <span class="meta">
+                         作者 Perkin
+                        <span>
+                          日期 2017-08-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#middleware"
+                           title="middleware">middleware</a>
+                        
+                        <a class="tag" href="/tags/#Redux"
+                           title="Redux">Redux</a>
+                        
+                        <a class="tag" href="/tags/#Koa"
+                           title="Koa">Koa</a>
+                        
+                        <a class="tag" href="/tags/#Express"
+                           title="Express">Express</a>
+                        
+                        <a class="tag" href="/tags/#redux-thunk"
+                           title="redux-thunk">redux-thunk</a>
+                        
+                        <a class="tag" href="/tags/#函数式编程"
+                           title="函数式编程">函数式编程</a>
+                        
+                        <a class="tag" href="/tags/#compose"
+                           title="compose">compose</a>
+                        
+                        <a class="tag" href="/tags/#curring"
+                           title="curring">curring</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Redux,Koa,Express之middleware机制对比
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>看到标题，也许您会觉得奇怪，redux跟Koa以及Express并不是同一类别的框架，干嘛要拿来做类比。尽管，例如Express以及koa等这类的middleware是<strong>指可以被嵌入在框架接收请求到产生响应过程之中的代码</strong>。而redux的middleware是<strong>提供的是位于 action 被发起之后，到达 reducer 之前的扩展点</strong>。我觉得，不管是什么框架，一种思想才是最重要的。相同的概念，可能实现的思路与方法不同，同样值得我们去深究，去学习。</p>
+<p>面对多样的业务场景，前后端都需要一种插件机制，可以随意组合。middleware即是这种可以自由组合，自由插拔的插件机制。所以我们就来横向比较一下middleware在redux,koa以及express的运行机制，本文主要通过以下三点来进行比较:</p>
+<ol>
+<li>异步编程模式</li>
+<li>middleware的使用</li>
+<li>middleware的执行原理及实现</li>
+</ol>
+<h3>异步编程模式</h3>
+<p>理解异步编程方式式理解几种middleware执行原理的前提。</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>异步方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Express</td>
+<td>callback</td>
+</tr>
+<tr>
+<td>Koa1</td>
+<td>generator/yield+co</td>
+</tr>
+<tr>
+<td>Koa2</td>
+<td>Async/Await</td>
+</tr>
+<tr>
+<td>Redux</td>
+<td>redux-thunk,redux-saga,redux-promise等</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<h5>express: 由于是在ES6之前出现的，所以中间件的基础原理还是callback方式</h5>
+</li>
+<li>
+<h5>koa: koa1得益于generator特性并通过co框架加入了自动流程管理。（co会把所有generator的返回封装成为Promise对象）koa2则使用了Async/Await的形式（仅仅知识genertator函数的语法糖）</h5>
+</li>
+<li>
+<h5>redux: 论redux的异步变成，更准确的应该是异步的action的方式。解决异步action的方式有多种，比如：redux-thunk,redux-saga,redux-promise等</h5>
+</li>
+</ul>
+<blockquote>
+<p>本文并不会对js里的异步编程作详细，推荐阮一峰老师写的《深入掌握 ECMAScript 6 异步编程》系列文章。</p>
+</blockquote>
+<h3>middleware的使用</h3>
+<p>众所周知，Koa是Express框架原班人马基于ES6新特性重新开发的敏捷开发框架。Express主要是基于Connect中间件框架，其自身封装了大量的功能，比如路由、请求等。而Koa是基于co(koa2基于async/await)中间件框架，框架自身并没集成太多功能，大部分功能需要用户自行require中间件去解决。我们首先来比较一下Koa与Express的写法：
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//Express</span></div><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>)</div><div class="line"><span class="keyword">var</span> app = express()</div><div class="line"></div><div class="line">app.get(<span class="string">'/'</span>,(req,res)=&gt;&#123;</div><div class="line">    res.send(<span class="string">'Hello Express!'</span>)</div><div class="line">&#125;)</div><div class="line">app.listen(<span class="number">3000</span>)</div></pre></td></tr></table></figure></p>
+<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//Koa</span></div><div class="line"><span class="keyword">var</span> koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">var</span> app = koa()</div><div class="line"><span class="keyword">var</span> route = <span class="built_in">require</span>(<span class="string">'koa-route'</span>)</div><div class="line"></div><div class="line">app.use(route.get(<span class="string">'/'</span>,<span class="keyword">async</span> (ctx) =&gt; &#123;</div><div class="line">    ctx.body = <span class="string">'Hello Koa'</span></div><div class="line">&#125;))</div><div class="line"></div><div class="line">app.listen(<span class="number">3000</span>)</div></pre></td></tr></table></figure></p>
+<p>redux使用包含自定义功能的middleware来扩展。Middleware可以让你包装store的dispatch方法来达到你想要的目的。同时，middleware还拥有&quot;compose&quot;这一关键特性。(这个下文会讲)多个middleware可以被组合到一起使用，形成middleware链。其中，每个middleware都不需要关心链中它前后的middleware 的任何信息。</p>
+<p>例如：
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">const</span> logger = <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> crashReporter = <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> thunk = <span class="function"><span class="params">()</span> =&gt;</span>&#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">let</span> store = createStore(</div><div class="line">  App,</div><div class="line">  applyMiddleware(</div><div class="line">    crashReporter,</div><div class="line">    thunk,</div><div class="line">    logger</div><div class="line">  )</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<h3>middleware的执行原理及实现</h3>
+<h5>express的middleware执行原理及实现</h5>
+<p>Express更像是中间件顺序执行，称之为线性模型</p>
+<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">↓</div><div class="line">---------------</div><div class="line">| middleware1 |</div><div class="line">---------------</div><div class="line">       ↓</div><div class="line">---------------</div><div class="line">| ... ... ... |</div><div class="line">---------------</div><div class="line">       ↓</div><div class="line">---------------</div><div class="line">| middlewareN |</div><div class="line">---------------</div><div class="line">       ↓</div></pre></td></tr></table></figure></p>
+<p>其实express middleware的原理很简单，express内部维护一个函数数组，这个函数数组表示在发出响应之前要执行的所有函数，也就是中间件数组，每一次use以后，传进来的中间件就会推入到数组中，执行完毕后调用next方法执行函数的下一个函数，如果没用调用，调用就会终止。
+下面我们实现一个简单的Express中间件功能
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">function express() &#123;</div><div class="line">    var funcs = [] // 中间件存储的数组</div><div class="line">    var app = function (req, res) &#123;</div><div class="line">        var i = 0  </div><div class="line">        // 定义next()</div><div class="line">        function next() &#123;</div><div class="line">            var task = funcs[i++]  // 取出中间件数组里的下一个中间件函数</div><div class="line">            if (!task) &#123;    // 如果中间件不存在,return</div><div class="line">                return</div><div class="line">            &#125;</div><div class="line">            task(req, res, next);   // 否则,执行下一个中间件</div><div class="line">        &#125;</div><div class="line">        next()</div><div class="line">    &#125;</div><div class="line">    // use方法则是将中间件函数推入到中间件数组中</div><div class="line">    app.use = function (task) &#123;</div><div class="line">        funcs.push(task);</div><div class="line">    &#125;</div><div class="line">    return app    // 返回实例</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h5>koa的middleware执行原理及实现</h5>
+<p>Koa会把多个中间件推入栈中，与express不同，koa的中间件是所谓的洋葱型模型。
+<img src="https://camo.githubusercontent.com/d80cf3b511ef4898bcde9a464de491fa15a50d06/68747470733a2f2f7261772e6769746875622e636f6d2f66656e676d6b322f6b6f612d67756964652f6d61737465722f6f6e696f6e2e706e67" alt="image"></p>
+<p>koa的中间件的实现主要依靠的是koa-compose。首先我们来看下koa-compose的使用,koa-compose模块可以将多个中间件合成为一个:
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">const</span> compose = <span class="built_in">require</span>(<span class="string">'koa-compose'</span>)</div><div class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</div><div class="line"></div><div class="line"><span class="keyword">const</span> logger = <span class="function">(<span class="params">ctx, next</span>) =&gt;</span> &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;<span class="built_in">Date</span>.now()&#125;</span> <span class="subst">$&#123;ctx.request.method&#125;</span> <span class="subst">$&#123;ctx.request.url&#125;</span>`</span>)</div><div class="line">  next()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> main = <span class="function"><span class="params">ctx</span> =&gt;</span> &#123;</div><div class="line">  ctx.response.body = <span class="string">'Hello Koa'</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">const</span> middlewares = compose([logger, main])</div><div class="line"></div><div class="line">app.use(middlewares)</div><div class="line">app.listen(<span class="number">3000</span>)</div></pre></td></tr></table></figure></p>
+<p>下面我们来分析一下koa-compose的源码
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = compose</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Compose `middleware` returning</div><div class="line"> * a fully valid middleware comprised</div><div class="line"> * of all those which are passed.</div><div class="line"> *</div><div class="line"> * @param &#123;Array&#125; middleware</div><div class="line"> * @return &#123;Function&#125;</div><div class="line"> * @api public</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span> (<span class="params">middleware</span>) </span>&#123;</div><div class="line">  <span class="comment">// 错误处理</span></div><div class="line">  <span class="keyword">if</span> (!<span class="built_in">Array</span>.isArray(middleware)) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Middleware stack must be an array!'</span>)</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">const</span> fn <span class="keyword">of</span> middleware) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> fn !== <span class="string">'function'</span>) <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'Middleware must be composed of functions!'</span>)</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">/**</span></div><div class="line">   * @param &#123;Object&#125; context</div><div class="line">   * @return &#123;Promise&#125;</div><div class="line">   * @api public</div><div class="line">   */</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">context, next</span>) </span>&#123;</div><div class="line">    <span class="comment">// last called middleware #</span></div><div class="line">    <span class="keyword">let</span> index = <span class="number">-1</span></div><div class="line">    <span class="keyword">return</span> dispatch(<span class="number">0</span>)</div><div class="line">    <span class="function"><span class="keyword">function</span> <span class="title">dispatch</span> (<span class="params">i</span>) </span>&#123;</div><div class="line">      <span class="keyword">if</span> (i &lt;= index) <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'next() called multiple times'</span>))</div><div class="line">      <span class="comment">// 当前执行第 i 个中间件</span></div><div class="line">      index = i</div><div class="line">      <span class="keyword">let</span> fn = middleware[i]</div><div class="line">      <span class="comment">// 所有的中间件执行完毕</span></div><div class="line">      <span class="keyword">if</span> (i === middleware.length) fn = next</div><div class="line">      <span class="keyword">if</span> (!fn) <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve()</div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">        <span class="comment">// 执行当前的中间件</span></div><div class="line">        <span class="comment">// 这里的fn也就是app.use(fn)中的fn</span></div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(fn(context, <span class="function"><span class="keyword">function</span> <span class="title">next</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">return</span> dispatch(i + <span class="number">1</span>)</div><div class="line">        &#125;))</div><div class="line">      &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">        <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(err)</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Koa的中间件支持普通函数，返回一个Promise的函数，以及async函数。</p>
+<h5>redux的middleware执行原理及实现</h5>
+<blockquote>
+<p>&quot;It provides a third-party extension point between dispatching an action,and the moment it reaches the reducer&quot;
+这是redux作者的描述。</p>
+</blockquote>
+<p>正因为redux单一数据源的特点，数据从顶层流动，middleware就好比管道去辅助这些数据的流向，不同的管道具有不同的特点与功能。</p>
+<p>每个middleware函数接受Store的dispatch和getState函数作为命名参数，并返回一个函数。该函数会被传入被称为next的下一个middleware的 dispatch方法，并返回一个接收action的新函数，这个函数可以直接调用 next(action)，或者在其他需要的时刻调用，甚至根本不去调用它。调用链中最后一个middleware会接受真实的store的dispatch方法作为next参数，并借此结束调用链。</p>
+<p>下面以redux-thunk为例，来介绍下如何写一个redux middleware，下面是redux-thunk的源码</p>
+<blockquote>
+<p>redux-thunk帮助你统一了异步和同步action的调用方式，把异步过程放在action级别解决</p>
+</blockquote>
+<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createThunkMiddleware</span>(<span class="params">extraArgument</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">&#123; dispatch, getState &#125;</span>) =&gt;</span> next =&gt; <span class="function"><span class="params">action</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> action === <span class="string">'function'</span>) &#123;</div><div class="line">      <span class="keyword">return</span> action(dispatch, getState, extraArgument);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> next(action);</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> thunk = createThunkMiddleware();</div><div class="line">thunk.withExtraArgument = createThunkMiddleware;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> thunk;</div></pre></td></tr></table></figure></p>
+<p>一共只有11行，action本身是一个object，带有type和arguments。上述将dispatch和getState传入action，next()和action()是redux提供的方法。接着做判断，如果action是一个function，就返回action(dispatch, getState,extraArgument)，否则返回next(action)。</p>
+<p>然后将他们引用到Redux Store中
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createStore, combineReducers, applyMiddleware &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"></div><div class="line"><span class="keyword">let</span> todoApp = combineReducers(reducers)</div><div class="line"><span class="keyword">let</span> store = createStore(</div><div class="line">  todoApp,</div><div class="line">  <span class="comment">// applyMiddleware() 告诉 createStore() 如何处理中间件</span></div><div class="line">  applyMiddleware(thunk)</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>首先我们从源码出发
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> compose <span class="keyword">from</span> <span class="string">'./compose'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">applyMiddleware</span>(<span class="params">...middleware</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function">(<span class="params">next</span>) =&gt;</span> (reducer,initialState) =&gt; &#123;</div><div class="line">        <span class="keyword">let</span> store = next(reducer, initialState)</div><div class="line">        <span class="keyword">let</span> disptach = store.dispatch</div><div class="line">        <span class="keyword">let</span> chain = []</div><div class="line">        </div><div class="line">        <span class="keyword">var</span> middlewareAPI = &#123;</div><div class="line">            <span class="attr">getState</span>: store.getState,</div><div class="line">            <span class="attr">dispatch</span>: <span class="function">(<span class="params">action</span>) =&gt;</span> dispatch(action)</div><div class="line">        &#125; </div><div class="line">        chain = middlewares.map(<span class="function"><span class="params">middlre</span> =&gt;</span> middleware(middlewareAPI))</div><div class="line">        dispatch = compose(...chain)(store.dispatch)</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> &#123;</div><div class="line">            ...store,</div><div class="line">            dispatch</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>下面我们从以下几个点介绍redux的middleware机制。</p>
+<ol>
+<li>函数式编程思想
+redux middlreware的思想是使用匿名单参数函数来实现多参数函数的方法。</li>
+</ol>
+<blockquote>
+<p>ES6实现一个curring函数
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">&gt; <span class="function"><span class="keyword">function</span> <span class="title">curring</span>(<span class="params">fn</span>)</span>&#123;</div><div class="line">&gt;     <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">curried</span>(<span class="params">...args</span>)</span>&#123;</div><div class="line">&gt;         <span class="keyword">return</span> args.length &gt;= fn.length ? fn.call(<span class="keyword">this</span>,...args):<span class="function">(<span class="params">...rest</span>)=&gt;</span>&#123;</div><div class="line">&gt;             <span class="keyword">return</span> curried.call(<span class="keyword">this</span>,...args,...rest)</div><div class="line">&gt;         &#125;</div><div class="line">&gt;     &#125;</div><div class="line">&gt; &#125;</div><div class="line">&gt;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>好处：</p>
+<ul>
+<li>易串联</li>
+<li>共享store
+最后我们来总结一下三者的区别</li>
+</ul>
+<ol start="2">
+<li>分发store</li>
+</ol>
+<p>创建一个普通的store
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">let</span> newStore = applyMiddleware(mid1,mid2,...)(createStore)(reducer,<span class="literal">null</span>)</div></pre></td></tr></table></figure></p>
+<p>由于
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> middlewareAPI = &#123;</div><div class="line">            <span class="attr">getState</span>: store.getState,</div><div class="line">            <span class="attr">dispatch</span>: <span class="function">(<span class="params">action</span>) =&gt;</span> dispatch(action)</div><div class="line">        &#125; </div><div class="line">chain = middlewares.map(<span class="function"><span class="params">middlre</span> =&gt;</span> middleware(middlewareAPI))</div></pre></td></tr></table></figure></p>
+<p>因为闭包，每个匿名函数都可以访问相同的store，即middlewareAPI。</p>
+<ol start="3">
+<li>compose
+compose 的源码就是一个函数 compose :
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...funcs</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (funcs.length === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="params">arg</span> =&gt;</span> arg</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (funcs.length === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> funcs[<span class="number">0</span>]</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// 获取最后一个函数</span></div><div class="line">    <span class="keyword">const</span> last = funcs[funcs.length - <span class="number">1</span>];</div><div class="line">    <span class="comment">// 获取除最后一个以外的函数[0,length-1)</span></div><div class="line">    <span class="keyword">const</span> rest = funcs.slice(<span class="number">0</span>, <span class="number">-1</span>)</div><div class="line">   <span class="comment">// 通过函数 curry 化</span></div><div class="line">  <span class="keyword">return</span> <span class="function">(<span class="params">...args</span>) =&gt;</span> rest.reduceRight(<span class="function">(<span class="params">composed, f</span>) =&gt;</span> f(composed), last(...args))</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ol>
+<p>这里的compose跟上文中的koa-compose有些类似。属于函数式编程中的组合，它将chain中的所有匿名函数[f1,f2,f3,...,fn]组成一个新的函数，即新的dispatch,假设n = 3:
+dispatch = f1(f2(f3(store.dispatch)))
+这时调用新dispatch，每一个middleware就依次执行了。</p>
+<ol start="4">
+<li>在middleware中调用dispatch</li>
+</ol>
+<p><img src="http://oum6ifofe.bkt.clouddn.com/image/v2-e5b8f433fec45c09260759fb12e90bb6_b.png" alt="image">
+从上图中得出结论，middleware通过next(action)一层层处理和传递action直到redux原生的dispatch。而如果某个middleware使用store.dispatch(action)来分发action，就相当于重新来一遍。</p>
+<p><strong>在middleware中使用dispatch的场景一般是接受一个定向action，这个action并不希望到达原生的分发action,往往用在一步请求的需求里，比如上面提到的redux-thunk，就是直接接受dispatch。</strong></p>
+<p>下面我们来总结一下三者的关系</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>运行逻辑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>express</td>
+<td>1.中间件为一个方法接受 req,res,next三个参数。2. 中间可以执行任何方法包括异步方法。3. 最后一定要通过res.end或者next来通知结束这个中间件方法。4. 如果没有执行res.end或者next访问会一直卡着不动直到超时。5.并且在这之后的中间件也会没法执行到。</td>
+</tr>
+<tr>
+<td>koa</td>
+<td>1. 中间件为一个方法接受 req,res,next 三个参数。2. 中间可以执行任何方法包括异步方法。3. 最后一定要通过res.end或者next来通知结束这个中间件方法。4. 如果没有执行res.end或者next访问会一直卡着不动直到超时。5.并且在这之后的中间件也会没法执行到。</td>
+</tr>
+<tr>
+<td>Redux</td>
+<td>1. 函数式编程思想设计 2， 给middleware分发store 3. 组合串联middlware 4. 在middleware调用dispatch</td>
+</tr>
+</tbody>
+</table>
+<h3>参考文档</h3>
+<hr>
+<ul>
+<li><a href="https://juejin.im/post/591c8b4544d904006c90a2cb" target="_blank" rel="external">你知道 koa 中间件执行原理吗?</a></li>
+<li><a href="http://cn.redux.js.org/docs/api/applyMiddleware.html" target="_blank" rel="external">redux gitbook</a></li>
+<li><a href="https://stackoverflow.com/questions/35411423/how-to-dispatch-a-redux-action-with-a-timeout/35415559#35415559" target="_blank" rel="external">redux-thunk of stackoverflow</a></li>
+<li><a href="http://syaning.com/2016/11/08/koa2/" target="_blank" rel="external">Koa2原理详解</a></li>
+<li>《深入React技术栈》</li>
+</ul>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/08/09/Facebook面试题之凸边形判断而衍生的实际场景应用/" data-toggle="tooltip" data-placement="top"
+                           title="Facebook面试题之凸边形判断而衍生的实际场景应用">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">异步编程模式</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">express: 由于是在ES6之前出现的，所以中间件的基础原理还是callback方式</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">koa: koa1得益于generator特性并通过co框架加入了自动流程管理。（co会把所有generator的返回封装成为Promise对象）koa2则使用了Async/Await的形式（仅仅知识genertator函数的语法糖）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">redux: 论redux的异步变成，更准确的应该是异步的action的方式。解决异步action的方式有多种，比如：redux-thunk,redux-saga,redux-promise等</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">middleware的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">middleware的执行原理及实现</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">express的middleware执行原理及实现</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">koa的middleware执行原理及实现</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">redux的middleware执行原理及实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考文档</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#middleware"
+                           title="middleware">middleware</a>
+                        
+                        <a class="tag" href="/tags/#Redux"
+                           title="Redux">Redux</a>
+                        
+                        <a class="tag" href="/tags/#Koa"
+                           title="Koa">Koa</a>
+                        
+                        <a class="tag" href="/tags/#Express"
+                           title="Express">Express</a>
+                        
+                        <a class="tag" href="/tags/#redux-thunk"
+                           title="redux-thunk">redux-thunk</a>
+                        
+                        <a class="tag" href="/tags/#函数式编程"
+                           title="函数式编程">函数式编程</a>
+                        
+                        <a class="tag" href="/tags/#compose"
+                           title="compose">compose</a>
+                        
+                        <a class="tag" href="/tags/#curring"
+                           title="curring">curring</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; Perkin 2017
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg">
+</body>
+
+</html>
