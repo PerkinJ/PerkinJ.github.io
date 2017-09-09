@@ -150,13 +150,13 @@
 
 
 <img class="wechat-title-img"
-     src="http://oum6ifofe.bkt.clouddn.comimage/reduxSaga.jpg">
+     src="http://oum6ifofe.bkt.clouddn.comimage/redux-saga.jpeg">
 
 
 <style>
     
     header.intro-header {
-        background-image: url('http://oum6ifofe.bkt.clouddn.comimage/reduxSaga.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+        background-image: url('http://oum6ifofe.bkt.clouddn.comimage/redux-saga.jpeg?imageView2/1/w/1400/h/400/interlace/1/q/90')
     }
 
     
@@ -236,7 +236,7 @@
 <h3 id="Redux-Aside"><a href="#Redux-Aside" class="headerlink" title="Redux Aside"></a>Redux Aside</h3><p>当然，在这里redux有点老生常谈了，言简意赅一下：</p>
 <p>a) 提供一个全局store，去存储应用的state，这里与内部的state不冲突，这里比如一个国家，有很多个省。</p>
 <p>b) 提供reducers给tore。就好比是每个省的省长，当遇到一些要改变省内状态的事情时，他们来决定是否接受或拒绝。</p>
-<p>c) 通过<figure class="highlight plain"><figcaption><span>store=&#123;store&#125;/>```传递，使得我们的应用能够拿到这个全局状态</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">d)app分发actions</div><div class="line"></div><div class="line">e)对于reducers来说，如果action与他们有关，便会捕获，修正他们的状态(纯函数的方式)</div><div class="line"></div><div class="line">f)当全局状态改变，被connected的app会接收这个改变，会再次渲染我们的react组件。</div><div class="line"></div><div class="line">### 模块分析</div><div class="line"></div><div class="line">#### 1. The Client State</div><div class="line">client模块主要是保存用户登录之后的token信息，此token为JWT(后文详细介绍)。</div><div class="line"></div><div class="line"></div><div class="line">```javascript</div><div class="line">// client存储的初始state</div><div class="line">const initialState = &#123;  </div><div class="line">  id: null,</div><div class="line">  token: null,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>c) 通过<figure class="highlight plain"><figcaption><span>store=&#123;store&#125;/>```传递，使得我们的应用能够拿到这个全局状态</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">d)app分发actions</div><div class="line"></div><div class="line">e)对于reducers来说，如果action与他们有关，便会捕获，修正他们的状态(纯函数的方式)</div><div class="line"></div><div class="line">f)当全局状态改变，被connected的app会接收这个改变，会再次渲染我们的react组件。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### 模块分析</div><div class="line"></div><div class="line">#### 1. The Client State</div><div class="line">client模块主要是保存用户登录之后的token信息，此token为JWT(后文详细介绍)。</div><div class="line"></div><div class="line"></div><div class="line">```javascript</div><div class="line">// client存储的初始state</div><div class="line">const initialState = &#123;  </div><div class="line">  id: null,</div><div class="line">  token: null,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
 <li><p>设置action</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; CLIENT_SET, CLIENT_UNSET &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">setClient</span> (<span class="params">token</span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">type</span>: CLIENT_SET,</div><div class="line">    token,</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">unsetClient</span> (<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">type</span>: CLIENT_UNSET,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
