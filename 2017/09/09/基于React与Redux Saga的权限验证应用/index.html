@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        基于React与Redux Saga的权限验证应用｜Perkin
+        基于React与Redux Saga的权限验证应用(一)｜Perkin
         
     </title>
 
@@ -167,7 +167,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>基于React与Redux Saga的权限验证应用</h1>
+                    <h1>基于React与Redux Saga的权限验证应用(一)</h1>
                     
                     <span class="meta">
                          作者 Perkin
@@ -196,7 +196,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            基于React与Redux Saga的权限验证应用
+            基于React与Redux Saga的权限验证应用(一)
         </span>
     </div>
 </header>
@@ -229,14 +229,16 @@
 <p>d) 安装依赖<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">npm i redux react-redux redux-saga react-router redux-form --save</div></pre></td></tr></table></figure></p>
 <p>e) 启动项目<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">npm start</div></pre></td></tr></table></figure></p>
 <p>f) 创建目录结构<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">src/  </div><div class="line">  login/ # 不同的容器对应不同的路由</div><div class="line">    sagas.js # 存储跟api调用有关的saga</div><div class="line">    reducer.js # 管理所有跟容器有关的状态</div><div class="line">    actions.js # 提供给容器层分发任务的动作(action)</div><div class="line">    constants.js # 对reducers/actions存储常量</div><div class="line">    index.js  # 容器型组件</div><div class="line"></div><div class="line">  signup/</div><div class="line">    sagas.js</div><div class="line">    reducer.js</div><div class="line">    actions.js</div><div class="line">    constants.js</div><div class="line">    index.js</div><div class="line"></div><div class="line">  widgets/</div><div class="line">    sagas.js</div><div class="line">    reducer.js</div><div class="line">    actions.js</div><div class="line">    constants.js</div><div class="line">    index.js</div><div class="line"></div><div class="line">  client/</div><div class="line">    reducer.js</div><div class="line">    actions.js</div><div class="line">    constants.js</div><div class="line"></div><div class="line">  notifications/ # 消息与错误的通知</div><div class="line">    Messages.js</div><div class="line">    Errors.js</div><div class="line"></div><div class="line">  lib/</div><div class="line">    api-errors.js # 处理api调用错误</div><div class="line">    check-auth.js # 当用户访问建立权限验证时应该被保护</div><div class="line"></div><div class="line">    index-reducer.js #对reducer统一管理，方便compose</div><div class="line">    index-sagas.js  #对saga统一管理</div></pre></td></tr></table></figure></p>
-<h3 id="建立入口文件"><a href="#建立入口文件" class="headerlink" title="建立入口文件"></a>建立入口文件</h3><h4 id="1-建立路由结构"><a href="#1-建立路由结构" class="headerlink" title="1. 建立路由结构"></a>1. 建立路由结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//...</span></div><div class="line">ReactDOM.render(  </div><div class="line">  &lt;Provider store=&#123;store&#125;&gt;</div><div class="line">    &lt;Router history=&#123;browserHistory&#125;&gt;</div><div class="line">      &lt;Route path="/" component=&#123;App&#125; &gt;</div><div class="line">        &lt;Route path="/login" component=&#123;Login&#125; /&gt;</div><div class="line">        &lt;Route path="/signup" component=&#123;Signup&#125; /&gt;</div><div class="line">        &lt;Route path="/widgets" component=&#123;Widgets&#125; /&gt;</div><div class="line">      &lt;/Route&gt;</div><div class="line">    &lt;/Router&gt;</div><div class="line">  &lt;/Provider&gt;,</div><div class="line">  document.getElementById('root'),</div><div class="line">)</div></pre></td></tr></table></figure>
+<h3 id="建立入口文件"><a href="#建立入口文件" class="headerlink" title="建立入口文件"></a>建立入口文件</h3><hr>
+<h4 id="1-建立路由结构"><a href="#1-建立路由结构" class="headerlink" title="1. 建立路由结构"></a>1. 建立路由结构</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//...</span></div><div class="line">ReactDOM.render(  </div><div class="line">  &lt;Provider store=&#123;store&#125;&gt;</div><div class="line">    &lt;Router history=&#123;browserHistory&#125;&gt;</div><div class="line">      &lt;Route path="/" component=&#123;App&#125; &gt;</div><div class="line">        &lt;Route path="/login" component=&#123;Login&#125; /&gt;</div><div class="line">        &lt;Route path="/signup" component=&#123;Signup&#125; /&gt;</div><div class="line">        &lt;Route path="/widgets" component=&#123;Widgets&#125; /&gt;</div><div class="line">      &lt;/Route&gt;</div><div class="line">    &lt;/Router&gt;</div><div class="line">  &lt;/Provider&gt;,</div><div class="line">  document.getElementById('root'),</div><div class="line">)</div></pre></td></tr></table></figure>
 <h4 id="2-建立中间件"><a href="#2-建立中间件" class="headerlink" title="2. 建立中间件"></a>2. 建立中间件</h4><figure class="highlight"><table><tr><td class="code"><pre><div class="line">// Import the index reducer and sagas</div><div class="line">import IndexReducer from './index-reducer'  </div><div class="line">import IndexSagas from './index-sagas</div><div class="line">const sagaMiddleware = createSagaMiddleware()</div></pre></td></tr></table></figure>
 <h4 id="3-引入Redux-Devtools-Chrome-Extension"><a href="#3-引入Redux-Devtools-Chrome-Extension" class="headerlink" title="3. 引入Redux Devtools Chrome Extension"></a>3. 引入Redux Devtools Chrome Extension</h4><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">const</span> composeSetup = process.env.NODE_ENV !== <span class="string">'production'</span> &amp;&amp; <span class="keyword">typeof</span> <span class="built_in">window</span> === <span class="string">'object'</span> &amp;&amp;  </div><div class="line">  <span class="built_in">window</span>.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?</div><div class="line">  <span class="built_in">window</span>.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose</div></pre></td></tr></table></figure>
 <h4 id="4-开始saga"><a href="#4-开始saga" class="headerlink" title="4. 开始saga"></a>4. 开始saga</h4><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">const store = createStore(  </div><div class="line">  IndexReducer,</div><div class="line">  composeSetup(applyMiddleware(sagaMiddleware)), // 使用Redux Devtool 去跟踪saga</div><div class="line">)</div><div class="line"></div><div class="line">sagaMiddleware.run(IndexSagas)</div></pre></td></tr></table></figure>
-<h3 id="Redux-Aside"><a href="#Redux-Aside" class="headerlink" title="Redux Aside"></a>Redux Aside</h3><p>当然，在这里redux有点老生常谈了，言简意赅一下：</p>
+<h3 id="Redux-Aside"><a href="#Redux-Aside" class="headerlink" title="Redux Aside"></a>Redux Aside</h3><hr>
+<p>当然，在这里redux有点老生常谈了，言简意赅一下：</p>
 <p>a) 提供一个全局store，去存储应用的state，这里与内部的state不冲突，这里比如一个国家，有很多个省。</p>
 <p>b) 提供reducers给tore。就好比是每个省的省长，当遇到一些要改变省内状态的事情时，他们来决定是否接受或拒绝。</p>
-<p>c) 通过<figure class="highlight plain"><figcaption><span>store=&#123;store&#125;/>```传递，使得我们的应用能够拿到这个全局状态</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">d)app分发actions</div><div class="line"></div><div class="line">e)对于reducers来说，如果action与他们有关，便会捕获，修正他们的状态(纯函数的方式)</div><div class="line"></div><div class="line">f)当全局状态改变，被connected的app会接收这个改变，会再次渲染我们的react组件。</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">### 模块分析</div><div class="line"></div><div class="line">#### 1. The Client State</div><div class="line">client模块主要是保存用户登录之后的token信息，此token为JWT(后文详细介绍)。</div><div class="line"></div><div class="line"></div><div class="line">```javascript</div><div class="line">// client存储的初始state</div><div class="line">const initialState = &#123;  </div><div class="line">  id: null,</div><div class="line">  token: null,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>c) 通过<figure class="highlight plain"><figcaption><span>store=&#123;store&#125;/>```传递，使得我们的应用能够拿到这个全局状态</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">d)app分发actions</div><div class="line"></div><div class="line">e)对于reducers来说，如果action与他们有关，便会捕获，修正他们的状态(纯函数的方式)</div><div class="line"></div><div class="line">f)当全局状态改变，被connected的app会接收这个改变，会再次渲染我们的react组件。</div><div class="line">### 模块搭建</div><div class="line"></div><div class="line">---</div><div class="line">#### 1. The Client State</div><div class="line">client模块主要是保存用户登录之后的token信息，此token为JWT(后文详细介绍)。</div><div class="line"></div><div class="line"></div><div class="line">```javascript</div><div class="line">// client存储的初始state</div><div class="line">const initialState = &#123;  </div><div class="line">  id: null,</div><div class="line">  token: null,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <ul>
 <li><p>设置action</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; CLIENT_SET, CLIENT_UNSET &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">setClient</span> (<span class="params">token</span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">type</span>: CLIENT_SET,</div><div class="line">    token,</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">unsetClient</span> (<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">type</span>: CLIENT_UNSET,</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
@@ -254,7 +256,73 @@
 </ul>
 <p>接着，创建reducer<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; SIGNUP_REQUESTING &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> signupRequest = <span class="function"><span class="keyword">function</span> <span class="title">signupRequest</span> (<span class="params">&#123; email, password &#125;</span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> &#123;</div><div class="line">    <span class="attr">type</span>: SIGNUP_REQUESTING,</div><div class="line">    email,</div><div class="line">    password,</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> signupRequest</div></pre></td></tr></table></figure></p>
 <p>为了保持我们的actions是纯(pure)的,我们将所有异步的操作交给saga来完成。（与thunk不同的是，在这里saga将ations抽成了promises chain来处理）</p>
-<h4 id="3-The-Signup-View"><a href="#3-The-Signup-View" class="headerlink" title="3. The Signup View"></a>3. The Signup View</h4><p>在这之前，我们先花一点功夫介绍下redux-form。</p>
+<h4 id="3-The-Signup-View"><a href="#3-The-Signup-View" class="headerlink" title="3. The Signup View"></a>3. The Signup View</h4><p>在这之前，我们先花一点功夫介绍下redux-form。为什么要用redux-form呢？想象一下，如果用state来保存要提交的数据，用onChange来获取用户输入，然后改变state中相应数据荐，简直是梦魇一般。<strong>如果使用Redux跟Redux-form,redux用来管理状态，redux-form来负责表单数据部分。</strong></p>
+<p>a) redux-form主要有以下特点：</p>
+<ul>
+<li>formReducer (reducer) :表单的各种操作以 Redux action 的方式，通过此 reducer 来促使 Redux store 数据的变化。</li>
+<li>reduxForm() (HOC):属于react装饰器，此高阶组件用以整合 Redux action 绑定的用户交互与您的组件，并返回一个新的组件供以使用。</li>
+<li><field>:一个Filed组件将用户输入与redux store相连接</field></li>
+</ul>
+<p>b) 数据流:</p>
+<p><img src="http://oum6ifofe.bkt.clouddn.com/image/reduxFormDiagram.png" alt="image"><br>数据流大概是这个样子的:</p>
+<ol>
+<li>用户点击这个 <figure class="highlight plain"><figcaption><span>组件,</span></figcaption><table><tr><td class="code"><pre><div class="line">2. &quot;Focus action&quot; 被触发,</div><div class="line">3. formReducer 更新了对应的状态,</div><div class="line">4. 这个状态被传回 ```&lt;input/&gt;</div></pre></td></tr></table></figure></li>
+</ol>
+<p>根据上面的数据流模型，我们搬出项目里的代码来分析：<br>第一步：Form reducer的添加<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//index-reducer.js</span></div><div class="line"><span class="keyword">import</span> &#123; combineReducers &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"><span class="keyword">import</span> &#123; reducer <span class="keyword">as</span> form &#125; <span class="keyword">from</span> <span class="string">'redux-form'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> signup <span class="keyword">from</span> <span class="string">'./signup/reducer'</span></div><div class="line"> </div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> IndexReducer = combineReducers(&#123;</div><div class="line">  signup,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> IndexReducer</div></pre></td></tr></table></figure></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// index.js</span></div><div class="line"><span class="keyword">const</span> store = createStore(</div><div class="line">  IndexReducer,</div><div class="line">  composeSetup(applyMiddleware(sagaMiddleware)), <span class="comment">// allows redux devtools to watch sagas</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<p>store需要知道组件如何发送action,因此我们需要在store中注册 formReducer，这样可以服务于整个app中你定义的所有表单组件，因此只需要注册一次。</p>
+<p>第二步:建立 Form component</p>
+<p>为了使表单组件可以与store进行交互，我们需要使用高价函数 reduxForm() 来包裹组件。他可以在执行提交表单等操作的时候，以props的方式提供表单内的state。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Signup</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">static</span> propTypes = &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render () &#123;</div><div class="line">    <span class="keyword">const</span> &#123;</div><div class="line">      handleSubmit,</div><div class="line">      <span class="attr">signup</span>: &#123;</div><div class="line">        requesting,</div><div class="line">        successful,</div><div class="line">        messages,</div><div class="line">        errors,</div><div class="line">      &#125;,</div><div class="line">    &#125; = <span class="keyword">this</span>.props</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div className="signup"&gt;</div><div class="line">        &#123;/* Use the Submit handler with our own submit handler*/&#125;</div><div class="line">        &lt;form className="widget-form" onSubmit=&#123;handleSubmit(this.submit)&#125;&gt;</div><div class="line">          //...</div><div class="line">        &lt;/form&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> mapStateToProps = <span class="function"><span class="params">state</span> =&gt;</span> (&#123;</div><div class="line">  <span class="attr">signup</span>: state.signup,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> connected = connect(mapStateToProps, &#123; signupRequest &#125;)(Signup)</div><div class="line"></div><div class="line"><span class="keyword">const</span> formed = reduxForm(&#123;</div><div class="line">  <span class="attr">form</span>: <span class="string">'signup'</span>,</div><div class="line">&#125;)(connected)</div><div class="line"></div><div class="line"><span class="comment">// Export our well formed component!</span></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> formed</div></pre></td></tr></table></figure></p>
+<p>第三步：完善 Form <field> Components</field></p>
+<p><field> 组件可以连接所有input类型组件的数据到store中，基本用法如下:<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">&lt;label htmlFor="email"&gt;Email&lt;/label&gt;</div><div class="line">&lt;Field</div><div class="line">   name="email"</div><div class="line">   type="text"</div><div class="line">   id="email"</div><div class="line">   className="email"</div><div class="line">   label="Email"</div><div class="line">   component="input"</div><div class="line">/&gt;</div></pre></td></tr></table></figure></field></p>
+<blockquote>
+<p>它创建了一个text类型的<figure class="highlight plain"><figcaption><span>value onChange,onBlur等属性，用于跟踪和维护此组件的各种状态。</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">到第三步为止表单上的操作数据已经可以填充至store，并可以执行提交表单操作</div><div class="line"></div><div class="line">第四步：增加sumbit</div><div class="line">```js</div><div class="line">  // Form fields `email` and `password` when the form is submitted</div><div class="line">  // this will in turn call the action</div><div class="line">  submit = (values) =&gt; &#123;</div><div class="line">    console.log(values)</div><div class="line">    this.props.signupRequest(values)</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>提交的数据以JSON对象的形式注入了此表单组件的 onSubmit方法里了，可以打印出来看</p>
+<p>c) 表单value的生命周期:</p>
+<p><img src="https://github.com/erikras/redux-form/raw/master/docs/valueLifecycle.png" alt="image"></p>
+<p>d) API</p>
+<p>这里只介绍本文使用的api，详细的api请移步<a href="http://redux-form.com/6.8.0/docs/api/" target="_blank" rel="external">官方文档</a></p>
+<ul>
+<li><p>reduxForm：可以通过配置一些参数创建表单修饰器，如配置表单验证，提交成功或者失败的回调，获取或者失去焦点的action发送，prop命名等。</p>
+<ul>
+<li><p>必要参数</p>
+<p>form : 用于命名您的表单，在store生成此命名的数据节点。</p>
+</li>
+<li><p>可选参数</p>
+<p>onChange : 表单触发 onChange 事件后的回调。</p>
+<p>onSubmit : 表单提交配置，可以配置需要提交哪些参数，还有提交时触发的 dispatch等。</p>
+<p>onSubmitSuccess  &amp; onSubmitFail :  提交表单成功和失败的回调。</p>
+<p>shouldValidate: 同步验证。</p>
+<p>shouldAsyncValidate: 异步验证。</p>
+</li>
+</ul>
+</li>
+<li><p>Field：所有需要与 store 数据连接的表单组件，都可以用 <field>。</field></p>
+<ul>
+<li>name：可以是简单的字符串，如 userName、password，也可以是复杂的结构。</li>
+<li>component：可以是一个组件、无状态组件或者DOM所支持的默认的标签(input、textarea、select)。</li>
+<li>其他所有属性会通过prop传递到元素生成器中。如 className</li>
+</ul>
+</li>
+<li><p>reducer:表单的reducer用来安装Redux state 到表单中。</p>
+<blockquote>
+<p>如果您使用 Immutablejs 来管理您的 Redux state，你必须这么从 redux-form/immutable 中导入 reducer 模块。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; combineReducers &#125; <span class="keyword">from</span> <span class="string">'redux'</span></div><div class="line"><span class="keyword">import</span> &#123; reducer <span class="keyword">as</span> form &#125; <span class="keyword">from</span> <span class="string">'redux-form'</span></div><div class="line"> <span class="comment">// Or with Immutablejs:</span></div><div class="line"><span class="comment">// import &#123; reducer as form &#125; from 'redux-form/immutable'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> IndexReducer = combineReducers(&#123;</div><div class="line">  form,</div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> IndexReducer</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<p>以上就是Redux-Form的基本介绍。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>项目的基本搭建</li>
+<li>redux的相关介绍</li>
+<li><strong>Redux-Form的使用以及基本的原理</strong></li>
+</ol>
+<p>由于篇幅原因，基于Redux-Form与Redux-Saga的权限验证应用的第一系列就到此结束。基于Redux-Form与Redux-Saga的权限验证应用的第二系列，我们将详细介绍Redux-Saga在该项目中的应用，以及相关的原理。</p>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><hr>
+<p><a href="https://start.jcolemorrison.com/react-and-redux-sagas-authentication-app-tutorial/" target="_blank" rel="external">React and Redux Sagas Authentication App Tutorial</a></p>
+<p><a href="https://juejin.im/entry/599174956fb9a03c5b04ce9e" target="_blank" rel="external">浅谈redux-form在项目中的运用</a></p>
+<p><a href="http://react-china.org/t/react-redux-redux-form/13292" target="_blank" rel="external">React-Redux技术栈——之redux-form详解</a></p>
 
                 <hr>
                 
@@ -280,7 +348,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目搭建"><span class="toc-text">项目搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建立API"><span class="toc-text">1. 建立API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-建立脚手架"><span class="toc-text">2. 建立脚手架</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立入口文件"><span class="toc-text">建立入口文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建立路由结构"><span class="toc-text">1. 建立路由结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-建立中间件"><span class="toc-text">2. 建立中间件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-引入Redux-Devtools-Chrome-Extension"><span class="toc-text">3. 引入Redux Devtools Chrome Extension</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-开始saga"><span class="toc-text">4. 开始saga</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redux-Aside"><span class="toc-text">Redux Aside</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-The-Signup-State"><span class="toc-text">2. The Signup State</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-The-Signup-View"><span class="toc-text">3. The Signup View</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目搭建"><span class="toc-text">项目搭建</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建立API"><span class="toc-text">1. 建立API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-建立脚手架"><span class="toc-text">2. 建立脚手架</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#建立入口文件"><span class="toc-text">建立入口文件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-建立路由结构"><span class="toc-text">1. 建立路由结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-建立中间件"><span class="toc-text">2. 建立中间件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-引入Redux-Devtools-Chrome-Extension"><span class="toc-text">3. 引入Redux Devtools Chrome Extension</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-开始saga"><span class="toc-text">4. 开始saga</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Redux-Aside"><span class="toc-text">Redux Aside</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-The-Signup-State"><span class="toc-text">2. The Signup State</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-The-Signup-View"><span class="toc-text">3. The Signup View</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-text">参考链接</span></a></li></ol>
                 </div>
             </div>
         </div>
