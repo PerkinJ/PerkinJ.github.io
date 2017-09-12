@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        学习Nginx相关配置｜Perkin
+        基于React与Redux Saga的权限验证应用(二)｜Perkin
         
     </title>
 
-    <link rel="canonical" href="http://perkinj.github.io/2017/07/16/学习相关Nginx配置/">
+    <link rel="canonical" href="http://perkinj.github.io/2017/09/12/基于Redux-Form与Redux-Saga的权限验证应用(二)/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -167,24 +167,27 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>学习Nginx相关配置</h1>
+                    <h1>基于React与Redux Saga的权限验证应用(二)</h1>
                     
                     <span class="meta">
                          作者 Perkin
                         <span>
-                          日期 2017-07-16
+                          日期 2017-09-12
                          </span>
                     </span>
                     <div class="tags text-center">
                         
-                        <a class="tag" href="/tags/#nginx"
-                           title="nginx">nginx</a>
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
                         
-                        <a class="tag" href="/tags/#proxy"
-                           title="proxy">proxy</a>
+                        <a class="tag" href="/tags/#redux-saga"
+                           title="redux-saga">redux-saga</a>
                         
-                        <a class="tag" href="/tags/#Node.js"
-                           title="Node.js">Node.js</a>
+                        <a class="tag" href="/tags/#redux-form"
+                           title="redux-form">redux-form</a>
+                        
+                        <a class="tag" href="/tags/#JWT"
+                           title="JWT">JWT</a>
                         
                     </div>
                 </div>
@@ -193,7 +196,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            学习Nginx相关配置
+            基于React与Redux Saga的权限验证应用(二)
         </span>
     </div>
 </header>
@@ -204,76 +207,39 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h3 id="Nginx的作用"><a href="#Nginx的作用" class="headerlink" title="Nginx的作用"></a>Nginx的作用</h3><ul>
-<li>反向代理，实现简单的负载均衡： 如果有多台服务器或者一台服务器多个端口，可以考虑用nginx。</li>
-<li>静态资源缓存：把一些静态资源（如静态页面，js等资源文件）放到nginx里，可以极大的提高服务的性能。</li>
-</ul>
-<blockquote>
-<p>Nginx是一款轻量的Web网页开发服务器，反向代理服务器，以稳定性，丰富的功能级，低系统资源消耗闻名。Nginx有着出色的HTTP反向代理能力，应该放在各种Web开发语言的前面。</p>
+                <blockquote>
+<p>本文是基于<a href="https://start.jcolemorrison.com/react-and-redux-sagas-authentication-app-tutorial/" target="_blank" rel="external">React and Redux Sagas Authentication App Tutorial</a>翻译整理，并总结而来，目的是学习redux-saga以及redux-form以及JWT形式的验证方式。</p>
 </blockquote>
-<h3 id="Nginx和单进程NodeJS比较"><a href="#Nginx和单进程NodeJS比较" class="headerlink" title="Nginx和单进程NodeJS比较"></a>Nginx和单进程NodeJS比较</h3><ol>
-<li>静态文件性能<br>NodeJS处理静态文件，受限于单线程异步IO模型。在多核处理器上，应该尽量使用Nginx来处理静态文件。</li>
-<li>反向代理规则<br>反向代理服务多样，让配置好的机器分担更多的压力。</li>
-<li>稳定性和转发性能<br>Nginx在同样的负载，相比NodeJS占用更好的CPU和内存资源</li>
-<li>安全性<br>减少DOS攻击</li>
-<li>运维管理<br>监听不同的端口，通过反向代理配置，将多个站点域名指向一个机器。</li>
-</ol>
-<h3 id="Nginx在服务器上的配置"><a href="#Nginx在服务器上的配置" class="headerlink" title="Nginx在服务器上的配置"></a>Nginx在服务器上的配置</h3><ol>
-<li><p>删除appache,首先检测是否有apache</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo service apache2 stop</div><div class="line">sudo service apache stop</div></pre></td></tr></table></figure>
-</li>
-<li><p>删除apache</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">update-rc.d -f apache2 remove</div></pre></td></tr></table></figure>
-</li>
-<li><p>移除apache</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo agt-get remove apache2</div></pre></td></tr></table></figure>
-</li>
-<li><p>更新列表</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure>
-</li>
-<li><p>安装nginx</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo apt-get install nginx</div></pre></td></tr></table></figure>
-</li>
-<li><p>进入nginx目录</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line"><span class="built_in">cd</span> /etc/nginx</div><div class="line"></div><div class="line"><span class="built_in">cd</span> conf.d</div></pre></td></tr></table></figure>
-</li>
-<li><p>命名</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo vi perkinzone-com-8081.conf</div></pre></td></tr></table></figure>
-</li>
-<li><p>配置</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">upstream perkinzone &#123;</div><div class="line">        server 127.0.0.1:8081</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">        listen:80;</div><div class="line">        server_name:localhost;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">                proxy_set_header X-Real-IP <span class="variable">$remote_addr</span>;</div><div class="line">                proxy_set_header X-Forward-For <span class="variable">$proxy_add_xforwarded_for</span>;</div><div class="line">                proxy_set_header Host <span class="variable">$http_host</span>;</div><div class="line">                proxy_set_header X-Nginx-Proxy <span class="literal">true</span>;</div><div class="line"></div><div class="line">                proxy_pass http://perkinzone;  //配置指令来实现代理，把域名配置到代理的名字上面，或者是应用的名字上面</div><div class="line">                proxy_redirect off;</div><div class="line">        &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-</li>
-<li><p>然后再配置nginx.conf</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo vi nginx.conf</div></pre></td></tr></table></figure>
-</li>
-<li><p>查看是否被注释，注释则打开</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">include /etc/nginx/conf.d/*.conf;</div><div class="line">include /etc/nginx/sites-enabled/*;</div></pre></td></tr></table></figure>
-</li>
-<li><p>检测配置文件是否有错误</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo nginx -t</div></pre></td></tr></table></figure>
-</li>
-<li><p>重启nginx</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><div class="line">sudo nginx -s reload</div><div class="line"></div><div class="line">sudo service nginx restart</div></pre></td></tr></table></figure>
-</li>
-<li><p>让nginx对外透明，编辑nginx.conf<br>```sh<br>sudo vi nginx.conf   //打开 server_tokens off;</p>
-</li>
-<li>再设置防火墙</li>
-</ol>
+<p><a href="http://perkinzone.cn/2017/09/09/%E5%9F%BA%E4%BA%8EReact%E4%B8%8ERedux%20Saga%E7%9A%84%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81%E5%BA%94%E7%94%A8/" target="_blank" rel="external">基于React与Redux Saga的权限验证应用(一)</a>主要介绍了项目的搭建，redux的基础知识，以及redux-form，本文开始介绍redux-saga，在项目中的运用。</p>
+<h3>Redux-Saga</h3>
+<p>redux-saga是一个redux中间件，主要有下面的特点：</p>
+<ul>
+<li>集中解决redux副作用的问题</li>
+<li>依靠generator/yield来实现异步</li>
+<li>类redux-thunk中间件</li>
+<li>watch/worker(监听-&gt;执行)的工作形式</li>
+</ul>
+<p>下面我们来看看项目中是如何实现的</p>
+<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; SIGNUP_REQUESTING &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// watcher会监听运行的SIGNUP_REQUESTING action</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupFlow</span> (<span class="params">action</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 监听SIGNUP_REQUESTING，当我们dispatch时，调用signupFlow()</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupWatcher</span> (<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="comment">// takelatest会发起最新的一次调用</span></div><div class="line">  <span class="keyword">yield</span> takeLatest(SIGNUP_REQUESTING, signupFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> signupWatcher</div></pre></td></tr></table></figure></p>
+<p>以上过程可以简化为：
+1)等待直到SIGNUP_REQUESTING这个动作被分发
+2)当动作被接收后，调用signupFlow()
+3)signupFlow()会在每一异步过程以generator单步执行。</p>
+<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/signup/sagas.js</span></div><div class="line"><span class="keyword">import</span> &#123; call, put, takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; handleApiErrors &#125; <span class="keyword">from</span> <span class="string">'../lib/api-errors'</span>  </div><div class="line"><span class="keyword">import</span> &#123;  </div><div class="line">  SIGNUP_REQUESTING,</div><div class="line">  SIGNUP_SUCCESS,</div><div class="line">  SIGNUP_ERROR,</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> signupUrl = <span class="string">`<span class="subst">$&#123;process.env.REACT_APP_API_URL&#125;</span>/api/Clients`</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">signupApi</span> (<span class="params">email, password</span>) </span>&#123;  </div><div class="line">  <span class="comment">// call to the "fetch".  this is a "native" function for browsers</span></div><div class="line">  <span class="comment">// that's conveniently polyfilled in create-react-app if not available</span></div><div class="line">  <span class="keyword">return</span> fetch(signupUrl, &#123;</div><div class="line">    <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">    <span class="attr">headers</span>: &#123;</div><div class="line">      <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">body</span>: <span class="built_in">JSON</span>.stringify(&#123; email, password &#125;),</div><div class="line">  &#125;)</div><div class="line">    .then(handleApiErrors) <span class="comment">// we'll make this in a second</span></div><div class="line">    .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</div><div class="line">    .then(<span class="function"><span class="params">json</span> =&gt;</span> json)</div><div class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123; <span class="keyword">throw</span> error &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">// ..</span></div></pre></td></tr></table></figure></p>
+<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/lib/api-errors.js</span></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">handleApiErrors</span> (<span class="params">response</span>) </span>&#123;  </div><div class="line">  <span class="keyword">if</span> (!response.ok) <span class="keyword">throw</span> <span class="built_in">Error</span>(response.statusText)</div><div class="line">  <span class="keyword">return</span> response</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3>参考链接</h3>
+<hr>
+<p><a href="https://zhuanlan.zhihu.com/p/23012870" target="_blank" rel="external">redux-saga 实践总结</a></p>
 
                 <hr>
                 
 
                 <ul class="pager">
                     
-                    <li class="previous">
-                        <a href="/2017/07/23/学习react&redux之自定义createStore/" data-toggle="tooltip" data-placement="top"
-                           title="学习react&redux之自定义createStore">&larr; Previous Post</a>
-                    </li>
-                    
                     
                     <li class="next">
-                        <a href="/2017/06/16/基于react的视频类APP分享页填坑总结/" data-toggle="tooltip" data-placement="top"
-                           title="基于react的视频类APP分享页填坑总结">Next Post &rarr;</a>
+                        <a href="/2017/09/09/基于React与Redux Saga的权限验证应用/" data-toggle="tooltip" data-placement="top"
+                           title="基于React与Redux Saga的权限验证应用(一)">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -289,7 +255,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx的作用"><span class="toc-text">Nginx的作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx和单进程NodeJS比较"><span class="toc-text">Nginx和单进程NodeJS比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Nginx在服务器上的配置"><span class="toc-text">Nginx在服务器上的配置</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Redux-Saga</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考链接</span></a></li></ol>
                 </div>
             </div>
         </div>
@@ -311,14 +277,17 @@
                     </h5>
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#nginx"
-                           title="nginx">nginx</a>
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
                         
-                        <a class="tag" href="/tags/#proxy"
-                           title="proxy">proxy</a>
+                        <a class="tag" href="/tags/#redux-saga"
+                           title="redux-saga">redux-saga</a>
                         
-                        <a class="tag" href="/tags/#Node.js"
-                           title="Node.js">Node.js</a>
+                        <a class="tag" href="/tags/#redux-form"
+                           title="redux-form">redux-form</a>
+                        
+                        <a class="tag" href="/tags/#JWT"
+                           title="JWT">JWT</a>
                         
                     </div>
                 </section>
