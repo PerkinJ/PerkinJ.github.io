@@ -211,8 +211,7 @@
 <p>本文是基于<a href="https://start.jcolemorrison.com/react-and-redux-sagas-authentication-app-tutorial/" target="_blank" rel="external">React and Redux Sagas Authentication App Tutorial</a>翻译整理，并总结而来，目的是学习redux-saga以及redux-form以及JWT形式的验证方式。</p>
 </blockquote>
 <p><a href="http://perkinzone.cn/2017/09/09/%E5%9F%BA%E4%BA%8EReact%E4%B8%8ERedux%20Saga%E7%9A%84%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81%E5%BA%94%E7%94%A8/" target="_blank" rel="external">基于React与Redux Saga的权限验证应用(一)</a>主要介绍了项目的搭建，redux的基础知识，以及redux-form，本文开始介绍redux-saga，在项目中的运用。</p>
-<h3>Redux-Saga</h3>
-<p>redux-saga是一个redux中间件，主要有下面的特点：</p>
+<h3 id="Redux-Saga"><a href="#Redux-Saga" class="headerlink" title="Redux-Saga"></a>Redux-Saga</h3><h4 id="在项目中运用redux-saga"><a href="#在项目中运用redux-saga" class="headerlink" title="在项目中运用redux-saga"></a>在项目中运用redux-saga</h4><p>redux-saga是一个redux中间件，主要有下面的特点：</p>
 <ul>
 <li>集中解决redux副作用的问题</li>
 <li>依靠generator/yield来实现异步</li>
@@ -220,14 +219,80 @@
 <li>watch/worker(监听-&gt;执行)的工作形式</li>
 </ul>
 <p>下面我们来看看项目中是如何实现的</p>
-<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; SIGNUP_REQUESTING &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// watcher会监听运行的SIGNUP_REQUESTING action</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupFlow</span> (<span class="params">action</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 监听SIGNUP_REQUESTING，当我们dispatch时，调用signupFlow()</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupWatcher</span> (<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="comment">// takelatest会发起最新的一次调用</span></div><div class="line">  <span class="keyword">yield</span> takeLatest(SIGNUP_REQUESTING, signupFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> signupWatcher</div></pre></td></tr></table></figure></p>
-<p>以上过程可以简化为：
-1)等待直到SIGNUP_REQUESTING这个动作被分发
-2)当动作被接收后，调用signupFlow()
-3)signupFlow()会在每一异步过程以generator单步执行。</p>
-<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/signup/sagas.js</span></div><div class="line"><span class="keyword">import</span> &#123; call, put, takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; handleApiErrors &#125; <span class="keyword">from</span> <span class="string">'../lib/api-errors'</span>  </div><div class="line"><span class="keyword">import</span> &#123;  </div><div class="line">  SIGNUP_REQUESTING,</div><div class="line">  SIGNUP_SUCCESS,</div><div class="line">  SIGNUP_ERROR,</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> signupUrl = <span class="string">`<span class="subst">$&#123;process.env.REACT_APP_API_URL&#125;</span>/api/Clients`</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">signupApi</span> (<span class="params">email, password</span>) </span>&#123;  </div><div class="line">  <span class="comment">// call to the "fetch".  this is a "native" function for browsers</span></div><div class="line">  <span class="comment">// that's conveniently polyfilled in create-react-app if not available</span></div><div class="line">  <span class="keyword">return</span> fetch(signupUrl, &#123;</div><div class="line">    <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">    <span class="attr">headers</span>: &#123;</div><div class="line">      <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">body</span>: <span class="built_in">JSON</span>.stringify(&#123; email, password &#125;),</div><div class="line">  &#125;)</div><div class="line">    .then(handleApiErrors) <span class="comment">// we'll make this in a second</span></div><div class="line">    .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</div><div class="line">    .then(<span class="function"><span class="params">json</span> =&gt;</span> json)</div><div class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123; <span class="keyword">throw</span> error &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">// ..</span></div></pre></td></tr></table></figure></p>
-<p><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/lib/api-errors.js</span></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">handleApiErrors</span> (<span class="params">response</span>) </span>&#123;  </div><div class="line">  <span class="keyword">if</span> (!response.ok) <span class="keyword">throw</span> <span class="built_in">Error</span>(response.statusText)</div><div class="line">  <span class="keyword">return</span> response</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3>参考链接</h3>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; SIGNUP_REQUESTING &#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// watcher会监听运行的SIGNUP_REQUESTING action</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupFlow</span> (<span class="params">action</span>) </span>&#123;&#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">// 监听SIGNUP_REQUESTING，当我们dispatch时，调用signupFlow()</span></div><div class="line"><span class="function"><span class="keyword">function</span>* <span class="title">signupWatcher</span> (<span class="params"></span>) </span>&#123;  </div><div class="line">  <span class="comment">// takelatest会发起最新的一次调用</span></div><div class="line">  <span class="keyword">yield</span> takeLatest(SIGNUP_REQUESTING, signupFlow)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> signupWatcher</div></pre></td></tr></table></figure>
+<p>以上过程可以简化为：</p>
+<p>1)等待直到SIGNUP_REQUESTING这个动作被分发</p>
+<p>2)当动作被接收后，调用signupFlow()</p>
+<p>3)signupFlow()会在每一异步过程以generator单步执行,方便地处理复杂异步问题。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/signup/sagas.js</span></div><div class="line"><span class="keyword">import</span> &#123; call, put, takeLatest &#125; <span class="keyword">from</span> <span class="string">'redux-saga/effects'</span>  </div><div class="line"><span class="keyword">import</span> &#123; handleApiErrors &#125; <span class="keyword">from</span> <span class="string">'../lib/api-errors'</span>  </div><div class="line"><span class="keyword">import</span> &#123;  </div><div class="line">  SIGNUP_REQUESTING,</div><div class="line">  SIGNUP_SUCCESS,</div><div class="line">  SIGNUP_ERROR,</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'./constants'</span></div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">const</span> signupUrl = <span class="string">`<span class="subst">$&#123;process.env.REACT_APP_API_URL&#125;</span>/api/Clients`</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">signupApi</span> (<span class="params">email, password</span>) </span>&#123;  </div><div class="line">  <span class="keyword">return</span> fetch(signupUrl, &#123;</div><div class="line">    <span class="attr">method</span>: <span class="string">'POST'</span>,</div><div class="line">    <span class="attr">headers</span>: &#123;</div><div class="line">      <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">body</span>: <span class="built_in">JSON</span>.stringify(&#123; email, password &#125;),</div><div class="line">  &#125;)</div><div class="line">    .then(handleApiErrors)</div><div class="line">    .then(<span class="function"><span class="params">response</span> =&gt;</span> response.json())</div><div class="line">    .then(<span class="function"><span class="params">json</span> =&gt;</span> json)</div><div class="line">    .catch(<span class="function">(<span class="params">error</span>) =&gt;</span> &#123; <span class="keyword">throw</span> error &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">// ..</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">//src/lib/api-errors.js</span></div><div class="line"><span class="comment">// 手动处理error</span></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">handleApiErrors</span> (<span class="params">response</span>) </span>&#123;  </div><div class="line">  <span class="keyword">if</span> (!response.ok) <span class="keyword">throw</span> <span class="built_in">Error</span>(response.statusText)</div><div class="line">  <span class="keyword">return</span> response</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="redux-saga的常用api"><a href="#redux-saga的常用api" class="headerlink" title="redux-saga的常用api"></a>redux-saga的常用api</h4><ul>
+<li>Saga辅助函数<ul>
+<li>takeEvery:允许多个请求同时启动。在某个特定时刻，我们可以启动一个新的请求任务， 尽管之前还有一个或多个 请求尚未结束。</li>
+<li>takeLastest:想得到最新那个请求的响应</li>
+</ul>
+</li>
+<li><p>声明式Effects<br>我们从generator里yield纯Javascript对象以表达Saga逻辑，称这些对象为Effects。可以当作是发送给middleware的指令以执行某些操作，即调用某些异步函数，发起一个action到store。</p>
+<ul>
+<li><p>call:通过call,我们不立即执行异步调用，而是创建一个描述结果的信息<br>这与redux中的action creator一样，创建一个将被Store执行的、描述的action的纯文本信息</p>
+<blockquote>
+<p>当然call同样支持调用对象方法,比如</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">yield</span> call([obj, obj.method], arg1, arg2, ...) <span class="comment">// 如同 obj.method(arg1, arg2 ...)</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>apply<br>与call类似，提供了另外一种调用</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">yield apply(obj, obj.method, [arg1, arg2, ...])</div></pre></td></tr></table></figure>
+</li>
+<li><p>cps:以上call跟apply适合返回promise结果的函数，而cps可以用来处理Node风格的函数,cps 表示的是延续传递风格（Continuation Passing Style））。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; cps &#125; <span class="keyword">from</span> <span class="string">'redux-saga'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> content = <span class="keyword">yield</span> cps(readFile, <span class="string">'/path/to/file'</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>take:与call跟put类似，它创建另一个命令对象，告诉middleware等待一个特定的action。与action被推向（pushed） 任务处理函数不同，Saga 是自己主动拉取action。好处：1. 能够实现一些使用传统的push方法做非常规事情的控制流2. 可以使用熟悉的同步风格来描述我们的控制流，比如：</p>
+  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">//使用拉取（pull）模式，我们可以在同一个地方写控制流。</div><div class="line">function* loginFlow() &#123;</div><div class="line">  while(true) &#123;</div><div class="line">    yield take(&apos;LOGIN&apos;)</div><div class="line">    // ... perform the login logic</div><div class="line">    yield take(&apos;LOGOUT&apos;)</div><div class="line">    // ... perform the logout logic</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>fork:表示无阻塞调用，当我们fork一个任务，任务会在后台启动，调用者也可以继续它自己的流程，而不用等待被 fork 的任务结束。</p>
+</li>
+<li>cancel:取消fork任务</li>
+<li>race:在多个 Effects 之间触发一个竞赛,另一个有用的功能是，它会自动取消那些失败的 Effects</li>
+</ul>
+</li>
+<li><p>发起action</p>
+<ul>
+<li><p>put:用于创建 dispatch Effect</p>
+<blockquote>
+<p>这样通过以上声明式的解决方案，我们可以很轻易的测试generator。这次就不深入讨论。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="redux-saga跟redux-thunk的区别"><a href="#redux-saga跟redux-thunk的区别" class="headerlink" title="redux-saga跟redux-thunk的区别"></a>redux-saga跟redux-thunk的区别</h4><p>redux-thunk</p>
+<blockquote>
+<p>Redux本身只能处理同步的Action，但可以通过中间件来拦截处理其它类型的action，比如函数(Thunk)，再用回调触发普通Action，从而实现异步处理，在这点上所有Redux的异步方案都是类似的。</p>
+</blockquote>
+<p>redux-thunk最大的特点是：redux-thunk 以延迟执行的方式把副作用的责任推卸到用户身上。</p>
+<ul>
+<li>Sagas 是通过 Generator 函数来创建的，意味着可以用同步的方式写异步的代码；</li>
+<li>Thunks 是在 action 被创建时才调用，Sagas 在应用启动时就开始调用，监听action 并做相应处理； （通过创建 Sagas 将所有的异步操作逻辑收集在一个地方集中处理）</li>
+<li>启动的任务可以在任何时候通过手动取消，也可以把任务和其他的 Effects 放到 race 方法里可以自动取消</li>
+</ul>
+<p>redux-sage相比于redux-thunk的好处：</p>
+<ol>
+<li>易于测试</li>
+<li>更复杂的控制流</li>
+</ol>
+<h4 id="redux-saga的优缺点"><a href="#redux-saga的优缺点" class="headerlink" title="redux-saga的优缺点"></a>redux-saga的优缺点</h4><p>缺点：</p>
+<ul>
+<li>由于saga采用generator配合fetch来完成异步，而fetch不强迫我们捕获异常，这往往会造成异常发生时难以发现原因。</li>
+<li>generator 的调试环境比较糟糕，babel 的 source-map 经常错位，经常要手动加 debugger 来调试。</li>
+<li>使用的其它异步中间件，或许难以和 redux-saga 搭配良好</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>保持 action 的简单纯粹，流程拆分更细，所有异步的action 或者特殊要求的action都在sagas中做统一处理，流程逻辑更清晰，模块更干净；</li>
+<li>声明式的 Effects，能容易地测试 Generator 里所有的业务逻辑</li>
+<li>以用同步的方式写异步代码，可以做一些async 函数做不到的事情 (无阻塞并发、取消请求)</li>
+<li>可以通过监听Action 来进行前端的打点日志记录，减少侵入式打点对代码的侵入程度<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3></li>
+</ul>
 <hr>
 <p><a href="https://zhuanlan.zhihu.com/p/23012870" target="_blank" rel="external">redux-saga 实践总结</a></p>
 
@@ -255,7 +320,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Redux-Saga</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考链接</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Redux-Saga"><span class="toc-text">Redux-Saga</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#在项目中运用redux-saga"><span class="toc-text">在项目中运用redux-saga</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redux-saga的常用api"><span class="toc-text">redux-saga的常用api</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redux-saga跟redux-thunk的区别"><span class="toc-text">redux-saga跟redux-thunk的区别</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#redux-saga的优缺点"><span class="toc-text">redux-saga的优缺点</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考链接"><span class="toc-text">参考链接</span></a></li></ol>
                 </div>
             </div>
         </div>
