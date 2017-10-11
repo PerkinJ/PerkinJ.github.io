@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        JavaScript 轻量级函数式编程(学习总结)｜Perkin
+        
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/2017/10/11/JavaScript 轻量级函数式编程(学习总结)/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                的博客
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://oum6ifofe.bkt.clouddn.com/image/fp.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/fp.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>JavaScript 轻量级函数式编程(学习总结)</h1>
+                    
+                    <span class="meta">
+                         作者 Perkin
+                        <span>
+                          日期 2017-10-11
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#函数式编程"
+                           title="函数式编程">函数式编程</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            JavaScript 轻量级函数式编程(学习总结)
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <blockquote>
+<p>最近在<a href="https://link.juejin.im/?target=https%3A%2F%2Fgithub.com%2Fgetify" target="_blank" rel="external">学习JavaScript 轻量级函数式编程</a>的教程，Kyle Simpson作者也是《You-Dont-Know-JS》的作者，感谢译者团队翻译的<a href="https://juejin.im/post/599a7d8a518825242147afe8" target="_blank" rel="external">《JavaScript 轻量级函数式编程》</a>（文中有提到），对于初学函数式编程来说，直接看英文文档还是很吃力的，毕竟很多概念不容易理解，建议看完这个系列译文之后，再回过头来看看英文教程。下面是我对学习中出现的一些概念以及重点做了一些概要，方便自己今后回顾，也方便其他小伙伴学习了解。</p>
+<h2 id="函数基础"><a href="#函数基础" class="headerlink" title="函数基础"></a>函数基础</h2><h4 id="函数输入"><a href="#函数输入" class="headerlink" title="函数输入"></a>函数输入</h4><p>arguments 是你输入的值（实参）， parameters 是函数中的命名变量（形参），用于接收函数的输入值。</p>
+</blockquote>
+<p>输入计数：Arity</p>
+<p>关于实参的小技巧<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params">...args</span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log( args[<span class="number">3</span>] );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> arr = [ <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span> ];</div><div class="line"></div><div class="line">foo( ...arr );                        <span class="comment">// 4</span></div></pre></td></tr></table></figure></p>
+<p>关于形参的小技巧</p>
+<p>我们都应该尽可能使用声明性的和自解释的代码。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"> &#123;x,y&#125; = &#123;&#125; </span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log( x, y );</div><div class="line">&#125;</div><div class="line"></div><div class="line">foo( &#123;</div><div class="line">    <span class="attr">y</span>: <span class="number">3</span></div><div class="line">&#125; );</div></pre></td></tr></table></figure></p>
+<h4 id="函数输出"><a href="#函数输出" class="headerlink" title="函数输出"></a>函数输出</h4><p>因为 JS 对数组、对象和函数都使用引用和引用复制，我们可以很容易地从函数中创建输出，即使是无心的。<br>没有副作用的函数也有一个特殊的名称：纯函数。</p>
+<h4 id="函数功能"><a href="#函数功能" class="headerlink" title="函数功能"></a>函数功能</h4><blockquote>
+<p>函数是可以接受并且返回任何类型的值。一个函数如果可以接受或返回一个甚至多个函数，它被叫做高阶函数。</p>
+</blockquote>
+<ul>
+<li><p>保持作用域</p>
+<p>  当一个函数内部存在另一个函数的作用域时，对当前函数进行操作,当内部函数从外部函数引用变量，这被称作闭包。</p>
+</li>
+<li><p>偏函数应用和柯里化</p>
+</li>
+</ul>
+<h4 id="句法"><a href="#句法" class="headerlink" title="句法"></a>句法</h4><blockquote>
+<p>具体来说，函数具有一个 name 的属性，用于保存函数在语法上设定名称的字符串值，例如 “helloMyNameIs” 或 “FunctionExpr”。 这个name 属性特别用于 JS 环境的控制台或开发工具。当我们在堆栈轨迹中追踪（通常来自异常）时，这个属性可以列出该函数。而如果是匿名的话，这个列表条目不给开发人员任何关于异常来源路径的线索。它没有给我们开发者提供任何帮助。</p>
+</blockquote>
+<p>命名函数比匿名函数更可取：</p>
+<ul>
+<li>堆栈轨迹调试</li>
+<li>可靠的自我引用</li>
+<li>可读性。</li>
+</ul>
+<h4 id="This"><a href="#This" class="headerlink" title="This"></a>This</h4><p>JavaScript 的 function 有一个 this 关键字，每个函数调用都会自动绑定。this 关键字有许多不同的方式描述，但我更喜欢说它提供了一个对象上下文来使该函数运行。</p>
+<p>this 因为各种原因，不符合函数式编程的原则。其中一个明显的问题是隐式 this 共享。</p>
+<h3 id="管理函数的输入"><a href="#管理函数的输入" class="headerlink" title="管理函数的输入"></a>管理函数的输入</h3><h4 id="立即传参与稍后传参"><a href="#立即传参与稍后传参" class="headerlink" title="立即传参与稍后传参"></a>立即传参与稍后传参</h4><p>偏函数：在函数调用现场（function call-site），将实参应用（apply） 于形参。偏函数严格来讲是一个减少函数参数个数（arity）的过程；这里的参数个数指的是希望传入的形参的数量。</p>
+<p>柯里化（currying）技术：将一个多参数（higher-arity）函数拆解为一系列的单元链式函数。</p>
+<p>区别：函数会明确地返回一个期望只接收下一个实参的函数，而不是那个能接收所有剩余实参的函数。</p>
+<p>柯里化的好处是，每次函数调用传入一个实参，并生成另一个特定性更强的函数，之后我们可以在程序中获取并使用那个新函数。而偏应用则是预先指定所有将被偏应用的实参，产出一个等待接收剩下所有实参的函数。</p>
+<h4 id="恒定参数"><a href="#恒定参数" class="headerlink" title="恒定参数"></a>恒定参数</h4><p>Certain API 禁止直接给方法传值，而要求我们传入一个函数，就算这个函数只是返回一个值。JS Promise 中的 then(..) 方法就是一个 Certain API。</p>
+<h4 id="参数顺序的那些事儿"><a href="#参数顺序的那些事儿" class="headerlink" title="参数顺序的那些事儿"></a>参数顺序的那些事儿</h4><p>命名实参（named-argument）:命名实参主要的好处就是不用再纠结实参传入的顺序，因此提高了可读性。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">partialProps</span>(<span class="params">fn,presetArgsObj</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">partiallyApplied</span>(<span class="params">laterArgsObj</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> fn( <span class="built_in">Object</span>.assign( &#123;&#125;, presetArgsObj, laterArgsObj ) );</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">curryProps</span>(<span class="params">fn,arity = <span class="number">1</span></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (<span class="function"><span class="keyword">function</span> <span class="title">nextCurried</span>(<span class="params">prevArgsObj</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">curried</span>(<span class="params">nextArgObj = &#123;&#125;</span>)</span>&#123;</div><div class="line">            <span class="keyword">var</span> [key] = <span class="built_in">Object</span>.keys( nextArgObj );</div><div class="line">            <span class="keyword">var</span> allArgsObj = <span class="built_in">Object</span>.assign( &#123;&#125;, prevArgsObj, &#123; [key]: nextArgObj[key] &#125; );</div><div class="line"></div><div class="line">            <span class="keyword">if</span> (<span class="built_in">Object</span>.keys( allArgsObj ).length &gt;= arity) &#123;</div><div class="line">                <span class="keyword">return</span> fn( allArgsObj );</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">return</span> nextCurried( allArgsObj );</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">    &#125;)( &#123;&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="无形参风格"><a href="#无形参风格" class="headerlink" title="无形参风格"></a>无形参风格</h4><p>在函数式编程的世界中，有一种流行的代码风格，其目的是通过移除不必要的形参-实参映射来减少视觉上的干扰。这种风格的正式名称为 “隐性编程（tacit programming）”，一般则称作 “无形参（point-free）” 风格。术语 “point” 在这里指的是函数形参。</p>
+<p>使用无形参风格的关键，是找到你代码中，有哪些地方的函数直接将其形参作为内部函数调用的实参。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">double</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> x * <span class="number">2</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>].map( double );</div><div class="line"><span class="comment">// [2,4,6,8,10]</span></div></pre></td></tr></table></figure></p>
+<h3 id="组合函数"><a href="#组合函数" class="headerlink" title="组合函数"></a>组合函数</h3><h4 id="通用组合"><a href="#通用组合" class="headerlink" title="通用组合"></a>通用组合</h4><p>我们能够像这样实现一个通用 compose(..) 实用函数：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...fns</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">composed</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">        <span class="comment">// 拷贝一份保存函数的数组</span></div><div class="line">        <span class="keyword">var</span> list = fns.slice();</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (list.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// 将最后一个函数从列表尾部拿出</span></div><div class="line">            <span class="comment">// 并执行它</span></div><div class="line">            result = list.pop()( result );</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ES6 箭头函数形式写法</span></div><div class="line"><span class="keyword">var</span> compose =</div><div class="line">    <span class="function">(<span class="params">...fns</span>) =&gt;</span></div><div class="line">        result =&gt; &#123;</div><div class="line">            <span class="keyword">var</span> list = fns.slice();</div><div class="line"></div><div class="line">            <span class="keyword">while</span> (list.length &gt; <span class="number">0</span>) &#123;</div><div class="line">                <span class="comment">// 将最后一个函数从列表尾部拿出</span></div><div class="line">                <span class="comment">// 并执行它</span></div><div class="line">                result = list.pop()( result );</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">return</span> result;</div><div class="line">        &#125;;</div></pre></td></tr></table></figure></p>
+<h4 id="compose不同的实现"><a href="#compose不同的实现" class="headerlink" title="compose不同的实现"></a>compose不同的实现</h4><p>原始版本的 compose(..) 使用一个循环并且饥渴的（也就是，立刻）执行计算，将一个调用的结果传递到下一个调用。我们可以通过 reduce(..) （代替循环）做到同样的事。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...fns</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">composed</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> fns.reverse().reduce( <span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">result,fn</span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> fn( result );</div><div class="line">        &#125;, result );</div><div class="line">    &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ES6 箭头函数形式写法</span></div><div class="line"><span class="keyword">var</span> compose = <span class="function">(<span class="params">...fns</span>) =&gt;</span></div><div class="line">    result =&gt;</div><div class="line">        fns.reverse().reduce(</div><div class="line">            <span class="function">(<span class="params">result,fn</span>) =&gt;</span></div><div class="line">                fn( result )</div><div class="line">            , result</div><div class="line">        );</div></pre></td></tr></table></figure></p>
+<p>这种实现的优点就是代码更简练，并且使用了常见的函数式编程结构：reduce(..)。这种实现方式的性能和原始的 for 循环版本很相近。</p>
+<p>但是，这种实现局限处在于外层的组合函数（也就是，组合中的第一个函数）只能接收一个参数。其他大多数实现在首次调用的时候就把所有参数传进去了。如果组合中的每一个函数都是一元的，这个方案没啥大问题。但如果你需要给第一个调用传递多参数，那么你可能需要不同的实现方案。</p>
+<p>为了修正第一次调用的单参数限制，我们可以仍使用 reduce(..) ，但加一个懒执行函数包裹器：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...fns</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> fns.reverse().reduce( <span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">fn1,fn2</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">composed</span>(<span class="params">...args</span>)</span>&#123;</div><div class="line">            <span class="keyword">return</span> fn2( fn1( ...args ) );</div><div class="line">        &#125;;</div><div class="line">    &#125; );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ES6 箭头函数形式写法</span></div><div class="line"><span class="keyword">var</span> compose =</div><div class="line">    <span class="function">(<span class="params">...fns</span>) =&gt;</span></div><div class="line">        fns.reverse().reduce( <span class="function">(<span class="params">fn1,fn2</span>) =&gt;</span></div><div class="line">            (...args) =&gt;</div><div class="line">                fn2( fn1( ...args ) )</div><div class="line">        );</div></pre></td></tr></table></figure></p>
+<p>相较于直接计算结果并把它传入到 reduce(..) 循环中进行处理，这种实现通过在组合之前只运行 一次 reduce(..) 循环，然后将所有的函数调用运算全部延迟了 ———— 称为惰性运算。每一个简化后的局部结果都是一个包裹层级更多的函数。</p>
+<p>我们也能够使用递归来定义 compose(..)。递归式定义的 compose(fn1,fn2, .. fnN) 看起来会是这样：<br>这里是我们用递归实现 compose(..) 的代码：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">compose</span>(<span class="params">...fns</span>) </span>&#123;</div><div class="line">    <span class="comment">// 拿出最后两个参数</span></div><div class="line">    <span class="keyword">var</span> [ fn1, fn2, ...rest ] = fns.reverse();</div><div class="line"></div><div class="line">    <span class="keyword">var</span> composedFn = <span class="function"><span class="keyword">function</span> <span class="title">composed</span>(<span class="params">...args</span>)</span>&#123;</div><div class="line">        <span class="keyword">return</span> fn2( fn1( ...args ) );</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (rest.length == <span class="number">0</span>) <span class="keyword">return</span> composedFn;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> compose( ...rest.reverse(), composedFn );</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// ES6 箭头函数形式写法</span></div><div class="line"><span class="keyword">var</span> compose =</div><div class="line">    <span class="function">(<span class="params">...fns</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// 拿出最后两个参数</span></div><div class="line">        <span class="keyword">var</span> [ fn1, fn2, ...rest ] = fns.reverse();</div><div class="line"></div><div class="line">        <span class="keyword">var</span> composedFn =</div><div class="line">            <span class="function">(<span class="params">...args</span>) =&gt;</span></div><div class="line">                fn2( fn1( ...args ) );</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (rest.length == <span class="number">0</span>) <span class="keyword">return</span> composedFn;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> compose( ...rest.reverse(), composedFn );</div><div class="line">    &#125;;</div></pre></td></tr></table></figure></p>
+<h4 id="重排序组合"><a href="#重排序组合" class="headerlink" title="重排序组合"></a>重排序组合</h4><p>从右往左顺序的标准 compose(..) 实现。这么做的好处是能够和手工组合列出参数（函数）的顺序保持一致。</p>
+<p>不足之处就是它们排列的顺序和它们执行的顺序是相反的，这将会造成困扰。</p>
+<p>相反的顺序，从右往左的组合，有个常见的名字：pipe(..)。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">pipe</span>(<span class="params">...fns</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">piped</span>(<span class="params">result</span>)</span>&#123;</div><div class="line">        <span class="keyword">var</span> list = fns.slice();</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (list.length &gt; <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// 从列表中取第一个函数并执行</span></div><div class="line">            result = list.shift()( result );</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> result;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实际上，我们只需将 compose(..) 的参数反转就能定义出来一个 pipe(..)。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> pipe = reverseArgs( compose )</div></pre></td></tr></table></figure></p>
+<p>pipe(..) 的优势在于它以函数执行的顺序排列参数，某些情况下能够减轻阅读者的疑惑。</p>
+<p>一般来说，在使用一个完善的函数式编程库时，pipe(..) 和 compose(..) 没有明显的性能区别。</p>
+<h4 id="抽象"><a href="#抽象" class="headerlink" title="抽象"></a>抽象</h4><p>抽象经常被定义为对两个或多个任务公共部分的剥离。通用部分只定义一次，从而避免重复。为了展现每个任务的特殊部分，通用部分需要被参数化。</p>
+<p>命令式 vs 声明式的编程风格</p>
+<ul>
+<li>命令式代码主要关心的是描述怎么做来准确完成一项任务</li>
+<li>声明式代码则是描述输出应该是什么，并将具体实现交给其它部分。<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getData</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 命令式</span></div><div class="line"><span class="keyword">var</span> tmp = getData();</div><div class="line"><span class="keyword">var</span> a = tmp[<span class="number">0</span>];</div><div class="line"><span class="keyword">var</span> b = tmp[<span class="number">3</span>];</div><div class="line"></div><div class="line"><span class="comment">// 声明式</span></div><div class="line"><span class="keyword">var</span> [ a ,,, b ] = getData();</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="将组合当作抽象"><a href="#将组合当作抽象" class="headerlink" title="将组合当作抽象"></a>将组合当作抽象</h4><p>函数组合同样也是一种声明式抽象。</p>
+<p>组合是一个抽象的强力工具，它能够将命令式代码抽象为更可读的声明式代码。</p>
+<h3 id="减少副作用"><a href="#减少副作用" class="headerlink" title="减少副作用"></a>减少副作用</h3><p>写出有副作用/效果的代码是很正常的， 所以我们需要谨慎和刻意地避免产生有副作用的代码。</p>
+<h4 id="潜在的原因"><a href="#潜在的原因" class="headerlink" title="潜在的原因"></a>潜在的原因</h4><ul>
+<li>输出和状态的变化，是最常被引用的副作用的表现。</li>
+<li><p>随机性</p>
+<p>  比如随机函数Math.random()</p>
+</li>
+<li><p>I/O 效果</p>
+<p>  事实上，这些来源既可以是输入也可以是输出，是因也是果。以 DOM 为例，我们更新（产生副作用的结果）一个 DOM 元素为了给用户展示文字或图片信息，但是 DOM 的当前状态是对这些操作的隐式输入（产生副作用的原因）。</p>
+</li>
+<li><p>其他的错误</p>
+</li>
+</ul>
+<h4 id="一次就好"><a href="#一次就好" class="headerlink" title="一次就好"></a>一次就好</h4><p>如果你必须要使用副作用来改变状态，那么一种对限制潜在问题有用的操作是幂等。</p>
+<ul>
+<li><p>数学中的幂等：幂等指的是在第一次调用后，如果你将该输出一次又一次地输入到操作中，其输出永远不会改变的操作。换句话说，foo(x) 将产生与 foo(foo(x))、foo(foo(foo(x))) 等相同的输出。</p>
+<p>  比如：<br>  一个典型的数学例子是 Math.abs(..)（取绝对值）。Math.abs(-2) 的结果是 2，和 Math.abs(Math.abs(Math.abs(Math.abs(-2)))) 的结果相同。像Math.min(..)、Math.max(..)、Math.round(..)、Math.floor(..) 和 Math.ceil(..)这些工具函数都是幂等的。</p>
+</li>
+<li><p>编程中的幂等：编程中的幂等仅仅是 f(x); 的结果与 f(x); f(x) 相同而不是要求 f(x) === f(f(x))。换句话说，之后每一次调用 f(x) 的结果和第一次调用 f(x) 的结果没有任何改变。</p>
+<blockquote>
+<p>这种幂等性的方式经常被用于 HTTP 操作（动词），例如 GET 或 PUT。如果 HTTP REST API 正确地遵循了幂等的规范指导，那么 PUT 被定义为一个更新操作，它可以完全替换资源。同样的，客户端可以一次或多次发送 PUT 请求（使用相同的数据），而服务器无论如何都将具有相同的结果状态。</p>
+</blockquote>
+</li>
+</ul>
+<p>幂等与非幂等<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 幂等的：</span></div><div class="line">obj.count = <span class="number">2</span>;</div><div class="line">a[a.length - <span class="number">1</span>] = <span class="number">42</span>;</div><div class="line">person.name = upper( person.name );</div><div class="line"></div><div class="line"><span class="comment">// 非幂等的：</span></div><div class="line">obj.count++;</div><div class="line">a[a.length] = <span class="number">42</span>;</div><div class="line">person.lastUpdated = <span class="built_in">Date</span>.now();</div></pre></td></tr></table></figure></p>
+<p>这里的幂等性的概念是每一个幂等运算（比如 obj.count = 2）可以重复多次，而不是在第一次更新后改变程序操作。非幂等操作每次都改变状态。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> hist = <span class="built_in">document</span>.getElementById( <span class="string">"orderHistory"</span> );</div><div class="line"></div><div class="line"><span class="comment">// 幂等的：</span></div><div class="line">hist.innerHTML = order.historyText;</div><div class="line"></div><div class="line"><span class="comment">// 非幂等的：</span></div><div class="line"><span class="keyword">var</span> update = <span class="built_in">document</span>.createTextNode( order.latestUpdate );</div><div class="line">hist.appendChild( update );</div></pre></td></tr></table></figure></p>
+<p>这里的关键区别在于，幂等的更新替换了 DOM 元素的内容。DOM 元素的当前状态是独立的，因为它是无条件覆盖的。非幂等的操作将内容添加到元素中；隐式地，DOM 元素的当前状态是计算下一个状态的一部分。</p>
+<p>没有副作用的函数称为<strong>纯函数</strong>。在编程的意义上，纯函数是一种幂等函数，因为它不可能有任何副作用。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/09/12/基于Redux-Form与Redux-Saga的权限验证应用(二)/" data-toggle="tooltip" data-placement="top"
+                           title="基于React与Redux Saga的权限验证应用(二)">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#函数基础"><span class="toc-text">函数基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#函数输入"><span class="toc-text">函数输入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数输出"><span class="toc-text">函数输出</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#函数功能"><span class="toc-text">函数功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#句法"><span class="toc-text">句法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#This"><span class="toc-text">This</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管理函数的输入"><span class="toc-text">管理函数的输入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#立即传参与稍后传参"><span class="toc-text">立即传参与稍后传参</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#恒定参数"><span class="toc-text">恒定参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#参数顺序的那些事儿"><span class="toc-text">参数顺序的那些事儿</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#无形参风格"><span class="toc-text">无形参风格</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组合函数"><span class="toc-text">组合函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#通用组合"><span class="toc-text">通用组合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#compose不同的实现"><span class="toc-text">compose不同的实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#重排序组合"><span class="toc-text">重排序组合</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#抽象"><span class="toc-text">抽象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将组合当作抽象"><span class="toc-text">将组合当作抽象</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#减少副作用"><span class="toc-text">减少副作用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#潜在的原因"><span class="toc-text">潜在的原因</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一次就好"><span class="toc-text">一次就好</span></a></li></ol></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#函数式编程"
+                           title="函数式编程">函数式编程</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright 版权所有&copy; Perkin 2017
+                    <a href="http://www.miitbeian.gov.cn">湘ICP备15015400号</a>	
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg">
+</body>
+
+</html>
