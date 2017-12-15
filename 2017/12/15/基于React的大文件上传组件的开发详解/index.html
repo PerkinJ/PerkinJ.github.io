@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        基于React的大文件上传组件的开发详解｜Perkin
+        
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/2017/12/15/基于React的大文件上传组件的开发详解/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                &Zone秀分享	
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://oum6ifofe.bkt.clouddn.com/image/bigUpload.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/bigUpload.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>基于React的大文件上传组件的开发详解</h1>
+                    
+                    <span class="meta">
+                         作者 Perkin
+                        <span>
+                          日期 2017-12-15
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
+                        
+                        <a class="tag" href="/tags/#FileReader"
+                           title="FileReader">FileReader</a>
+                        
+                        <a class="tag" href="/tags/#文件上传"
+                           title="文件上传">文件上传</a>
+                        
+                        <a class="tag" href="/tags/#md5"
+                           title="md5">md5</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            基于React的大文件上传组件的开发详解
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <blockquote>
+<p>以前实习的时候有做过大文件上传的需求，当时我们团队用的是网宿科技的存储服务，自然而然用的也是他们上传的js-sdk，不管是网宿科技还是七牛等提供存储服务的公司，他们的文件上传底层使用的基本上都是<a href="http://www.plupload.com/" target="_blank" rel="external">plupload</a>库。除了这个，百度FEX团队开源的<a href="http://fex.baidu.com/webuploader/" target="_blank" rel="external">webuploader</a>也是鼎鼎大名的，当然，对于文件操作的库有许多许多，本文不做过多介绍。</p>
+</blockquote>
+<p>对于一个中小型企业的小项目或者个人项目来说，使用第三方的存储服务也许昂贵了点，且如果上传的文件涉及到隐私的话也是不安全的（各种方案都是因项目而异的）。本文主要讲解在不使用webuploader,plupload等库的情况下，使用html5的File API来解决大文件上传的问题(本文主要指前端部分)。当然，由于是对内的项目，本文并没有过多考虑浏览器兼容性的问题，毕竟对于IE低版本浏览器来说，Flash可能是最适合的。</p>
+<p>本文主要使用了<a href="https://ant.design/docs/react/introduce-cn" target="_blank" rel="external">antd</a>为UI组件，搭建了如下系统。</p>
+<h3 id="Demo演示"><a href="#Demo演示" class="headerlink" title="Demo演示"></a>Demo演示</h3><p>下图为文件预加载时的动图，考虑到gif时间的限制，拿了个30多M文件测试。</p>
+<p><img src="http://oum6ifofe.bkt.clouddn.com/image/uploadPre.gif" alt="image"></p>
+<p>下图为上传中的过程</p>
+<p><img src="http://oum6ifofe.bkt.clouddn.com/image/uploaded.gif" alt="image"></p>
+<h3 id="前后端联调步骤"><a href="#前后端联调步骤" class="headerlink" title="前后端联调步骤"></a>前后端联调步骤</h3><p>其实之所以不使用WebUploader等库来实现，也是因为后端的需求跟一般的大文件上传有一点不同，所以前端干脆不使用库来写。</p>
+<p>前后端重点考虑的点，是使用<strong>分片上传</strong>，且每个分片都需要生成md5值，以便后端去校验。因此，每一次分片上传，都需要上传该片段的file,以及chunkMd5，和整个文件的fileMd5。同时，前后端采用arrayBuffer的blob格式来进行文件传输。</p>
+<p>如下为前后端联调的步骤</p>
+<h4 id="第一步：用户选择文件，进行预处理"><a href="#第一步：用户选择文件，进行预处理" class="headerlink" title="第一步：用户选择文件，进行预处理"></a>第一步：用户选择文件，进行预处理</h4><ul>
+<li><ol>
+<li>计算总文件的md5值,即fileMd5</li>
+</ol>
+</li>
+<li><ol>
+<li>按照固定的分片大小（比如5M，该值为用户自定义），进行切分</li>
+</ol>
+</li>
+<li><ol>
+<li>计算每个分片的md5值，chunkMd5,start,end,size等</li>
+</ol>
+</li>
+</ul>
+<h4 id="第二步：用户点击上传"><a href="#第二步：用户点击上传" class="headerlink" title="第二步：用户点击上传"></a>第二步：用户点击上传</h4><ul>
+<li><ol>
+<li>发送第一步生成的json数据到requestUrl</li>
+</ol>
+</li>
+<li><ol>
+<li>requestUrl接口返回响应，来验证该文件是否已经上传，或者已上传了哪些chunk。（返回的response应该包括每个chunk的状态，即pending or uploaded，第一次上传所有chunk状态都为pending）</li>
+</ol>
+</li>
+<li><ol>
+<li>前端过滤掉已经上传的chunks后，对pending状态的chunks构成一个待上传队列进行上传。</li>
+</ol>
+</li>
+<li><ol>
+<li>每一个chunk上传到partUpload接口，都应该包括，chunkMd5,start,end以及该分片的arrayBuffer数据。</li>
+</ol>
+</li>
+</ul>
+<h4 id="第三步：上传结果反馈"><a href="#第三步：上传结果反馈" class="headerlink" title="第三步：上传结果反馈"></a>第三步：上传结果反馈</h4><ul>
+<li><ol>
+<li>partUpload接口会返回该分片上传的基本情况，每一次上传成功，上传队列的个数即减一，这样也可以自定义上传的progress。</li>
+</ol>
+</li>
+<li><ol>
+<li>当上传队列个数为0时，此时调用checkUrl，检查整个文件是否上传成功，与前端进行一个同步校验。</li>
+</ol>
+</li>
+</ul>
+<h3 id="代码拆分"><a href="#代码拆分" class="headerlink" title="代码拆分"></a>代码拆分</h3><h4 id="总体架构"><a href="#总体架构" class="headerlink" title="总体架构"></a>总体架构</h4><p>本文Demo主要是对UI组件进行描述，所以没有考虑数据层，读者可以自己配合dva或者redux。下文为主要的代码结构</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React, &#123; Component &#125; <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> PropTypes <span class="keyword">from</span> <span class="string">'prop-types'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> &#123; Upload, Icon, Button, Progress,Checkbox, Modal, Spin, Radio, message &#125; <span class="keyword">from</span> <span class="string">'antd'</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> request <span class="keyword">from</span> <span class="string">'superagent'</span></div><div class="line"><span class="keyword">import</span> SparkMD5 <span class="keyword">from</span> <span class="string">'spark-md5'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> confirm = Modal.confirm</div><div class="line"><span class="keyword">const</span> Dragger = Upload.Dragger</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileUpload</span> <span class="keyword">extends</span> <span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props)</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">      <span class="attr">preUploading</span>:<span class="literal">false</span>,   <span class="comment">//预处理</span></div><div class="line">      chunksSize:<span class="number">0</span>,   <span class="comment">// 上传文件分块的总个数</span></div><div class="line">      currentChunks:<span class="number">0</span>,  <span class="comment">// 当前上传的队列个数 当前还剩下多少个分片没上传</span></div><div class="line">      uploadPercent:<span class="number">-1</span>,  <span class="comment">// 上传率</span></div><div class="line">      preUploadPercent:<span class="number">-1</span>, <span class="comment">// 预处理率  </span></div><div class="line">      uploadRequest:<span class="literal">false</span>, <span class="comment">// 上传请求，即进行第一个过程中</span></div><div class="line">      uploaded:<span class="literal">false</span>, <span class="comment">// 表示文件是否上传成功</span></div><div class="line">      uploading:<span class="literal">false</span>, <span class="comment">// 上传中状态</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  showConfirm = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> _this = <span class="keyword">this</span></div><div class="line">    confirm(&#123;</div><div class="line">      <span class="attr">title</span>: <span class="string">'是否提交上传?'</span>,</div><div class="line">      <span class="attr">content</span>: <span class="string">'点击确认进行提交'</span>,</div><div class="line">      onOk() &#123;</div><div class="line">        _this.preUpload()</div><div class="line">      &#125;,</div><div class="line">      onCancel() &#123; &#125;,</div><div class="line">    &#125;)</div><div class="line">  &#125;</div><div class="line">  </div><div class="line"> </div><div class="line">  preUpload = <span class="function"><span class="params">()</span>=&gt;</span>&#123;</div><div class="line">   <span class="comment">// requestUrl,返回可以上传的分片队列</span></div><div class="line">   <span class="comment">//...</span></div><div class="line">  &#125;</div><div class="line"> </div><div class="line">  handlePartUpload = <span class="function">(<span class="params">uploadList</span>)=&gt;</span>&#123;</div><div class="line">   <span class="comment">// 分片上传</span></div><div class="line">   <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">const</span> &#123;preUploading,uploadPercent,preUploadPercent,uploadRequest,uploaded,uploading&#125; = <span class="keyword">this</span>.state</div><div class="line">    <span class="keyword">const</span> _this = <span class="keyword">this</span></div><div class="line">    <span class="keyword">const</span> uploadProp = &#123;</div><div class="line">      <span class="attr">onRemove</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</div><div class="line">      <span class="comment">// ...</span></div><div class="line">      &#125;,</div><div class="line">      <span class="attr">beforeUpload</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// ...对文件的预处理</span></div><div class="line"></div><div class="line">      &#125;,</div><div class="line">      <span class="attr">fileList</span>: <span class="keyword">this</span>.state.fileList,</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div className="content-inner"&gt;</div><div class="line">        &lt;Spin tip=&#123;</div><div class="line">              &lt;div &gt;</div><div class="line">                &lt;h3 style=&#123;&#123;margin:'10px auto',color:'#1890ff'&#125;&#125;&gt;文件预处理中...&lt;/h3&gt;</div><div class="line">                &lt;Progress width=&#123;80&#125; percent=&#123;preUploadPercent&#125; type="circle" status="active" /&gt;</div><div class="line">              &lt;/div&gt;</div><div class="line">              &#125; </div><div class="line">              spinning=&#123;preUploading&#125; </div><div class="line">              style=&#123;&#123; height: 350 &#125;&#125;&gt;</div><div class="line">          &lt;div style=&#123;&#123; marginTop: 16, height: 250 &#125;&#125;&gt;</div><div class="line">            &lt;Dragger &#123;...uploadProp&#125;&gt;</div><div class="line">              &lt;p className="ant-upload-drag-icon"&gt;</div><div class="line">                &lt;Icon type="inbox" /&gt;</div><div class="line">              &lt;/p&gt;</div><div class="line">              &lt;p className="ant-upload-text"&gt;点击或者拖拽文件进行上传&lt;/p&gt;</div><div class="line">              &lt;p className="ant-upload-hint"&gt;Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files&lt;/p&gt;</div><div class="line">            &lt;/Dragger&gt;</div><div class="line">            &#123;uploadPercent&gt;=0&amp;&amp;!!uploading&amp;&amp;&lt;div style=&#123;&#123;marginTop:20,width:'95%'&#125;&#125;&gt;</div><div class="line">              &lt;Progress percent=&#123;uploadPercent&#125; status="active" /&gt;</div><div class="line">              &lt;h4&gt;文件上传中，请勿关闭窗口&lt;/h4&gt;</div><div class="line">            &lt;/div&gt;&#125;</div><div class="line">            &#123;!!uploadRequest&amp;&amp;&lt;h4 style=&#123;&#123;color:'#1890ff'&#125;&#125;&gt;上传请求中...&lt;/h4&gt;&#125;</div><div class="line">            &#123;!!uploaded&amp;&amp;&lt;h4 style=&#123;&#123;color:'#52c41a'&#125;&#125;&gt;文件上传成功&lt;/h4&gt;&#125;</div><div class="line">            &lt;Button type="primary" onClick=&#123;this.showConfirm&#125; disabled=&#123;!!(this.state.preUploadPercent &lt;100)&#125;&gt;</div><div class="line">                &lt;Icon type="upload" /&gt;提交上传</div><div class="line">             &lt;/Button&gt;</div><div class="line">          &lt;/div&gt;</div><div class="line">        &lt;/Spin&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">FileUpload.propTypes = &#123;</div><div class="line">  //...</div><div class="line">&#125;</div><div class="line"></div><div class="line">export default FileUpload</div></pre></td></tr></table></figure>
+<h4 id="文件分片"><a href="#文件分片" class="headerlink" title="文件分片"></a>文件分片</h4><blockquote>
+<p>使用Html5 的File API是现在主流的处理文件上传的方案。在使用FileReader API之前，应该了解一下<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Blob" target="_blank" rel="external">Blob</a>对象，Blob对象表示不可变的类似文件对象的原始数据。File接口就是基于Blob，继承了blob的功能并将其扩展使其支持用户系统上的文件。</p>
+</blockquote>
+<ul>
+<li><p>本文前后端约束采用二进制的ArrayBuffer 对象格式来传输文件,类型话数组(ArrayBuffer)可以直接操作内存，接口之间完全可以用二进制数据通信。</p>
+</li>
+<li><p>使用FileReader来读取文件，主要有5个方法：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>abort</td>
+<td>none</td>
+<td>中断读取</td>
+</tr>
+<tr>
+<td>readAsBinaryString</td>
+<td>file</td>
+<td>将文件读取为二进制码</td>
+</tr>
+<tr>
+<td>readAsDataURL</td>
+<td>file</td>
+<td>将文件读取为DataURL</td>
+</tr>
+<tr>
+<td>readAsText</td>
+<td>file,[encoding]</td>
+<td>将文件读取为文本</td>
+</tr>
+<tr>
+<td>readAsArrayBuffer</td>
+<td>file</td>
+<td>将文件读取为ArrayBuffer</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>使用Antd的Drag(Uploader)组件，我们可以在props的beforeUpload属性中操作file，也可以通过onChange监听file。当然，使用beforeUpload更加方便。关键代码如下：</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">const</span> uploadProp = &#123;</div><div class="line">      <span class="attr">onRemove</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</div><div class="line">        <span class="keyword">this</span>.setState(<span class="function">(<span class="params">&#123; fileList &#125;</span>) =&gt;</span> &#123;</div><div class="line">          <span class="keyword">const</span> index = fileList.indexOf(file)</div><div class="line">          <span class="keyword">const</span> newFileList = fileList.slice()</div><div class="line">          newFileList.splice(index, <span class="number">1</span>)</div><div class="line">          <span class="keyword">return</span> &#123;</div><div class="line">            <span class="attr">fileList</span>: newFileList,</div><div class="line">          &#125;</div><div class="line">        &#125;)</div><div class="line">      &#125;,</div><div class="line">      <span class="attr">beforeUpload</span>: <span class="function">(<span class="params">file</span>) =&gt;</span> &#123;</div><div class="line">        <span class="comment">// 首先清除一下各种上传的状态</span></div><div class="line">        <span class="keyword">this</span>.setState(&#123;</div><div class="line">          <span class="attr">uploaded</span>:<span class="literal">false</span>,   <span class="comment">// 上传成功</span></div><div class="line">          uploading:<span class="literal">false</span>,  <span class="comment">// 上传中</span></div><div class="line">          uploadRequest:<span class="literal">false</span>   <span class="comment">// 上传预处理</span></div><div class="line">        &#125;)</div><div class="line">        <span class="comment">// 兼容性的处理</span></div><div class="line">        <span class="keyword">let</span> blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,</div><div class="line">          chunkSize = <span class="number">1024</span>*<span class="number">1024</span>*<span class="number">5</span>,                             <span class="comment">// 切片每次5M</span></div><div class="line">          chunks = <span class="built_in">Math</span>.ceil(file.size / chunkSize),</div><div class="line">          currentChunk = <span class="number">0</span>, <span class="comment">// 当前上传的chunk</span></div><div class="line">          spark = <span class="keyword">new</span> SparkMD5.ArrayBuffer(),</div><div class="line">          <span class="comment">// 对arrayBuffer数据进行md5加密，产生一个md5字符串</span></div><div class="line">          chunkFileReader = <span class="keyword">new</span> FileReader(),  <span class="comment">// 用于计算出每个chunkMd5</span></div><div class="line">          totalFileReader = <span class="keyword">new</span> FileReader()  <span class="comment">// 用于计算出总文件的fileMd5</span></div><div class="line">          </div><div class="line">        <span class="keyword">let</span> params = &#123;<span class="attr">chunks</span>: [], <span class="attr">file</span>: &#123;&#125;&#125;,   <span class="comment">// 用于上传所有分片的md5信息</span></div><div class="line">            arrayBufferData = []              <span class="comment">// 用于存储每个chunk的arrayBuffer对象,用于分片上传使用</span></div><div class="line">        params.file.fileName = file.name</div><div class="line">        params.file.fileSize = file.size</div><div class="line"></div><div class="line">        totalFileReader.readAsArrayBuffer(file)</div><div class="line">        totalFileReader.onload = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>)</span>&#123;</div><div class="line">            <span class="comment">// 对整个totalFile生成md5</span></div><div class="line">            spark.append(e.target.result)</div><div class="line">            params.file.fileMd5 = spark.end() <span class="comment">// 计算整个文件的fileMd5</span></div><div class="line">          &#125;</div><div class="line"></div><div class="line">        chunkFileReader.onload = <span class="function"><span class="keyword">function</span> (<span class="params">e</span>) </span>&#123;</div><div class="line">          <span class="comment">// 对每一片分片进行md5加密</span></div><div class="line">          spark.append(e.target.result)</div><div class="line">          <span class="comment">// 每一个分片需要包含的信息</span></div><div class="line">          <span class="keyword">let</span> obj = &#123;</div><div class="line">            <span class="attr">chunk</span>:currentChunk + <span class="number">1</span>,</div><div class="line">            <span class="attr">start</span>:currentChunk * chunkSize, <span class="comment">// 计算分片的起始位置</span></div><div class="line">            end:((currentChunk * chunkSize + chunkSize) &gt;= file.size) ? file.size : currentChunk * chunkSize + chunkSize, <span class="comment">// 计算分片的结束位置</span></div><div class="line">            chunkMd5:spark.end(),</div><div class="line">            chunks</div><div class="line">          &#125;</div><div class="line">          <span class="comment">// 每一次分片onload,currentChunk都需要增加，以便来计算分片的次数</span></div><div class="line">          currentChunk++;          </div><div class="line">          params.chunks.push(obj)</div><div class="line">          </div><div class="line">          <span class="comment">// 将每一块分片的arrayBuffer存储起来，用来partUpload</span></div><div class="line">          <span class="keyword">let</span> tmp = &#123;</div><div class="line">            <span class="attr">chunk</span>:obj.chunk,</div><div class="line">            <span class="attr">currentBuffer</span>:e.target.result</div><div class="line">          &#125;</div><div class="line">          arrayBufferData.push(tmp)</div><div class="line">          </div><div class="line">          <span class="keyword">if</span> (currentChunk &lt; chunks) &#123;</div><div class="line">            <span class="comment">// 当前切片总数没有达到总数时</span></div><div class="line">            loadNext()</div><div class="line">            </div><div class="line">            <span class="comment">// 计算预处理进度</span></div><div class="line">            _this.setState(&#123;</div><div class="line">              <span class="attr">preUploading</span>:<span class="literal">true</span>,</div><div class="line">              <span class="attr">preUploadPercent</span>:<span class="built_in">Number</span>((currentChunk / chunks * <span class="number">100</span>).toFixed(<span class="number">2</span>))</div><div class="line">            &#125;)</div><div class="line">          &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//记录所有chunks的长度</span></div><div class="line">            params.file.fileChunks = params.chunks.length  </div><div class="line">            <span class="comment">// 表示预处理结束，将上传的参数，arrayBuffer的数据存储起来</span></div><div class="line">            _this.setState(&#123;</div><div class="line">              <span class="attr">preUploading</span>:<span class="literal">false</span>,</div><div class="line">              <span class="attr">uploadParams</span>:params,</div><div class="line">              arrayBufferData,</div><div class="line">              <span class="attr">chunksSize</span>:chunks,</div><div class="line">              <span class="attr">preUploadPercent</span>:<span class="number">100</span>              </div><div class="line">            &#125;)</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        fileReader.onerror = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="built_in">console</span>.warn(<span class="string">'oops, something went wrong.'</span>);</div><div class="line">        &#125;;</div><div class="line">        </div><div class="line">        <span class="function"><span class="keyword">function</span> <span class="title">loadNext</span>(<span class="params"></span>) </span>&#123;</div><div class="line">          <span class="keyword">var</span> start = currentChunk * chunkSize,</div><div class="line">            end = ((start + chunkSize) &gt;= file.size) ? file.size : start + chunkSize;</div><div class="line">          fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        loadNext()</div><div class="line"></div><div class="line">        <span class="comment">// 只允许一份文件上传</span></div><div class="line">        <span class="keyword">this</span>.setState(&#123;</div><div class="line">          <span class="attr">fileList</span>: [file],</div><div class="line">          <span class="attr">file</span>: file</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">      &#125;,</div><div class="line">      <span class="attr">fileList</span>: <span class="keyword">this</span>.state.fileList,</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h4 id="分片上传"><a href="#分片上传" class="headerlink" title="分片上传"></a>分片上传</h4><ul>
+<li>在预处理过程中会拿到uploadParams的json数据，如下所示<figure class="highlight js"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">file</span>:&#123;</div><div class="line">     <span class="attr">fileChunks</span>:<span class="number">119</span>,</div><div class="line">     <span class="attr">fileMd5</span>:<span class="string">"f5aeec69076483585f4f112223265c0c"</span>,</div><div class="line">     <span class="attr">fileName</span>:<span class="string">"xxxx.test"</span>,</div><div class="line">     <span class="attr">fileSize</span>:<span class="number">6205952600</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">chunks</span>:[&#123;</div><div class="line">        <span class="attr">chunk</span>:<span class="number">1</span>,</div><div class="line">        <span class="attr">chunkMd5</span>:<span class="string">"8770f43dc59effdc8b995e4aacc8a26c"</span>,</div><div class="line">        <span class="attr">chunks</span>:<span class="number">119</span>,</div><div class="line">        <span class="attr">end</span>:<span class="number">5242880</span>,</div><div class="line">        <span class="attr">start</span>:<span class="number">0</span></div><div class="line">    &#125;,</div><div class="line">    ...</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>将以上数据post到RequestUrl接口中，会得到如下json数据：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">Chunks</span>:[</div><div class="line">        &#123;</div><div class="line">            <span class="attr">chunk</span>: <span class="number">1</span>, </div><div class="line">            <span class="attr">chunkMd5</span>:<span class="string">"8770f43dc59effdc8b995e4aacc8a26c"</span>, </div><div class="line">            <span class="attr">fileMd5</span>:<span class="string">"f5aeec69076483585f4f672223265c0c"</span>,</div><div class="line">            <span class="attr">end</span>: <span class="number">5242880</span>,</div><div class="line">            <span class="attr">start</span>:<span class="number">0</span>,</div><div class="line">            <span class="attr">status</span>:<span class="string">"pending"</span></div><div class="line">        &#125;,</div><div class="line">        …</div><div class="line">    ],</div><div class="line">    <span class="attr">Code</span>:<span class="number">200</span>,</div><div class="line">    <span class="attr">FileMd5</span>:<span class="string">"f5aeec69076483585f4f672223265c0c"</span></div><div class="line">    MaxThreads:<span class="number">1</span>,</div><div class="line">    <span class="attr">Message</span>:<span class="string">"OK"</span>,</div><div class="line">    <span class="attr">Total</span>:<span class="number">119</span>,</div><div class="line">    <span class="attr">Uploaded</span>:<span class="number">0</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><p>拿到json数据，会先对得到的Chunks进行一次过滤，将status为pengding的过滤出来。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">let</span> uploadList = res.body.Chunks.filter(<span class="function">(<span class="params">value</span>)=&gt;</span>&#123;</div><div class="line">  <span class="keyword">return</span> value.status === <span class="string">'Pending'</span></div><div class="line">&#125;)</div><div class="line"></div><div class="line"><span class="comment">// 从返回结果中获取当前还有多少个分片没传</span></div><div class="line"><span class="keyword">let</span> currentChunks = res.body.Total - res.body.Uploaded</div><div class="line"></div><div class="line"><span class="comment">// 获得上传进度</span></div><div class="line"><span class="keyword">let</span> uploadPercent = <span class="built_in">Number</span>(((<span class="keyword">this</span>.state.chunksSize - currentChunks) /<span class="keyword">this</span>.state.chunksSize * <span class="number">100</span>).toFixed(<span class="number">2</span>))      </div><div class="line"><span class="comment">// 上传之前，先判断文件是否已经上传成功</span></div><div class="line"><span class="keyword">if</span>(uploadPercent === <span class="number">100</span>)&#123;</div><div class="line">  message.success(<span class="string">'上传成功'</span>)</div><div class="line">  <span class="keyword">this</span>.setState(&#123;</div><div class="line">    <span class="attr">uploaded</span>:<span class="literal">true</span>,    <span class="comment">// 让进度条消失</span></div><div class="line">    uploading:<span class="literal">false</span></div><div class="line">  &#125;)</div><div class="line">&#125;<span class="keyword">else</span>&#123;</div><div class="line">  <span class="keyword">this</span>.setState(&#123;</div><div class="line">    <span class="attr">uploaded</span>:<span class="literal">false</span>,</div><div class="line">    <span class="attr">uploading</span>:<span class="literal">true</span>    </div><div class="line">  &#125;)</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">this</span>.setState(&#123;</div><div class="line">  <span class="attr">uploadRequest</span>:<span class="literal">false</span>,    <span class="comment">// 上传请求成功</span></div><div class="line">  currentChunks,</div><div class="line">  uploadPercent</div><div class="line">&#125;)</div><div class="line"><span class="comment">//进行分片上传</span></div><div class="line"><span class="keyword">this</span>.handlePartUpload(uploadList)</div></pre></td></tr></table></figure>
+</li>
+<li><p>遍历uploadList的数据，分别将数据传入到uploadUrl接口中。<strong>此过程最关键的，就是如何将分片的arrayBuffer数据如何添加到Blob对象中</strong></p>
+</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line">handlePartUpload = <span class="function">(<span class="params">uploadList</span>)=&gt;</span>&#123;</div><div class="line">    <span class="keyword">let</span> blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice  </div><div class="line">    <span class="comment">// 遍历uploadList</span></div><div class="line">    uploadList.forEach(<span class="function">(<span class="params">value</span>)=&gt;</span>&#123;</div><div class="line">      <span class="comment">// 取出每个分片里的基本属性</span></div><div class="line">      <span class="keyword">let</span> &#123;fileMd5,chunkMd5,chunk,start,end&#125; = value</div><div class="line">      <span class="keyword">let</span> formData = <span class="keyword">new</span> FormData(),</div><div class="line">          <span class="comment">//新建一个Blob对象，将对应分片的arrayBuffer加入Blob中</span></div><div class="line">          blob = <span class="keyword">new</span> Blob([<span class="keyword">this</span>.state.arrayBufferData[chunk<span class="number">-1</span>].currentBuffer],&#123;<span class="attr">type</span>: <span class="string">'application/octet-stream'</span>&#125;),</div><div class="line">          <span class="comment">// 上传的参数</span></div><div class="line">          params = <span class="string">`fileMd5=<span class="subst">$&#123;fileMd5&#125;</span>&amp;chunkMd5=<span class="subst">$&#123;chunkMd5&#125;</span>&amp;chunk=<span class="subst">$&#123;chunk&#125;</span>&amp;start=<span class="subst">$&#123;start&#125;</span>&amp;end=<span class="subst">$&#123;end&#125;</span>&amp;chunks=<span class="subst">$&#123;<span class="keyword">this</span>.state.arrayBufferData.length&#125;</span>`</span></div><div class="line">      </div><div class="line">      <span class="comment">// 将生成blob塞入到formdata中传入服务端</span></div><div class="line">      formData.append(<span class="string">'chunk'</span>, blob, chunkMd5)</div><div class="line">      </div><div class="line">      request</div><div class="line">        .post(<span class="string">`http://X.X.X.X/api/upload_file_part?<span class="subst">$&#123;params&#125;</span>`</span>)</div><div class="line">        .send(formData)</div><div class="line">        .end(<span class="function">(<span class="params">err,res</span>)=&gt;</span>&#123;</div><div class="line">          <span class="keyword">if</span>(res.body.Code === <span class="number">200</span>)&#123;</div><div class="line">            <span class="keyword">let</span> currentChunks = <span class="keyword">this</span>.state.currentChunks</div><div class="line">            --currentChunks</div><div class="line">            <span class="comment">// 计算上传进度</span></div><div class="line">            <span class="keyword">let</span> uploadPercent = <span class="built_in">Number</span>(((<span class="keyword">this</span>.state.chunksSize - currentChunks) /<span class="keyword">this</span>.state.chunksSize * <span class="number">100</span>).toFixed(<span class="number">2</span>))</div><div class="line">            <span class="keyword">this</span>.setState(&#123;</div><div class="line">              currentChunks,  <span class="comment">// 同步当前所需上传的chunks</span></div><div class="line">              uploadPercent,</div><div class="line">              <span class="attr">uploading</span>:<span class="literal">true</span></div><div class="line">            &#125;)</div><div class="line">            <span class="keyword">if</span>(currentChunks ===<span class="number">0</span>)&#123;</div><div class="line">              <span class="comment">// 调用验证api</span></div><div class="line">              <span class="keyword">this</span>.checkUpload()</div><div class="line">              message.success(<span class="string">'上传成功'</span>)</div><div class="line">              <span class="keyword">this</span>.setState(&#123;</div><div class="line">                <span class="attr">uploading</span>:<span class="literal">false</span>,    <span class="comment">// 让进度条消失</span></div><div class="line">                uploaded:<span class="literal">true</span></div><div class="line">              &#125;)</div><div class="line">            &#125;</div><div class="line">          &#125;</div><div class="line">        &#125;)</div><div class="line">        </div><div class="line">    &#125;)</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<h3 id="总结与展望"><a href="#总结与展望" class="headerlink" title="总结与展望"></a>总结与展望</h3><p>以上就是一个简单的基于react的大文件上传组件，主要的知识点包括：<strong>分片上传技术，FileReader API，ArrayBuffer数据结构，md5加密技术，Blob对象的应用</strong>等  知识点。读者可以自行扩展该React组件，可以跟Dva/Redux结合扩展Model层或者集中的状态管理等。同时，对于该组件中出现的异步流程是很简单粗暴的，如何建立合理的异步流程控制，也是需要去思考的。当然，对于大文件来说，文件压缩也是一个需要去考虑的点，比如使用snappy.js等工具库。</p>
+<hr>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
+<li><a href="https://juejin.im/post/5a263b79f265da431a430b4d" target="_blank" rel="external">1. 踩坑Webuploader视频上传</a></li>
+<li><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FileReader" target="_blank" rel="external">2.Filereader API</a></li>
+<li><a href="http://blog.csdn.net/lichwei1983/article/details/43893025" target="_blank" rel="external">3.ArrayBuffer：类型化数组</a></li>
+<li><a href="http://javascript.ruanyifeng.com/htmlapi/file.html" target="_blank" rel="external">文件和二进制数据的操作</a></li>
+</ul>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/12/04/大数据时代数据可视化的概念研究/" data-toggle="tooltip" data-placement="top"
+                           title="大数据时代数据可视化的概念研究">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#Demo演示"><span class="toc-text">Demo演示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#前后端联调步骤"><span class="toc-text">前后端联调步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#第一步：用户选择文件，进行预处理"><span class="toc-text">第一步：用户选择文件，进行预处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第二步：用户点击上传"><span class="toc-text">第二步：用户点击上传</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#第三步：上传结果反馈"><span class="toc-text">第三步：上传结果反馈</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码拆分"><span class="toc-text">代码拆分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#总体架构"><span class="toc-text">总体架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#文件分片"><span class="toc-text">文件分片</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#分片上传"><span class="toc-text">分片上传</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结与展望"><span class="toc-text">总结与展望</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考文献"><span class="toc-text">参考文献</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
+                        
+                        <a class="tag" href="/tags/#FileReader"
+                           title="FileReader">FileReader</a>
+                        
+                        <a class="tag" href="/tags/#文件上传"
+                           title="文件上传">文件上传</a>
+                        
+                        <a class="tag" href="/tags/#md5"
+                           title="md5">md5</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright 版权所有&copy; Perkin 2017
+                    <a href="http://www.miitbeian.gov.cn">湘ICP备15015400号</a>	
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg">
+</body>
+
+</html>
