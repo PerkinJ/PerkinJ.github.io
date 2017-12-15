@@ -201,54 +201,43 @@
                 <blockquote>
 <p>本文基于对DT时代下数据可视化概念进行解读与分析。在大数据时代大背景下，作为前端工程师，接触数据，使用数据，分析数据的次数会越来越多，开发数据可视化的应用也会越来越多。不管是使用Echarts.js,G2,HighCharts.js,SVG.js等已经封装好的高级可视化工具库，还是使用底层的d3.js,three.js,pixi.js等可视化数学库。我们都应该去了解数据可视化的一些基本概念，从而来让我们更好地去理解业务与需求。</p>
 </blockquote>
-<h3 id="1-数据可视化发展历程"><a href="#1-数据可视化发展历程" class="headerlink" title="1.数据可视化发展历程"></a>1.数据可视化发展历程</h3><table>
+<h3>1.数据可视化发展历程</h3>
+<table>
 <thead>
 <tr>
-<th></th>
 <th>年代</th>
 <th>发展历程</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td></td>
 <td>15世纪-17世纪</td>
 <td>可视化思想诞生初始,数据可视化的早期探索正式拉开序幕。</td>
-<td></td>
 </tr>
 <tr>
-<td></td>
 <td>18世纪</td>
 <td>数据可视化初步发展,直方图、柱状图、饼图、圆环图等开始出现。</td>
-<td></td>
 </tr>
 <tr>
-<td></td>
 <td>19世纪前半叶</td>
 <td>数据开始得到重视,数据图形出现。</td>
-<td></td>
 </tr>
 <tr>
-<td></td>
 <td>19世纪后半叶</td>
 <td>19世纪后半叶</td>
-<td></td>
 </tr>
 <tr>
-<td></td>
 <td>20世纪前期</td>
 <td>前期的可视化表达方式己经够用,图形表达的研宄并无新的进展。</td>
-<td></td>
 </tr>
 <tr>
-<td></td>
 <td>20世纪中后期至今</td>
 <td>数据可视化依附计算机科学与技术拥有了新的生命力,并将在不久的未来大放异彩。</td>
-<td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="2-数据可视化相关概念"><a href="#2-数据可视化相关概念" class="headerlink" title="2.数据可视化相关概念"></a>2.数据可视化相关概念</h3><p>广义上来说，数据可视化本身是一种泛称，它统一了较成熟的科学可视化和较年轻的信息可视化。而在大数据时代，除了包含这两种以外还囊括了在他们基础上发展起来的知识可视化以及结合了数据分析的可视化分析。</p>
+<h3>2.数据可视化相关概念</h3>
+<p>广义上来说，数据可视化本身是一种泛称，它统一了较成熟的科学可视化和较年轻的信息可视化。而在大数据时代，除了包含这两种以外还囊括了在他们基础上发展起来的知识可视化以及结合了数据分析的可视化分析。</p>
 <p>如下表，为可视化分类表：</p>
 <table>
 <thead>
@@ -306,26 +295,33 @@
 </tbody>
 </table>
 <p><img src="http://oum6ifofe.bkt.clouddn.com/image/%E5%8F%AF%E8%A7%86%E5%8C%96%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1.png" alt="image"></p>
-<h3 id="3-数据可视化流程"><a href="#3-数据可视化流程" class="headerlink" title="3.数据可视化流程"></a>3.数据可视化流程</h3><p>Ben Fry在他的著作《可视化数据》里把数据可视化的流程分为了七步:获取、分析、过滤、挖掘、表示、修饰、交互。<br><img src="http://oum6ifofe.bkt.clouddn.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg" alt="image"></p>
+<h3>3.数据可视化流程</h3>
+<p>Ben Fry在他的著作《可视化数据》里把数据可视化的流程分为了七步:获取、分析、过滤、挖掘、表示、修饰、交互。
+<img src="http://oum6ifofe.bkt.clouddn.com/%E5%8F%AF%E8%A7%86%E5%8C%96%E6%B5%81%E7%A8%8B%E5%9B%BE.jpg" alt="image"></p>
 <p>如上图，通常为了便于理解，<strong>可视化整体</strong>可分为三大部分：原始数据的转化-数据的视觉转化-界面交互。</p>
 <p><img src="http://oum6ifofe.bkt.clouddn.com/image/best-process-model.png" alt="image"></p>
 <p>上图为目前应用最广的可视化流程模型，后继几乎所有著名的信息可视化系统和工具都支持、兼容这个模型。</p>
 <p>其实各类模型本质上还是离不开分析-处理-生成三步。</p>
-<h4 id="3-1-分析"><a href="#3-1-分析" class="headerlink" title="3.1 分析"></a>3.1 分析</h4><ul>
+<h4>3.1 分析</h4>
+<ul>
 <li>任务：分析我们这次可视化的出发点和目标是什么？</li>
 <li>数据：分析数据</li>
 <li>领域：针对不同领域进行相应的分析</li>
 </ul>
-<h4 id="3-2-处理"><a href="#3-2-处理" class="headerlink" title="3.2 处理"></a>3.2 处理</h4><ul>
+<h4>3.2 处理</h4>
+<ul>
 <li>数据处理：数据处理、数据规范、数据分析</li>
 <li>设计视觉编码：指如何使用位置、尺寸、灰度值、纹理、色彩、方向、形状等视觉通道，以映射我们要展示的每个数据维度。（下文详细介绍）</li>
 </ul>
-<h4 id="3-3-生成"><a href="#3-3-生成" class="headerlink" title="3.3 生成"></a>3.3 生成</h4><p>把之前的分析和设计付诸实践，在制作或写代码过程中，再不断调整需求、不断地迭代（有可能要重复前两步），最后产出我们想要的结果。</p>
-<h3 id="4-数据模型"><a href="#4-数据模型" class="headerlink" title="4.数据模型"></a>4.数据模型</h3><p>数据可视化的主要任务是将数据转换为易于感知的图形。因此，为了更准确更形象的表达数据，我们需要了解一些数据相关的概念。</p>
+<h4>3.3 生成</h4>
+<p>把之前的分析和设计付诸实践，在制作或写代码过程中，再不断调整需求、不断地迭代（有可能要重复前两步），最后产出我们想要的结果。</p>
+<h3>4.数据模型</h3>
+<p>数据可视化的主要任务是将数据转换为易于感知的图形。因此，为了更准确更形象的表达数据，我们需要了解一些数据相关的概念。</p>
 <p><strong>数据模型</strong>是一组数字或符号的组合，它包含数据的定义、类型等，可以进行各类数学操作等。</p>
 <p><strong>概念模型</strong>描述的是事物的语义或状态行为等。</p>
 <p>现实世界可以用概念模型来描述，而概念模型又可以用数据模型来描述。经过两层抽象，数据便可以描述我们的现实生活中的方方面面。</p>
-<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><ul>
+<h4>数据类型</h4>
+<ul>
 <li>类别型：用于区分事物，例如水果分为苹果，香蕉等。</li>
 <li>有序型：表示对象间的顺序关系，例如排名从高到低等。</li>
 <li>区间型：用于对象间的定量比较，比如身高170-180cm之间的。</li>
@@ -334,7 +330,6 @@
 <table>
 <thead>
 <tr>
-<th></th>
 <th>数据类型</th>
 <th>操作</th>
 <th>集合操作</th>
@@ -347,45 +342,46 @@
 <td>=、≠</td>
 <td>互换元素位置</td>
 <td>类别、模式、列联相关</td>
-<td></td>
 </tr>
 <tr>
 <td>有序型</td>
 <td>=、≠、&gt;、&lt;</td>
 <td>计算元素单调递增（减）</td>
 <td>中值、百分位数</td>
-<td></td>
 </tr>
 <tr>
 <td>区间型</td>
 <td>=、≠、&gt;、&lt;、+、-</td>
 <td>元素间线性加（减）</td>
 <td>平均值、标准方差、等级相关、积差相关</td>
-<td></td>
 </tr>
 <tr>
 <td>比值型</td>
 <td>=、≠、&gt;、&lt;、+、-、×、÷</td>
 <td>元素间相似度</td>
 <td>变异系数</td>
-<td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="视觉编码"><a href="#视觉编码" class="headerlink" title="视觉编码"></a>视觉编码</h3><p><strong>视觉编码</strong>：描述的是将数据映射到最终可视化结果上的过程。</p>
+<h4>视觉编码</h4>
+<p><strong>视觉编码</strong>：描述的是将数据映射到最终可视化结果上的过程。</p>
 <p><strong>视觉通道</strong>：图形符号&lt;——&gt;信息&lt;——&gt;视觉系统</p>
-<p><img src="http://7b1evr.com1.z0.glb.clouddn.com/basics-of-data-visualization/signal.png" alt="image"><br>如上图所示，把图形符号分为两种：</p>
+<p><img src="http://7b1evr.com1.z0.glb.clouddn.com/basics-of-data-visualization/signal.png" alt="image">
+如上图所示，把图形符号分为两种：</p>
 <ul>
 <li>位置变量：一般指二维坐标</li>
 <li>视网膜变量：尺寸、数值、纹理、颜色、方向和形状</li>
 </ul>
 <p>以上基本的图形符号共有 7 种。将其映射到点、线、面之后，就相当于有 21种编码可用的视觉通道。后来人们还又补充了几种其他的视觉通道：长度、面积、体积、透明度、模糊/聚焦、动画等，所以可用的视觉通道其实太多了。</p>
-<h4 id="视觉通道的三个性质"><a href="#视觉通道的三个性质" class="headerlink" title="视觉通道的三个性质"></a>视觉通道的三个性质</h4><ul>
-<li><ol>
+<h4>视觉通道的三个性质</h4>
+<ul>
+<li>
+<ol>
 <li>定性性质（或者叫分类性质）。适用于类别型数据。比如形状或颜色，这两个视觉通道，非常容易被人眼识别。</li>
 </ol>
 </li>
-<li><ol>
+<li>
+<ol start="2">
 <li>定量性质或定序性质。适用于有序型和数值型数据。比如长度、大小特别适合于编码数值/量的大小。</li>
 </ol>
 </li>
@@ -400,7 +396,8 @@
 <li>直观映射、隐喻</li>
 </ul>
 <p>本文主要对大数据时代数据可视化的一些基本概念进行了总结，希望这篇文章能帮助到你。</p>
-<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><hr>
+<h3>参考文献</h3>
+<hr>
 <ul>
 <li>[1]<a href="http://geekplux.com/2017/01/01/basics-of-data-visualization-the-process-model.html" target="_blank" rel="external">数据可视化基础</a></li>
 <li>[2]陈为 沈则潜 陶煜波. 数据可视化[M]. 电子工业出版社, 2013.</li>
@@ -430,7 +427,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-数据可视化发展历程"><span class="toc-text">1.数据可视化发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-数据可视化相关概念"><span class="toc-text">2.数据可视化相关概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-数据可视化流程"><span class="toc-text">3.数据可视化流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-分析"><span class="toc-text">3.1 分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-处理"><span class="toc-text">3.2 处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-生成"><span class="toc-text">3.3 生成</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-数据模型"><span class="toc-text">4.数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#数据类型"><span class="toc-text">数据类型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#视觉编码"><span class="toc-text">视觉编码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#视觉通道的三个性质"><span class="toc-text">视觉通道的三个性质</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#参考文献"><span class="toc-text">参考文献</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">1.数据可视化发展历程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">2.数据可视化相关概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">3.数据可视化流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">3.1 分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">3.2 处理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">3.3 生成</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">4.数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">视觉编码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">视觉通道的三个性质</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考文献</span></a></li></ol>
                 </div>
             </div>
         </div>
