@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        前端Docker化:(一)工程理论知识｜Perkin
+        前端Docker化:(二)Nginx容器部署实践｜Perkin
         
     </title>
 
@@ -167,7 +167,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>前端Docker化:(一)工程理论知识</h1>
+                    <h1>前端Docker化:(二)Nginx容器部署实践</h1>
                     
                     <span class="meta">
                          作者 Perkin
@@ -190,7 +190,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            前端Docker化:(一)工程理论知识
+            前端Docker化:(二)Nginx容器部署实践
         </span>
     </div>
 </header>
@@ -201,85 +201,57 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h1>前端Docker化:(二)Nginx容器部署实践</h1>
-<blockquote>
+                <h1 id="前端Docker化-二-Nginx容器部署实践"><a href="#前端Docker化-二-Nginx容器部署实践" class="headerlink" title="前端Docker化:(二)Nginx容器部署实践"></a>前端Docker化:(二)Nginx容器部署实践</h1><blockquote>
 <p>最近本人在学docker，虽然网上关于docker的文档或者资料很多，但针对于前端开发人员的或者前端实践的文章并不多，故总结了这一系列文章，通过具体实践帮助读者更快的上手docker。</p>
 </blockquote>
-<h2>安装docker</h2>
-<blockquote>
+<h2 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装docker</h2><blockquote>
 <p>本文以ubuntu16版本为例。</p>
 </blockquote>
-<h3>开始安装</h3>
-<p>由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本，再进行更新。
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get remove docker docker-engine docker-ce docker.io</div><div class="line"></div><div class="line">sudo apt-get update</div></pre></td></tr></table></figure></p>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</div></pre></td></tr></table></figure></p>
-<p>安装以下包以使apt可以通过HTTPS使用存储库
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</div></pre></td></tr></table></figure></p>
-<p>添加Docker官方的GPG密钥
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</div></pre></td></tr></table></figure></p>
-<p>使用下面的命令来设置stable存储库
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;</div></pre></td></tr></table></figure></p>
-<p>再更新一下apt包索引：
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure></p>
-<p>安装最新版本的Docker CE：
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y docker-ce</div></pre></td></tr></table></figure></p>
-<p>在生产系统上，可能会需要应该安装一个特定版本的Docker CE，而不是总是使用最新版本：
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">apt-cache madison docker-ce</div><div class="line">sudo apt-get install docker-ce=&lt;VERSION&gt;</div></pre></td></tr></table></figure></p>
-<h3>验证docker</h3>
-<p>查看docker服务是否启动
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">systemctl status docker</div></pre></td></tr></table></figure></p>
-<p>经典的hello world
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo docker run hello-world</div></pre></td></tr></table></figure></p>
-<p>运行成功，如下图所示：
-<img src="http://oum6ifofe.bkt.clouddn.com/image/docker-hello.jpg" alt="image"></p>
-<h2>应用部署</h2>
-<ol>
-<li>打包应用
-这一步骤主要是拿到前端打包后的文件，具体过程在本文不阐述。读者可以通过scp协议进行上传，也可以通过pm2等自动化工具进行上传。</li>
-<li>安装Nginx
-如读者的服务器上没有安装nginx，请先安装。
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull nginx</div></pre></td></tr></table></figure></li>
+<h3 id="开始安装"><a href="#开始安装" class="headerlink" title="开始安装"></a>开始安装</h3><p>由于apt官方库里的docker版本可能比较旧，所以先卸载可能存在的旧版本，再进行更新。<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get remove docker docker-engine docker-ce docker.io</div><div class="line"></div><div class="line">sudo apt-get update</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</div></pre></td></tr></table></figure>
+<p>安装以下包以使apt可以通过HTTPS使用存储库<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common</div></pre></td></tr></table></figure></p>
+<p>添加Docker官方的GPG密钥<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -</div></pre></td></tr></table></figure></p>
+<p>使用下面的命令来设置stable存储库<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;</div></pre></td></tr></table></figure></p>
+<p>再更新一下apt包索引：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get update</div></pre></td></tr></table></figure></p>
+<p>安装最新版本的Docker CE：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo apt-get install -y docker-ce</div></pre></td></tr></table></figure></p>
+<p>在生产系统上，可能会需要应该安装一个特定版本的Docker CE，而不是总是使用最新版本：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">apt-cache madison docker-ce</div><div class="line">sudo apt-get install docker-ce=&lt;VERSION&gt;</div></pre></td></tr></table></figure></p>
+<h3 id="验证docker"><a href="#验证docker" class="headerlink" title="验证docker"></a>验证docker</h3><p>查看docker服务是否启动<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">systemctl status docker</div></pre></td></tr></table></figure></p>
+<p>经典的hello world<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo docker run hello-world</div></pre></td></tr></table></figure></p>
+<p>运行成功，如下图所示：<br><img src="http://oum6ifofe.bkt.clouddn.com/image/docker-hello.jpg" alt="image"></p>
+<h2 id="应用部署"><a href="#应用部署" class="headerlink" title="应用部署"></a>应用部署</h2><ol>
+<li>打包应用<br>这一步骤主要是拿到前端打包后的文件，具体过程在本文不阐述。读者可以通过scp协议进行上传，也可以通过pm2等自动化工具进行上传。</li>
+<li>安装Nginx<br>如读者的服务器上没有安装nginx，请先安装。<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker pull nginx</div></pre></td></tr></table></figure>
+</li>
 </ol>
 <p>为了使用方便，用docker-compose。</p>
 <ul>
-<li>创建docker-compose.yml
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">version: &apos;1&apos;</div><div class="line">services:</div><div class="line">  # 服务名称</div><div class="line">  nginx:</div><div class="line">    # 镜像:版本</div><div class="line">    image: nginx:latest </div><div class="line">    # 映射容器80端口到本地3003端口</div><div class="line">    ports:</div><div class="line">     - &quot;3003:80&quot;</div><div class="line">    # 数据卷 映射本地文件到容器</div><div class="line">    volumes:</div><div class="line">    # 映射nginx.conf文件到容器的/etc/nginx/conf.d目录并覆盖default.conf文件</div><div class="line">     - ./nginx.conf:/etc/nginx/conf.d/default.conf</div><div class="line">    # 映射build文件夹到容器的/usr/share/nginx/html文件夹</div><div class="line">     - ./dist:/usr/share/nginx/html</div><div class="line">    # 覆盖容器启动后默认执行的命令。</div><div class="line">    command: /bin/bash -c &quot;nginx -g &apos;daemon off;&apos;&quot;</div></pre></td></tr></table></figure></li>
+<li>创建docker-compose.yml<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">version: &apos;1&apos;</div><div class="line">services:</div><div class="line">  # 服务名称</div><div class="line">  nginx:</div><div class="line">    # 镜像:版本</div><div class="line">    image: nginx:latest </div><div class="line">    # 映射容器80端口到本地3003端口</div><div class="line">    ports:</div><div class="line">     - &quot;3003:80&quot;</div><div class="line">    # 数据卷 映射本地文件到容器</div><div class="line">    volumes:</div><div class="line">    # 映射nginx.conf文件到容器的/etc/nginx/conf.d目录并覆盖default.conf文件</div><div class="line">     - ./nginx.conf:/etc/nginx/conf.d/default.conf</div><div class="line">    # 映射build文件夹到容器的/usr/share/nginx/html文件夹</div><div class="line">     - ./dist:/usr/share/nginx/html</div><div class="line">    # 覆盖容器启动后默认执行的命令。</div><div class="line">    command: /bin/bash -c &quot;nginx -g &apos;daemon off;&apos;&quot;</div></pre></td></tr></table></figure>
+</li>
 </ul>
 <p>完成后执行<figure class="highlight plain"><figcaption><span>up -d``` 就会自动创建容器并在后台运行了</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">**常用命令：**</div><div class="line"></div><div class="line"> ```docker-compose down``` 关闭并删除容器</div><div class="line"> </div><div class="line">```docker-compose ps``` 查看容器状态</div><div class="line"></div><div class="line">```docker-compose exec SERVICE COMMAND``` 可以用来进入容器内部进行一些操作,</div><div class="line">比如 ```docker-compose exec nginx bash</div></pre></td></tr></table></figure></p>
 <ul>
 <li>静态资源配置</li>
 </ul>
-<p>我们先把打包好的dist文件夹上传至服务器,和docker-compose.yml 放在一起
-在 docker-compose.yml 文件已经配置了会把同目录的 dist 文件夹映射到nginx容器的/usr/share/nginx/html文件夹， 这个文件夹就是默认的静态资源文件夹。</p>
+<p>我们先把打包好的dist文件夹上传至服务器,和docker-compose.yml 放在一起<br>在 docker-compose.yml 文件已经配置了会把同目录的 dist 文件夹映射到nginx容器的/usr/share/nginx/html文件夹， 这个文件夹就是默认的静态资源文件夹。</p>
 <ul>
-<li>配置Nginx
-nginx镜像有一个默认的配置文件default.conf
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  localhost;</div><div class="line"></div><div class="line">    #charset koi8-r;</div><div class="line">    #access_log  /var/log/nginx/host.access.log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    #error_page  404              /404.html;</div><div class="line"></div><div class="line">    # redirect server error pages to the static page /50x.html</div><div class="line">    #</div><div class="line">    error_page   500 502 503 504  /50x.html;</div><div class="line">    location = /50x.html &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    proxy_pass   http://127.0.0.1;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    root           html;</div><div class="line">    #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">    #    fastcgi_index  index.php;</div><div class="line">    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">    #    include        fastcgi_params;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">    # concurs with nginx&apos;s one</div><div class="line">    #</div><div class="line">    #location ~ /\.ht &#123;</div><div class="line">    #    deny  all;</div><div class="line">    #&#125;</div></pre></td></tr></table></figure></li>
+<li>配置Nginx<br>nginx镜像有一个默认的配置文件default.conf<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  localhost;</div><div class="line"></div><div class="line">    #charset koi8-r;</div><div class="line">    #access_log  /var/log/nginx/host.access.log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">        index  index.html index.htm;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    #error_page  404              /404.html;</div><div class="line"></div><div class="line">    # redirect server error pages to the static page /50x.html</div><div class="line">    #</div><div class="line">    error_page   500 502 503 504  /50x.html;</div><div class="line">    location = /50x.html &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    proxy_pass   http://127.0.0.1;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    root           html;</div><div class="line">    #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">    #    fastcgi_index  index.php;</div><div class="line">    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">    #    include        fastcgi_params;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">    # concurs with nginx&apos;s one</div><div class="line">    #</div><div class="line">    #location ~ /\.ht &#123;</div><div class="line">    #    deny  all;</div><div class="line">    #&#125;</div></pre></td></tr></table></figure>
+</li>
 </ul>
 <blockquote>
 <p>注：默认的配置有一个问题, 在非首页的路由页面刷新就会报404错误。原因在于这些前端静态文件在运行时会更改浏览器uri而又不真的希望服务器对这些uri去作响应，如果此时刷新浏览器，服务器收到浏览器发来的uri就去寻找资源，这个uri在服务器上是没有对应资源，结果服务器因找不到资源就发送403错误标志给浏览器。</p>
 </blockquote>
 <p>所以，我们要做的调整是：浏览器在使用这个应用期间，无论uri更改与否，服务器都发回index.html这个页面就行。</p>
-<p>3.创建nginx.conf文件
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># gzip设置</div><div class="line">gzip on;</div><div class="line">gzip_vary on;</div><div class="line"></div><div class="line">gzip_comp_level 6;</div><div class="line">gzip_buffers 16 8k;</div><div class="line"></div><div class="line">gzip_min_length 1000;</div><div class="line">gzip_proxied any;</div><div class="line">gzip_disable &quot;msie6&quot;;</div><div class="line">#gzip_http_version 1.0;</div><div class="line">gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  localhost;</div><div class="line"></div><div class="line">    #charset koi8-r;</div><div class="line">    #access_log  /var/log/nginx/host.access.log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">        index  index.html index.htm;</div><div class="line">        # 其作用是按顺序检查文件是否存在，返回第一个找到的文件或文件夹（结尾加斜线表示为文件夹），如果所有的文件或文件夹都找不到，会进行一个内部重定向到最后一个参数。</div><div class="line">        try_files $uri /index.html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    #error_page  404              /404.html;</div><div class="line"></div><div class="line">    # redirect server error pages to the static page /50x.html</div><div class="line">    #</div><div class="line">    error_page   500 502 503 504  /50x.html;</div><div class="line">    location = /50x.html &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    proxy_pass   http://127.0.0.1;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    root           html;</div><div class="line">    #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">    #    fastcgi_index  index.php;</div><div class="line">    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">    #    include        fastcgi_params;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">    # concurs with nginx&apos;s one</div><div class="line">    #</div><div class="line">    #location ~ /\.ht &#123;</div><div class="line">    #    deny  all;</div><div class="line">    #&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>将docker-compose.yml里的
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># - ./nginx.conf:/etc/nginx/conf.d/default.conf</div></pre></td></tr></table></figure></p>
-<p>注释去掉 用nginx.conf覆盖默认的配置。再执行
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker-compose down</div><div class="line">docker-compose up -d</div></pre></td></tr></table></figure></p>
+<p>3.创建nginx.conf文件<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># gzip设置</div><div class="line">gzip on;</div><div class="line">gzip_vary on;</div><div class="line"></div><div class="line">gzip_comp_level 6;</div><div class="line">gzip_buffers 16 8k;</div><div class="line"></div><div class="line">gzip_min_length 1000;</div><div class="line">gzip_proxied any;</div><div class="line">gzip_disable &quot;msie6&quot;;</div><div class="line">#gzip_http_version 1.0;</div><div class="line">gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen       80;</div><div class="line">    server_name  localhost;</div><div class="line"></div><div class="line">    #charset koi8-r;</div><div class="line">    #access_log  /var/log/nginx/host.access.log  main;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">        index  index.html index.htm;</div><div class="line">        # 其作用是按顺序检查文件是否存在，返回第一个找到的文件或文件夹（结尾加斜线表示为文件夹），如果所有的文件或文件夹都找不到，会进行一个内部重定向到最后一个参数。</div><div class="line">        try_files $uri /index.html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    #error_page  404              /404.html;</div><div class="line"></div><div class="line">    # redirect server error pages to the static page /50x.html</div><div class="line">    #</div><div class="line">    error_page   500 502 503 504  /50x.html;</div><div class="line">    location = /50x.html &#123;</div><div class="line">        root   /usr/share/nginx/html;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    # proxy the PHP scripts to Apache listening on 127.0.0.1:80</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    proxy_pass   http://127.0.0.1;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</div><div class="line">    #</div><div class="line">    #location ~ \.php$ &#123;</div><div class="line">    #    root           html;</div><div class="line">    #    fastcgi_pass   127.0.0.1:9000;</div><div class="line">    #    fastcgi_index  index.php;</div><div class="line">    #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</div><div class="line">    #    include        fastcgi_params;</div><div class="line">    #&#125;</div><div class="line"></div><div class="line">    # deny access to .htaccess files, if Apache&apos;s document root</div><div class="line">    # concurs with nginx&apos;s one</div><div class="line">    #</div><div class="line">    #location ~ /\.ht &#123;</div><div class="line">    #    deny  all;</div><div class="line">    #&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>将docker-compose.yml里的<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># - ./nginx.conf:/etc/nginx/conf.d/default.conf</div></pre></td></tr></table></figure></p>
+<p>注释去掉 用nginx.conf覆盖默认的配置。再执行<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">docker-compose down</div><div class="line">docker-compose up -d</div></pre></td></tr></table></figure></p>
 <p>现在我们就能访问3003的应用了。</p>
 <p>如果出现docker容器Cannot connect to the Docker daemon. Is the docker daemon running on this host?的问题</p>
 <p>原因在于权限问题。需要root用户才能运行</p>
-<p>解决方法：
-第一种：
-直接在命令行中执行sudo命令
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo docker-compose up -d</div></pre></td></tr></table></figure></p>
-<p>第二种：
-Docker 需要用户具有 sudo 权限，为了避免每次命令都输入sudo，可以把用户加入 Docker 用户组：
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo usermod -aG docker $USER</div></pre></td></tr></table></figure></p>
-<p>Docker 是服务器----客户端架构。命令行运行docker命令的时候，需要本机有 Docker 服务。如果这项服务没有启动，可以用下面的命令启动</p>
-<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># service 命令的用法</div><div class="line">sudo service docker start</div><div class="line"></div><div class="line"># systemctl 命令的用法</div><div class="line">sudo systemctl start docker</div></pre></td></tr></table></figure></p>
-<h3>参考文献</h3>
-<ul>
+<p>解决方法：<br>第一种：<br>直接在命令行中执行sudo命令<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo docker-compose up -d</div></pre></td></tr></table></figure></p>
+<p>第二种：<br>Docker 需要用户具有 sudo 权限，为了避免每次命令都输入sudo，可以把用户加入 Docker 用户组：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo usermod -aG docker $USER</div></pre></td></tr></table></figure></p>
+<p>Docker 是服务器—-客户端架构。命令行运行docker命令的时候，需要本机有 Docker 服务。如果这项服务没有启动，可以用下面的命令启动</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"># service 命令的用法</div><div class="line">sudo service docker start</div><div class="line"></div><div class="line"># systemctl 命令的用法</div><div class="line">sudo systemctl start docker</div></pre></td></tr></table></figure>
+<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3><ul>
 <li><a href="https://github.com/riskers/blog/issues/30" target="_blank" rel="external">一个前端的docker笔记</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2018/02/docker-wordpress-tutorial.html" target="_blank" rel="external">Docker 微服务教程</a></li>
 <li><a href="http://www.ruanyifeng.com/blog/2018/02/nginx-docker.html" target="_blank" rel="external">Nginx 容器教程</a></li>
@@ -310,7 +282,7 @@ Docker 需要用户具有 sudo 权限，为了避免每次命令都输入sudo，
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#undefined"><span class="toc-text">前端Docker化:(二)Nginx容器部署实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">安装docker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">开始安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">验证docker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">应用部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考文献</span></a></li></ol></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前端Docker化-二-Nginx容器部署实践"><span class="toc-text">前端Docker化:(二)Nginx容器部署实践</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装docker"><span class="toc-text">安装docker</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#开始安装"><span class="toc-text">开始安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证docker"><span class="toc-text">验证docker</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#应用部署"><span class="toc-text">应用部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#参考文献"><span class="toc-text">参考文献</span></a></li></ol></li></ol></li></ol>
                 </div>
             </div>
         </div>
