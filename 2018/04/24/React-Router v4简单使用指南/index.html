@@ -205,108 +205,44 @@
 <blockquote>
 <p>React Router v4是目前流行的React package。 以前版本的React Router使用配置伪装成伪组件，可能难以理解。 随着v4版本的到来，一切都是纯组件。</p>
 </blockquote>
-<h2>1. Histroty</h2>
-<p>理解与使用react-router之前，需要读者理解history。history包提供了react-router的核心功能，能搞轻松地在客户端添加位置导航。
-主要有三种类型:</p>
+<h2 id="1-Histroty"><a href="#1-Histroty" class="headerlink" title="1. Histroty"></a>1. Histroty</h2><p>理解与使用react-router之前，需要读者理解history。history包提供了react-router的核心功能，能搞轻松地在客户端添加位置导航。<br>主要有三种类型:</p>
 <ol>
 <li>browser</li>
 <li>hash</li>
-<li>memory
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">import &#123;</div><div class="line">  createBrowserHistory,</div><div class="line">  createHashHistory,</div><div class="line">  createMemoryHistory</div><div class="line">&#125; from &apos;history&apos;</div></pre></td></tr></table></figure></li>
+<li>memory <figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123;</div><div class="line">  createBrowserHistory,</div><div class="line">  createHashHistory,</div><div class="line">  createMemoryHistory</div><div class="line">&#125; <span class="keyword">from</span> <span class="string">'history'</span></div></pre></td></tr></table></figure>
+</li>
 </ol>
-<h3>Location</h3>
-<p>无论何种类型，最终都会产生一个具有相同属性跟方法的history对象。
-其中最重要的属性是<strong>Location</strong>，该属性反映了当前所在的位置，包含了pathname,search,hash等属性。此外每个Location属性都有一个unique key,用来识别和存储特定于某个位置的的数据。state则表示与之相关的状态，这提供了一种附加数据来表示location在URL中是否存在的状态。如下所示：
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  pathname: &apos;/here&apos;,</div><div class="line">  search: &apos;?key=value&apos;,</div><div class="line">  hash: &apos;#extra-information&apos;,</div><div class="line">  state: &#123; modal: true &#125;,</div><div class="line">  key: &apos;abc123&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3>Navigation</h3>
-<p>Navigation属性可以更改位置。</p>
+<h3 id="Location"><a href="#Location" class="headerlink" title="Location"></a>Location</h3><p>无论何种类型，最终都会产生一个具有相同属性跟方法的history对象。<br>其中最重要的属性是<strong>Location</strong>，该属性反映了当前所在的位置，包含了pathname,search,hash等属性。此外每个Location属性都有一个unique key,用来识别和存储特定于某个位置的的数据。state则表示与之相关的状态，这提供了一种附加数据来表示location在URL中是否存在的状态。如下所示：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">pathname</span>: <span class="string">'/here'</span>,</div><div class="line">  <span class="attr">search</span>: <span class="string">'?key=value'</span>,</div><div class="line">  <span class="attr">hash</span>: <span class="string">'#extra-information'</span>,</div><div class="line">  <span class="attr">state</span>: &#123; <span class="attr">modal</span>: <span class="literal">true</span> &#125;,</div><div class="line">  <span class="attr">key</span>: <span class="string">'abc123'</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Navigation"><a href="#Navigation" class="headerlink" title="Navigation"></a>Navigation</h3><p>Navigation属性可以更改位置。</p>
 <ol>
-<li>push
-push方法能搞让用户跳转到新的location。当用户点击&lt;Link&gt;时，其实就是使用<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">2. replace</div><div class="line">replace与push类似，但是它并不是跳转到新的location，而是取代当前的页面。比如&lt;Redirect&gt;</div><div class="line">3. 其他</div><div class="line">还有其他三个比较相似的方法:goBack,goForward,go。</div><div class="line"></div><div class="line">### observer pattern</div><div class="line">History对象采用观察者模式去监听location的变化。每一个history对象都有一个listen方法。React路由器的路由组件将订阅history对象，以便它可以在位置变化时重新渲染。</div></pre></td></tr></table></figure></li>
+<li>push<br>push方法能搞让用户跳转到新的location。当用户点击<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">2. replace</div><div class="line">replace与push类似，但是它并不是跳转到新的location，而是取代当前的页面。比如```&lt;Redirect&gt;```。</div><div class="line"></div><div class="line">3. 其他</div><div class="line">还有其他三个比较相似的方法:goBack,goForward,go。</div><div class="line"></div><div class="line">### observer pattern</div><div class="line">History对象采用观察者模式去监听location的变化。每一个history对象都有一个listen方法。React路由器的路由组件将订阅history对象，以便它可以在位置变化时重新渲染。</div><div class="line"></div><div class="line">```javascript</div><div class="line">const youAreHere = document.getElementById(&apos;youAreHere&apos;)</div><div class="line">history.listen(function(location) &#123;</div><div class="line">  youAreHere.textContent = location.pathname</div><div class="line">&#125;)</div></pre></td></tr></table></figure></li>
 </ol>
-<p>const youAreHere = document.getElementById('youAreHere')
-history.listen(function(location) {
-youAreHere.textContent = location.pathname
-})
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">每个histroy对象都有一个createHref方法，可以每获取一个location对象而输出一个URL。</div><div class="line"></div><div class="line">### 使用场景</div><div class="line">1. 在浏览器中</div><div class="line"></div><div class="line">browser跟hash对象都能搞用在浏览器中，最大的不同在于他们如何从URL中创建location对象。browser使用完整的URL，而hash仅使用位于第一个散列符号之后的URL。</div></pre></td></tr></table></figure></p>
-<p>// Given the following URL
-url = 'http://www.example.com/this/is/the/path?key=value#hash'
-// a browser history creates the location object:
-{
-pathname: '/this/is/the/path',
-search: '?key=value',
-hash: '#hash'
-}
-// a hash history creates the location object:
-{
-pathname: 'hash',
-search: '',
-hash: ''
-}
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">2. hash history使用场景</div><div class="line"></div><div class="line">一般而言，对于动态服务器，请求的文件实际上是不存在的，此时，服务器将检查请求的URL并决定要响应的HTML。而对于静态文件服务器来说，只能返回磁盘上的文件。为了解决静态文件服务器的限制，最简单的方案是在服务器上只有一个真实的location来获取HTML。这也就意味着应用程序只有一个URL，这样就破坏了history的目的。为了解决这个问题，hash history能够使用URL的hash部分来设置和读取位置。比如:</div></pre></td></tr></table></figure></p>
-<p>// If example.com uses a static file server, these URLs would
-// both fetch html from /my-site/index.html
-http://www.example.com/my-site#/one
-http://www.example.com/my-site#/two
-// However, with a hash history, an application's location will be
-// different for each URL because the location is derived from
-// the hash section of the URL
-{ pathname: '/one' }
-{ pathname: '/two' }
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">虽然hash history运行良好，但缺点是它依赖于将所有路径信息存储在URL的哈希表中。 因此，只有在您的网站没有动态服务器来处理您的HTML时才应该考虑它。</div><div class="line"></div><div class="line">3. Memory：获取所有的history对象</div><div class="line"></div><div class="line">memory history可以在任何运行javascript的地方使用它。一个最简单的例子在于你可以通过node运行的单元测试中使用它。这使您可以测试依赖于history对象的代码，而无需实际使用浏览器进行测试。更重要的是，你可以使用memory history在移动端app中，react-router-native就是使用memory history的。memory history与browser跟hash最大的不同在于它保持了自己的内存阵列，在创建history记录时，用户可以传递信息来设置状态，这个状态可以是一个location数组或者在数组中表示当前页面的索引。而后者主要依赖于浏览器已经存储的位置数组。</div></pre></td></tr></table></figure></p>
-<p>const history = createMemoryHistory({
-initialEntries: ['/', '/next', '/last'],
-initialIndex: 0
-})
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">## 2. 渲染&lt;Router&gt;</div><div class="line">路由组件只接受一个子元素，因此将&lt;App /&gt;与路由分开是十分有用的。同时，对于服务端渲染来说，也是十分有用。</div></pre></td></tr></table></figure></p>
-<p>import { BrowserRouter } from 'react-router-dom'
-ReactDOM.render((
-&lt;BrowserRouter&gt;
-&lt;App /&gt;
-&lt;/BrowserRouter&gt;
-), document.getElementById('root'))
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">这里的BrowserRouter与上文将的browser一致，也是三种形式。分别为&lt;BrowserRouter&gt;,&lt;HashRouter&gt;,&lt;MemoryRouter&gt;。</div><div class="line">## 3. Routes</div><div class="line">```&lt;Route&gt;```组件是React Router的主要构建的模块。 只要用户想根据位置的路径名呈现内容，都应该使用```&lt;Route&gt;```元素。</div><div class="line"></div><div class="line">React Router使用[path-to-regexp](https://github.com/pillarjs/path-to-regexp/tree/v1.7.0)依赖包来确定路径元素的路径prop是否与当前位置匹配。它将路径字符串编译为一个正则表达式，该正则表达式将与该位置的路径名相匹配。</div><div class="line"> - url:当前位置路径名的匹配部分</div><div class="line"> - path:路由的path</div><div class="line"> - isExact:path === pathname</div><div class="line"> - params:包含path-to-regexp捕获的路径名的对象</div><div class="line"> </div><div class="line"> ### 创建路由</div><div class="line">```&lt;Route&gt;```可以在路由器的任何位置进行创建，但只有将它们渲染在同一位置才有意义。用户可以使用```&lt;Switch&gt;```组件去给```&lt;Route&gt;```分组， ```&lt;Switch&gt;```将迭代其子元素（路由），并仅渲染与当前路径名匹配的第一个元素。</div><div class="line">比如，我们想匹配如下规则：</div><div class="line"> 1. ```/``` -主页</div><div class="line"> 2. ```/roster```- 队员花名册</div><div class="line"> 3. ```/roster/:number```具体某一个队员</div><div class="line"> 4. ```/schedule```球队的比赛时间表</div><div class="line"> </div><div class="line">为了在应用程序中匹配一个路径，我们所要做的就是创建一个&lt;Route&gt;元素和我们想要匹配的路径。</div></pre></td></tr></table></figure></p>
-<p>&lt;Switch&gt;
-&lt;Route exact path='/' component={Home}/&gt;
-{/* both /roster and /roster/:number begin with /roster */}
-&lt;Route path='/roster' component={Roster}/&gt;
-&lt;Route path='/schedule' component={Schedule}/&gt;
-&lt;/Switch&gt;
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">### &lt;Route&gt;的渲染</div><div class="line">Routes有三个属性：</div><div class="line">1. component：React组件，当具有组件Prop的路由匹配时，路由将返回一个新元素，即为React组件（本质上是使用React.createElement创建）。</div><div class="line">2. render：一个返回React元素的函数。 它将在路径匹配时被调用。 这与组件类似，但对于内联渲染和将更多props给元素很有用。</div><div class="line">&gt; 这本质上就是一个无状态的功能组件。 component与render最大的不同在于component使用React.createElement创建该元素，而render则将该组件作为函数调用。 如果您要定义一个内联函数并将其传递给component 中，它将比render属性慢得多。</div><div class="line">3. children：一个返回React元素的函数，与前两个不同的是，无论path的路径是否匹配当前的location，该函数都会被渲染。</div></pre></td></tr></table></figure></p>
-<p>&lt;Route path='/page' component={Page} /&gt;
-const extraProps = { color: 'red' }
-&lt;Route path='/page' render={(props) =&gt; (
-&lt;Page {...props} data={extraProps}/&gt;
-)}/&gt;
-&lt;Route path='/page' children={(props) =&gt; (
-props.match
-? &lt;Page {...props}/&gt;
-: &lt;EmptyPage {...props}/&gt;
-)}/&gt;
-<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">一般而言，我们都使用component或者render，children偶尔会使用到，但通常最好在路径不匹配时不渲染任何东西。如果没有额外的属性传递，就推荐使用component属性。</div><div class="line"></div><div class="line">## 4. Links</div><div class="line">我们的应用一般需要一种在页面间导航的方法，如果我们使用锚点元素创建链接会导致整个页面重新加载。React-Router提供了```&lt;Link&gt;```组件来防止这种事情发生。点击```&lt;Link&gt;```时，URL更新，内容变化，但页面不重新加载。</div></pre></td></tr></table></figure></p>
-<p>import { Link } from 'react-router-dom'
-const Header = () =&gt; (
-&lt;header&gt;
-&lt;nav&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;Link to='/'&gt;Home&lt;/Link&gt;&lt;/li&gt;
-&lt;li&gt;&lt;Link to='/roster'&gt;Roster&lt;/Link&gt;&lt;/li&gt;
-&lt;li&gt;&lt;Link to='/schedule'&gt;Schedule&lt;/Link&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/nav&gt;
-&lt;/header&gt;
-)</p>
-<pre><code>
-&lt;Link&gt;使用to属性来描述我们想要导航的路径，可以是字符串也可以是location对象（包含pathname,search,hash,sstate等），当它为字符串时，它将被转换为location对象。
-
-
-
-## 参考文献
-[A little bit of history](https://medium.com/@pshrmn/a-little-bit-of-history-f245306f48dd)
-
-[A Simple React Router v4 Tutorial](https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf)
-
-[react router教程](https://reacttraining.com/react-router/web/guides/quick-start)</code></pre>
+<p>每个histroy对象都有一个createHref方法，可以每获取一个location对象而输出一个URL。</p>
+<h3 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h3><ol>
+<li>在浏览器中</li>
+</ol>
+<p>browser跟hash对象都能搞用在浏览器中，最大的不同在于他们如何从URL中创建location对象。browser使用完整的URL，而hash仅使用位于第一个散列符号之后的URL。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// Given the following URL</span></div><div class="line">url = <span class="string">'http://www.example.com/this/is/the/path?key=value#hash'</span></div><div class="line"><span class="comment">// a browser history creates the location object:</span></div><div class="line">&#123;</div><div class="line">  <span class="attr">pathname</span>: <span class="string">'/this/is/the/path'</span>,</div><div class="line">  <span class="attr">search</span>: <span class="string">'?key=value'</span>,</div><div class="line">  <span class="attr">hash</span>: <span class="string">'#hash'</span></div><div class="line">&#125;</div><div class="line"><span class="comment">// a hash history creates the location object:</span></div><div class="line">&#123;</div><div class="line">  <span class="attr">pathname</span>: <span class="string">'hash'</span>,</div><div class="line">  <span class="attr">search</span>: <span class="string">''</span>,</div><div class="line">  <span class="attr">hash</span>: <span class="string">''</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>hash history使用场景</li>
+</ol>
+<p>一般而言，对于动态服务器，请求的文件实际上是不存在的，此时，服务器将检查请求的URL并决定要响应的HTML。而对于静态文件服务器来说，只能返回磁盘上的文件。为了解决静态文件服务器的限制，最简单的方案是在服务器上只有一个真实的location来获取HTML。这也就意味着应用程序只有一个URL，这样就破坏了history的目的。为了解决这个问题，hash history能够使用URL的hash部分来设置和读取位置。比如:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// If example.com uses a static file server, these URLs would</span></div><div class="line"><span class="comment">// both fetch html from /my-site/index.html</span></div><div class="line">http:<span class="comment">//www.example.com/my-site#/one</span></div><div class="line">http:<span class="comment">//www.example.com/my-site#/two</span></div><div class="line"><span class="comment">// However, with a hash history, an application's location will be</span></div><div class="line"><span class="comment">// different for each URL because the location is derived from</span></div><div class="line"><span class="comment">// the hash section of the URL</span></div><div class="line">&#123; <span class="attr">pathname</span>: <span class="string">'/one'</span> &#125;</div><div class="line">&#123; <span class="attr">pathname</span>: <span class="string">'/two'</span> &#125;</div></pre></td></tr></table></figure>
+<p>虽然hash history运行良好，但缺点是它依赖于将所有路径信息存储在URL的哈希表中。 因此，只有在您的网站没有动态服务器来处理您的HTML时才应该考虑它。</p>
+<ol>
+<li>Memory：获取所有的history对象</li>
+</ol>
+<p>memory history可以在任何运行javascript的地方使用它。一个最简单的例子在于你可以通过node运行的单元测试中使用它。这使您可以测试依赖于history对象的代码，而无需实际使用浏览器进行测试。更重要的是，你可以使用memory history在移动端app中，react-router-native就是使用memory history的。memory history与browser跟hash最大的不同在于它保持了自己的内存阵列，在创建history记录时，用户可以传递信息来设置状态，这个状态可以是一个location数组或者在数组中表示当前页面的索引。而后者主要依赖于浏览器已经存储的位置数组。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">const</span> history = createMemoryHistory(&#123;</div><div class="line">  <span class="attr">initialEntries</span>: [<span class="string">'/'</span>, <span class="string">'/next'</span>, <span class="string">'/last'</span>],</div><div class="line">  <span class="attr">initialIndex</span>: <span class="number">0</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="2-渲染"><a href="#2-渲染" class="headerlink" title="2. 渲染"></a>2. 渲染<router></router></h2><p>路由组件只接受一个子元素，因此将<figure class="highlight plain"><figcaption><span>/>```与路由分开是十分有用的。同时，对于服务端渲染来说，也是十分有用。</span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">```js</div><div class="line">import &#123; BrowserRouter &#125; from &apos;react-router-dom&apos;</div><div class="line">ReactDOM.render((</div><div class="line">  &lt;BrowserRouter&gt;</div><div class="line">    &lt;App /&gt;</div><div class="line">  &lt;/BrowserRouter&gt;</div><div class="line">), document.getElementById(&apos;root&apos;))</div></pre></td></tr></table></figure></p>
+<p>这里的BrowserRouter与上文将的browser一致，也是三种形式。分别为<browserrouter>,<hashrouter>,<memoryrouter>。</memoryrouter></hashrouter></browserrouter></p>
+<h2 id="3-Routes"><a href="#3-Routes" class="headerlink" title="3. Routes"></a>3. Routes</h2><figure class="highlight plain"><figcaption><span>Router的主要构建的模块。 只要用户想根据位置的路径名呈现内容，都应该使用```<route>```元素。</route></span></figcaption><table><tr><td class="code"><pre><div class="line"></div><div class="line">React Router使用[path-to-regexp](https://github.com/pillarjs/path-to-regexp/tree/v1.7.0)依赖包来确定路径元素的路径prop是否与当前位置匹配。它将路径字符串编译为一个正则表达式，该正则表达式将与该位置的路径名相匹配。</div><div class="line"> - url:当前位置路径名的匹配部分</div><div class="line"> - path:路由的path</div><div class="line"> - isExact:path === pathname</div><div class="line"> - params:包含path-to-regexp捕获的路径名的对象</div><div class="line"> </div><div class="line"> ### 创建路由</div><div class="line">```&lt;Route&gt;```可以在路由器的任何位置进行创建，但只有将它们渲染在同一位置才有意义。用户可以使用```&lt;Switch&gt;```组件去给```&lt;Route&gt;```分组， ```&lt;Switch&gt;```将迭代其子元素（路由），并仅渲染与当前路径名匹配的第一个元素。</div><div class="line">比如，我们想匹配如下规则：</div><div class="line"> 1. ```/``` -主页</div><div class="line"> 2. ```/roster```- 队员花名册</div><div class="line"> 3. ```/roster/:number```具体某一个队员</div><div class="line"> 4. ```/schedule```球队的比赛时间表</div><div class="line"> </div><div class="line">为了在应用程序中匹配一个路径，我们所要做的就是创建一个&lt;Route&gt;元素和我们想要匹配的路径。</div></pre></td></tr></table></figure>
+<p><switch><br>  <route exact="" path="/" component="{Home}/"><br>  {/<em> both /roster and /roster/:number begin with /roster </em>/}<br>  <route path="/roster" component="{Roster}/"><br>  <route path="/schedule" component="{Schedule}/"><br></route></route></route></switch><br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">### ```&lt;Route&gt;```的渲染</div><div class="line">Routes有三个属性：</div><div class="line">1. component：React组件，当具有组件Prop的路由匹配时，路由将返回一个新元素，即为React组件（本质上是使用React.createElement创建）。</div><div class="line"></div><div class="line">2. render：一个返回React元素的函数。 它将在路径匹配时被调用。 这与组件类似，但对于内联渲染和将更多props给元素很有用。</div><div class="line">&gt; 这本质上就是一个无状态的功能组件。 component与render最大的不同在于component使用React.createElement创建该元素，而render则将该组件作为函数调用。 如果您要定义一个内联函数并将其传递给component 中，它将比render属性慢得多。</div><div class="line"></div><div class="line">3. children：一个返回React元素的函数，与前两个不同的是，无论path的路径是否匹配当前的location，该函数都会被渲染。</div><div class="line"></div><div class="line">```js</div><div class="line">&lt;Route path=&apos;/page&apos; component=&#123;Page&#125; /&gt;</div><div class="line">const extraProps = &#123; color: &apos;red&apos; &#125;</div><div class="line">&lt;Route path=&apos;/page&apos; render=&#123;(props) =&gt; (</div><div class="line">  &lt;Page &#123;...props&#125; data=&#123;extraProps&#125;/&gt;</div><div class="line">)&#125;/&gt;</div><div class="line">&lt;Route path=&apos;/page&apos; children=&#123;(props) =&gt; (</div><div class="line">  props.match</div><div class="line">    ? &lt;Page &#123;...props&#125;/&gt;</div><div class="line">    : &lt;EmptyPage &#123;...props&#125;/&gt;</div><div class="line">)&#125;/&gt;</div></pre></td></tr></table></figure></p>
+<p>一般而言，我们都使用component或者render，children偶尔会使用到，但通常最好在路径不匹配时不渲染任何东西。如果没有额外的属性传递，就推荐使用component属性。</p>
+<h2 id="4-Links"><a href="#4-Links" class="headerlink" title="4. Links"></a>4. Links</h2><p>我们的应用一般需要一种在页面间导航的方法，如果我们使用锚点元素创建链接会导致整个页面重新加载。React-Router提供了<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">```js</div><div class="line">import &#123; Link &#125; from &apos;react-router-dom&apos;</div><div class="line">const Header = () =&gt; (</div><div class="line">  &lt;header&gt;</div><div class="line">    &lt;nav&gt;</div><div class="line">      &lt;ul&gt;</div><div class="line">        &lt;li&gt;&lt;Link to=&apos;/&apos;&gt;Home&lt;/Link&gt;&lt;/li&gt;</div><div class="line">        &lt;li&gt;&lt;Link to=&apos;/roster&apos;&gt;Roster&lt;/Link&gt;&lt;/li&gt;</div><div class="line">        &lt;li&gt;&lt;Link to=&apos;/schedule&apos;&gt;Schedule&lt;/Link&gt;&lt;/li&gt;</div><div class="line">      &lt;/ul&gt;</div><div class="line">    &lt;/nav&gt;</div><div class="line">  &lt;/header&gt;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p><code>&lt;Link&gt;</code>使用to属性来描述我们想要导航的路径，可以是字符串也可以是location对象（包含pathname,search,hash,sstate等），当它为字符串时，它将被转换为location对象。</p>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><a href="https://medium.com/@pshrmn/a-little-bit-of-history-f245306f48dd" target="_blank" rel="external">A little bit of history</a></p>
+<p><a href="https://medium.com/@pshrmn/a-simple-react-router-v4-tutorial-7f23ff27adf" target="_blank" rel="external">A Simple React Router v4 Tutorial</a></p>
+<p><a href="https://reacttraining.com/react-router/web/guides/quick-start" target="_blank" rel="external">react router教程</a></p>
 
                 <hr>
                 
@@ -332,7 +268,7 @@ const Header = () =&gt; (
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">1. Histroty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Location</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Navigation</span></a></li></ol></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Histroty"><span class="toc-text">1. Histroty</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Location"><span class="toc-text">Location</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Navigation"><span class="toc-text">Navigation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用场景"><span class="toc-text">使用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-渲染"><span class="toc-text">2. 渲染</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Routes"><span class="toc-text">3. Routes</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Links"><span class="toc-text">4. Links</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考文献"><span class="toc-text">参考文献</span></a></li></ol>
                 </div>
             </div>
         </div>
