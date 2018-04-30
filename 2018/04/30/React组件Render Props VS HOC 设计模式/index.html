@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Perkin在 Github 上的个人博客">
+    <meta name="keyword" content="perkinzone">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="http://oum6ifofe.bkt.clouddn.com/about.ico">
+    <link rel="alternate" type="application/atom+xml" title="Perkin" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        React组件Render Props VS HOC 设计模式｜Perkin
+        
+    </title>
+
+    <link rel="canonical" href="http://perkinj.github.io/2018/04/30/React组件Render Props VS HOC 设计模式/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/home.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    Perkin
+                </span>
+                &Zone秀分享	
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">主页</a>
+                    </li>
+					
+                    
+                        
+							
+                        <li>
+                            <a href="/Tags/">
+                            标签
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/about/">
+                            关于我
+                            </a>
+                        </li>
+							
+						
+                    
+                        
+							
+                        <li>
+                            <a href="/archives/">
+                            归档
+                            </a>
+                        </li>
+							
+						
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://oum6ifofe.bkt.clouddn.com/image/HOC.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://oum6ifofe.bkt.clouddn.com/image/HOC.jpg?imageView2/1/w/1400/h/400/interlace/1/q/90')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>React组件Render Props VS HOC 设计模式</h1>
+                    
+                    <span class="meta">
+                         作者 Perkin
+                        <span>
+                          日期 2018-04-30
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
+                        
+                        <a class="tag" href="/tags/#HOC"
+                           title="HOC">HOC</a>
+                        
+                        <a class="tag" href="/tags/#Render Props"
+                           title="Render Props">Render Props</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            React组件Render Props VS HOC 设计模式
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>React的<a href="https://levelup.gitconnected.com/react-component-patterns-ab1f09be2c82" target="_blank" rel="external">设计模式</a>有很多种，比如无状态组件/表现型组件，有状态组件/容器型组件，render模式组件，高阶组件等等。本文主要介绍react的render模式与HOC设计模式，并通过实际案例进行比较。</p>
+<h3>render props模式</h3>
+<blockquote>
+<p>The Render Props是一种在不重复代码的情况下共享组件间功能的方法。如下所示：</p>
+</blockquote>
+<p><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">&lt;DataProvider render=&#123;data =&gt; (</div><div class="line">  &lt;h1&gt;Hello &#123;data.target&#125;&lt;/h1&gt;</div><div class="line">)&#125;/&gt;</div></pre></td></tr></table></figure></p>
+<p>通过使用prop来定义呈现的内容，组件只是注入功能，而不需要知道它如何应用于UI。render prop 模式意味着用户通过定义单独组件来传递prop方法，来指示共享组件应该返回的内容。</p>
+<p>Render Props 的核心思想是，通过一个函数将class组件的state作为props传递给纯函数组件
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> SharedComponent extends React.Component &#123;</div><div class="line">  state = &#123;...&#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &#123;this.props.render(this.state)&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> SharedComponent;</div></pre></td></tr></table></figure></p>
+<p><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">```js</div><div class="line">import React from &apos;react&apos;;</div><div class="line">import SharedComponent from &apos;components/SharedComponent&apos;;</div><div class="line"></div><div class="line">const SayHello = () =&gt; (</div><div class="line">  &lt;SharedComponent render=&#123;(state) =&gt; (</div><div class="line">    &lt;span&gt;hello!,&#123;...state&#125;&lt;/span&gt;</div><div class="line">  )&#125; /&gt;</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>{this.props.render(this.state)}这个函数，将其state作为参数传入其的props.render方法中，调用时直接取组件所需要的state即可。
+render props模式最重要的是它返回一个react元素，比如我将上面的render属性改名，依然有效。</p>
+<p><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> SharedComponentWithGoofyName extends React.Component &#123;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        &#123;this.props.wrapThisThingInADiv()&#125;</div><div class="line">      &lt;/div&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> SayHelloWithGoofyName = <span class="function"><span class="params">()</span> =&gt;</span> (</div><div class="line">  &lt;SharedComponentWithGoofyName wrapThisThingInADiv=&#123;() =&gt; (</div><div class="line">    &lt;span&gt;hello!&lt;/span&gt;</div><div class="line">  )&#125; /&gt;</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<h3>HOC设计模式</h3>
+<p>React的高阶组件主要用于组件之间共享通用功能而不重复代码的模式（也就是达到DRY模式）。</p>
+<p>高阶组件实际是一个函数。 HOC函数将组件作为参数并返回一个新的组件。它将组件转换为另一个组件并添加额外的数据或功能。</p>
+<blockquote>
+<p>高阶组件在React生态链技术中经常用到，对读者较为熟悉的,比如Redux中的connect，React Router中的withRouter等。</p>
+</blockquote>
+<p>常见的高阶组件如下所示：
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> withSecretToLife = <span class="function">(<span class="params">WrappedComponent</span>) =&gt;</span> &#123;</div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">HOC</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">    render() &#123;</div><div class="line">      <span class="keyword">return</span> (</div><div class="line">        &lt;WrappedComponent</div><div class="line">          secretToLife=&#123;42&#125;</div><div class="line">          &#123;...this.props&#125;</div><div class="line">        /&gt;</div><div class="line">      );</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">    </div><div class="line">  return HOC;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">export default withSecretToLife;</div></pre></td></tr></table></figure></p>
+<p>已知secretToLife为42，有一些组件需要共享这个信息，此时创建了SecretToLife的HOC，将它作为prop传递给我们的组件。
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"><span class="keyword">import</span> withSecretToLife <span class="keyword">from</span> <span class="string">'components/withSecretToLife'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> DisplayTheSecret = <span class="function"><span class="params">props</span> =&gt;</span> (</div><div class="line">  &lt;div&gt;</div><div class="line">    The secret to life is &#123;props.secretToLife&#125;.</div><div class="line">  &lt;/div&gt;</div><div class="line">);</div><div class="line"></div><div class="line"><span class="keyword">const</span> WrappedComponent = withSecretToLife(DisplayTheSecret);</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> WrappedComponent;</div></pre></td></tr></table></figure></p>
+<p>此时，WrappedComponent只是DisplayTheSecret的增强版本，允许我们访问secretToLife属性。</p>
+<h3>Render Props与HOC模式实例对比</h3>
+<p>本文以一个利用localStorage API的小例子分别使用HOC设计模式跟The Render Props设计模式编写demo。</p>
+<h4>HOC Example</h4>
+<p><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> withStorage = <span class="function">(<span class="params">WrappedComponent</span>) =&gt;</span> &#123;</div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">HOC</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">    state = &#123;</div><div class="line">      <span class="attr">localStorageAvailable</span>: <span class="literal">false</span>, </div><div class="line">    &#125;;</div><div class="line">  </div><div class="line">    componentDidMount() &#123;</div><div class="line">       <span class="keyword">this</span>.checkLocalStorageExists();</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    checkLocalStorageExists() &#123;</div><div class="line">      <span class="keyword">const</span> testKey = <span class="string">'test'</span>;</div><div class="line"></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">          localStorage.setItem(testKey, testKey);</div><div class="line">          localStorage.removeItem(testKey);</div><div class="line">          <span class="keyword">this</span>.setState(&#123; <span class="attr">localStorageAvailable</span>: <span class="literal">true</span> &#125;);</div><div class="line">      &#125; <span class="keyword">catch</span>(e) &#123;</div><div class="line">          <span class="keyword">this</span>.setState(&#123; <span class="attr">localStorageAvailable</span>: <span class="literal">false</span> &#125;);</div><div class="line">      &#125; </div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    load = <span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        <span class="keyword">return</span> localStorage.getItem(key); </div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    save = <span class="function">(<span class="params">key, data</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        localStorage.setItem(key, data);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    remove = <span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        localStorage.removeItem(key);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    render() &#123;</div><div class="line">      <span class="keyword">return</span> (</div><div class="line">        &lt;WrappedComponent</div><div class="line">          load=&#123;this.load&#125;</div><div class="line">          save=&#123;this.save&#125;</div><div class="line">          remove=&#123;this.remove&#125;</div><div class="line">          &#123;...this.props&#125;</div><div class="line">        /&gt;</div><div class="line">      );</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">    </div><div class="line">  return HOC; </div><div class="line">&#125;</div><div class="line"></div><div class="line">export default withStorage;</div></pre></td></tr></table></figure></p>
+<p>在withStorage中，使用componentDidMount生命周期函数来检查checkLocalStorageExists函数中是否存在localStorage。</p>
+<p>local，save，remove则是来操作localStorage的。现在我们创建一个新的组件，将其包裹在HOC组件中，用于显示相关的信息。由于获取信息的API调用需要很长时间，我们可以假设这些值一旦设定就不会改变。我们只会在未保存值的情况下进行此API调用。 然后，每当用户返回页面时，他们都可以立即访问数据，而不是等待我们的API返回。
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"><span class="keyword">import</span> withStorage <span class="keyword">from</span> <span class="string">'components/withStorage'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ComponentNeedingStorage</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  state = &#123;</div><div class="line">    <span class="attr">username</span>: <span class="string">''</span>,</div><div class="line">    <span class="attr">favoriteMovie</span>: <span class="string">''</span>,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  componentDidMount() &#123;</div><div class="line">    <span class="keyword">const</span> username = <span class="keyword">this</span>.props.load(<span class="string">'username'</span>);</div><div class="line">    <span class="keyword">const</span> favoriteMovie = <span class="keyword">this</span>.props.load(<span class="string">'favoriteMovie'</span>);</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!username || !favoriteMovie) &#123;</div><div class="line">      <span class="comment">// This will come from the parent component</span></div><div class="line">      <span class="comment">// and would be passed when we spread props &#123;...this.props&#125;</span></div><div class="line">      <span class="keyword">this</span>.props.reallyLongApiCall()</div><div class="line">        .then(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</div><div class="line">          <span class="keyword">this</span>.props.save(<span class="string">'username'</span>, user.username) || <span class="string">''</span>;</div><div class="line">          <span class="keyword">this</span>.props.save(<span class="string">'favoriteMovie'</span>, user.favoriteMovie) || <span class="string">''</span>;</div><div class="line">          <span class="keyword">this</span>.setState(&#123;</div><div class="line">            <span class="attr">username</span>: user.username,</div><div class="line">            <span class="attr">favoriteMovie</span>: user.favoriteMovie,</div><div class="line">          &#125;);</div><div class="line">        &#125;); </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      <span class="keyword">this</span>.setState(&#123; username, favoriteMovie &#125;)</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">const</span> &#123; username, favoriteMovie &#125; = <span class="keyword">this</span>.state;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!username || !favoriteMovie) &#123;</div><div class="line">      <span class="keyword">return</span> &lt;div&gt;Loading...&lt;/div&gt;; </div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;div&gt;</div><div class="line">        My username is &#123;username&#125;, and I love to watch &#123;favoriteMovie&#125;.</div><div class="line">      &lt;/div&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">const</span> WrappedComponent = withStorage(ComponentNeedingStorage);</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> WrappedComponent;</div></pre></td></tr></table></figure></p>
+<p>在封装组件的componentDidMount内部，首先尝试从localStorage中获取，如果不存在，则异步调用，将获得的信息存储到localStorage并显示出来。</p>
+<h4>The Render Props Exapmle</h4>
+<p><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Storage</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">    state = &#123;</div><div class="line">      <span class="attr">localStorageAvailable</span>: <span class="literal">false</span>, </div><div class="line">    &#125;;</div><div class="line">  </div><div class="line">    componentDidMount() &#123;</div><div class="line">       <span class="keyword">this</span>.checkLocalStorageExists();</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    checkLocalStorageExists() &#123;</div><div class="line">      <span class="keyword">const</span> testKey = <span class="string">'test'</span>;</div><div class="line"></div><div class="line">      <span class="keyword">try</span> &#123;</div><div class="line">          localStorage.setItem(testKey, testKey);</div><div class="line">          localStorage.removeItem(testKey);</div><div class="line">          <span class="keyword">this</span>.setState(&#123; <span class="attr">localStorageAvailable</span>: <span class="literal">true</span> &#125;);</div><div class="line">      &#125; <span class="keyword">catch</span>(e) &#123;</div><div class="line">          <span class="keyword">this</span>.setState(&#123; <span class="attr">localStorageAvailable</span>: <span class="literal">false</span> &#125;);</div><div class="line">      &#125; </div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    load = <span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        <span class="keyword">return</span> localStorage.getItem(key); </div><div class="line">      &#125;</div><div class="line">      </div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    save = <span class="function">(<span class="params">key, data</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        localStorage.setItem(key, data);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    remove = <span class="function">(<span class="params">key</span>) =&gt;</span> &#123;</div><div class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.state.localStorageAvailable) &#123;</div><div class="line">        localStorage.removeItem(key);</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    render() &#123;</div><div class="line">      <span class="keyword">return</span> (</div><div class="line">        &lt;span&gt;</div><div class="line">          this.props.render(&#123;</div><div class="line">            load: this.load,</div><div class="line">            save: this.save,</div><div class="line">            remove: this.remove,</div><div class="line">          &#125;)</div><div class="line">        &lt;/span&gt;</div><div class="line">      );</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Storage组件内部与HOC的withStorage较为类似，不同的是Storage不接受组件为参数，并且返回this.props.render。</p>
+<p><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span>;</div><div class="line"><span class="keyword">import</span> Storage <span class="keyword">from</span> <span class="string">'components/Storage'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ComponentNeedingStorage</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  state = &#123;</div><div class="line">    <span class="attr">username</span>: <span class="string">''</span>,</div><div class="line">    <span class="attr">favoriteMovie</span>: <span class="string">''</span>,</div><div class="line">    <span class="attr">isFetching</span>: <span class="literal">false</span>,</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  fetchData = <span class="function">(<span class="params">save</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; <span class="attr">isFetching</span>: <span class="literal">true</span> &#125;);</div><div class="line">    </div><div class="line">    <span class="keyword">this</span>.props.reallyLongApiCall()</div><div class="line">      .then(<span class="function">(<span class="params">user</span>) =&gt;</span> &#123;</div><div class="line">        save(<span class="string">'username'</span>, user.username);</div><div class="line">        save(<span class="string">'favoriteMovie'</span>, user.favoriteMovie);</div><div class="line"></div><div class="line">        <span class="keyword">this</span>.setState(&#123;</div><div class="line">          <span class="attr">username</span>: user.username,</div><div class="line">          <span class="attr">favoriteMovie</span>: user.favoriteMovie,</div><div class="line">          <span class="attr">isFetching</span>: <span class="literal">false</span>,</div><div class="line">        &#125;);</div><div class="line">      &#125;); </div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;Storage</div><div class="line">        render=&#123;(&#123; load, save, remove &#125;) =&gt; &#123;</div><div class="line">          const username = load('username') || this.state.username;</div><div class="line">          const favoriteMovie = load('favoriteMovie') || this.state.username;</div><div class="line">      </div><div class="line">          if (!username || !favoriteMovie) &#123;</div><div class="line">            if (!this.state.isFetching) &#123;</div><div class="line">              this.fetchData(save);               </div><div class="line">            &#125;</div><div class="line"></div><div class="line">            return &lt;div&gt;Loading...&lt;/div&gt;; </div><div class="line">          &#125;</div><div class="line">      </div><div class="line">          return (</div><div class="line">            &lt;div&gt;</div><div class="line">              My username is &#123;username&#125;, and I love to watch &#123;favoriteMovie&#125;.</div><div class="line">            &lt;/div&gt;</div><div class="line">          );</div><div class="line">        &#125;&#125;</div><div class="line">      /&gt;</div><div class="line">    )</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>对于ComponentNeedingStorage组件来说，利用了Storage组件的render属性传递的三个方法，进行一系列的数据操作，从而展示相关的信息。</p>
+<h3>render props VS HOC模式</h3>
+<p>总的来说，render props其实和高阶组件类似，就是在puru component上增加state，响应react的生命周期。
+对于HOC模式来说，优点如下：</p>
+<ul>
+<li>支持ES6</li>
+<li>复用性强，HOC为纯函数且返回值为组件，可以多层嵌套</li>
+<li>支持传入多个参数，增强了适用范围</li>
+</ul>
+<p>当然也存在如下缺点：</p>
+<ul>
+<li>当多个HOC一起使用时，无法直接判断子组件的props是哪个HOC负责传递的</li>
+<li>多个组件嵌套，容易产生同样名称的props</li>
+<li>HOC可能会产生许多无用的组件，加深了组件的层级</li>
+</ul>
+<p>Render Props模式的出现主要是为了解决HOC所出现的问题。优点如下所示：</p>
+<ul>
+<li>支持ES6</li>
+<li>不用担心props命名问题，在render函数中只取需要的state</li>
+<li>不会产生无用的组件加深层级</li>
+<li>render props模式的构建都是动态的，所有的改变都在render中触发，可以更好的利用组件内的生命周期。</li>
+</ul>
+<p>当然笔者认为，对于Render Props与HOC两者的选择，应该根据不同的场景进行选择。Render Props模式比HOC更直观也更利于调试，而HOC可传入多个参数，能减少不少的代码量。</p>
+<p>Render Props对于只读操作非常适用，如跟踪屏幕上的滚动位置或鼠标位置。 HOC倾向于更好地执行更复杂的操作，例如以上的localStorage功能。</p>
+<h3>参考文献</h3>
+<p><a href="https://levelup.gitconnected.com/understanding-react-render-props-by-example-71f2162fd0f2" target="_blank" rel="external">Understanding React Render Props by Example</a></p>
+<p><a href="https://levelup.gitconnected.com/understanding-react-higher-order-components-by-example-95e8c47c8006" target="_blank" rel="external">Understanding React Higher-Order Components by Example</a></p>
+<p><a href="https://levelup.gitconnected.com/ultimate-react-component-patterns-with-typescript-2-8-82990c516935" target="_blank" rel="external">Ultimate React Component Patterns with Typescript 2.8</a></p>
+<p><a href="https://levelup.gitconnected.com/react-component-patterns-ab1f09be2c82" target="_blank" rel="external">React Component Patterns</a></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2018/04/24/React-Router v4简单使用指南/" data-toggle="tooltip" data-placement="top"
+                           title="React-Router v4简单使用指南">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">render props模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">HOC设计模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">Render Props与HOC模式实例对比</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">HOC Example</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#undefined"><span class="toc-text">The Render Props Exapmle</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">render props VS HOC模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">参考文献</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                        <a class="tag" href="/tags/#react"
+                           title="react">react</a>
+                        
+                        <a class="tag" href="/tags/#HOC"
+                           title="HOC">HOC</a>
+                        
+                        <a class="tag" href="/tags/#Render Props"
+                           title="Render Props">Render Props</a>
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                
+                    <li>
+                        <a target="_blank" href="https://www.zhihu.com/people/perkin-10">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa  fa-stack-1x fa-inverse">知</i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+                    <li>
+                        <a target="_blank" href="http://weibo.com/2432428362">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-weibo fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/perkinJ">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright 版权所有&copy; Perkin 2018
+                    <a href="http://www.miitbeian.gov.cn">湘ICP备15015400号</a>	
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://perkinj.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+<script>
+    // dynamic User by Hux
+    var _gaId = 'UA-100907186-1';
+    var _gaDomain = 'perkinzone.cn';
+    // Originial
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', _gaId, _gaDomain);
+    ga('send', 'pageview');
+</script>
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = '46a74aa9d004724d9ee85ecffa1972f5';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','null','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="http://oum6ifofe.bkt.clouddn.com/image/avatar.jpg">
+</body>
+
+</html>
